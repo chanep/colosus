@@ -1,6 +1,7 @@
 import tensorflow as tf
 import numpy as np
 
+
 x = tf.constant(5)
 y = tf.constant(6)
 
@@ -16,3 +17,6 @@ b = np.copy(a)
 a[1, 1] = 10
 print("a: {}".format(a))
 print("b: {}".format(b))
+
+
+

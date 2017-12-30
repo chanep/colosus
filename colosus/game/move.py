@@ -1,3 +1,6 @@
+from .square import Square
+
+
 class Move:
     @staticmethod
     def from_squares(orig, dest):
@@ -6,3 +9,8 @@ class Move:
     @staticmethod
     def to_squares(move):
         return move & 63, move >> 6
+
+    @staticmethod
+    def to_string(move):
+        orig, dest = Move.to_squares(move)
+        return Square.to_string(orig) + Square.to_string(dest)
