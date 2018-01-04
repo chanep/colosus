@@ -28,7 +28,26 @@ class PositionTestCase(unittest.TestCase):
         self.assertEqual(Piece.ROOK, new_pos.piece_at(Side.WHITE, 4, 6))
         self.assertIsNone(new_pos.piece_at(Side.WHITE, 4, 5))
 
+    def test_checkmate(self):
+        pos = Position()
+        pos.side_to_move = Side.BLACK
+        pos.put_piece(Side.WHITE, Piece.KING, 5, 4)
+        pos.put_piece(Side.WHITE, Piece.ROOK, 7, 0)
+        pos.put_piece(Side.BLACK, Piece.KING, 7, 4)
 
+        pos.print()
+
+        self.assertTrue(pos.is_end)
+        self.assertEqual(-1, pos.score)
+
+        pos = Position()
+        pos.side_to_move = Side.BLACK
+        pos.put_piece(Side.WHITE, Piece.KING, 5, 4)
+        pos.put_piece(Side.WHITE, Piece.ROOK, 7, 0)
+        pos.put_piece(Side.BLACK, Piece.KING, 7, 5)
+
+        self.assertFalse(pos.is_end)
+        self.assertIsNone(pos.score)
 
 
 if __name__ == '__main__':
