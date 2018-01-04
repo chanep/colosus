@@ -9,16 +9,8 @@ class Square:
         return rank * 8 + file
 
     @staticmethod
-    def board(rank, file):
-        return np.uint64(1) << Square.square(rank, file)
-
-    @staticmethod
-    def board(square):
-        return np.uint64(1) << square
-
-    @staticmethod
     def to_rank_file(square):
-        return square / 8, square % 8
+        return int(square // 8), square % 8
 
     @staticmethod
     def board_to_rank_file(board):
