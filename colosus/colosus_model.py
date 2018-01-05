@@ -1,4 +1,6 @@
+import numpy as np
 from tensorflow.python.keras import Input
+from tensorflow.python.keras.optimizers import Adam
 from tensorflow.python.keras.models import Model
 from tensorflow.python.keras.layers import Conv2D, Activation, Flatten, Dense, Add
 from tensorflow.python.layers.normalization import BatchNormalization
@@ -46,6 +48,10 @@ class ColosusModel:
 
         self.model = Model(in_x, [policy_out, value_out], name="colosus_model")
 
+        opt = Adam()
+        losses = ['categorical_crossentropy', 'mean_squared_error']  # avoid overfit for supervised
+        self.model.compile(optimizer=opt, loss=losses, loss_weights=[1.25, 1.0])
+
     def _build_residual_block(self, x, index):
         mc = self.config.model
         in_x = x
@@ -62,4 +68,20 @@ class ColosusModel:
         x = Add(name=res_name + "_add")([in_x, x])
         x = Activation("relu", name=res_name + "_relu2")(x)
         return x
+
+    def predict(self, board) -> (float, np.ndarray):
+        board_t = np.transpose(board, [1, 2, 0])
+        input = np.expand_dims(board_t, axis=0)
+        output = self.model.predict_on_batch(input)
+        value = output[1][0][0]
+        policy = output[0][0]
+        return value, policy
+
+    def train(self, boards, policies, values):
+        self.model.fit(boards, [policies, values],
+                             batch_size=32,
+                             epochs=100,
+                             shuffle=True,
+                             validation_split=0,
+                             callbacks=None)
 
