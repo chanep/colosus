@@ -34,8 +34,8 @@ class Position:
     def _get_rank_file(piece_board):
         if np.sum(piece_board) == 0:
             return None, None
-        rank = np.sum(np.sum(piece_board, axis=0) * np.arange(8))
-        file = np.sum(np.sum(piece_board, axis=1) * np.arange(8))
+        rank = np.sum(np.sum(piece_board, axis=1) * np.arange(8)).astype(np.uint8)
+        file = np.sum(np.sum(piece_board, axis=0) * np.arange(8)).astype(np.uint8)
         return rank, file
 
     def _side_attacks(self, side):
@@ -45,7 +45,7 @@ class Position:
         k_board = self.board[self._get_board_index(side, Piece.KING)]
         k_rank, k_file = self._get_rank_file(k_board)
         b = np.zeros((8, 8), np.uint8)
-        b[max(0, k_rank - 1):min(7, k_rank + 1), max(0, k_file - 1):min(7, k_file + 1)] = 1
+        b[max(0, k_rank - 1):min(8, k_rank + 2), max(0, k_file - 1):min(8, k_file + 2)] = 1
         b[k_rank, k_file] = 0
         a = a + b
 
@@ -76,11 +76,9 @@ class Position:
 
     def put_piece(self, side, piece, rank, file):
         self.board[self._get_board_index(side, piece), rank, file] = 1
-        self._check_end()
 
     def remove_piece(self, rank, file):
         self.board[:, rank , file] = 0
-        self._check_end()
 
     def clone(self):
         cloned = Position()

@@ -27,6 +27,10 @@ e = np.sum(c, axis=1)
 print(e)
 print(np.arange(8))
 
+pos = Position()
+pos.put_piece(Side.WHITE, Piece.KING, 0, 5)
+pos.put_piece(Side.WHITE, Piece.ROOK, 0, 0)
+pos.put_piece(Side.BLACK, Piece.KING, 7, 5)
 
 
 

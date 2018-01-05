@@ -34,6 +34,7 @@ class PositionTestCase(unittest.TestCase):
         pos.put_piece(Side.WHITE, Piece.KING, 5, 4)
         pos.put_piece(Side.WHITE, Piece.ROOK, 7, 0)
         pos.put_piece(Side.BLACK, Piece.KING, 7, 4)
+        pos._chech_end()
 
         pos.print()
 
