@@ -21,6 +21,9 @@ class State:
         self.is_end = position.is_end
         self.children = []
 
+    def get_policy(self):
+
+
     def select(self):
         if self.is_leaf:
             self.expand()
