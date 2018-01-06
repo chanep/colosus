@@ -112,8 +112,6 @@ class Position:
         
         return False
 
-
-
     def legal_moves(self):
         moves = []
         for orig in range(64):
@@ -148,7 +146,7 @@ class Position:
             self.score = 0
         elif self.checkmate():
             self.is_end = True
-            self.score = -1
+            self.score = 1
 
     def in_check(self, side=None):
         if side is None:

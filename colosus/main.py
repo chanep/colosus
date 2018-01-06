@@ -16,21 +16,10 @@ print("result: {}".format(result))
 print("x: {}".format(x_res))
 print("shape: {}".format(result.shape))
 
-b = np.zeros((8,8), np.uint8)
-b[1:4, 3:6] = 1
-c = np.zeros((8,8), np.uint8)
-c[6,4] = 1
-print(c)
-d = np.sum(c, axis=0)
-print(d)
-e = np.sum(c, axis=1)
-print(e)
-print(np.arange(8))
+p = np.array([0.02, 0.9, 0.02, 0.02, 0.02, 0.02])
 
-pos = Position()
-pos.put_piece(Side.WHITE, Piece.KING, 0, 5)
-pos.put_piece(Side.WHITE, Piece.ROOK, 0, 0)
-pos.put_piece(Side.BLACK, Piece.KING, 7, 5)
+print(np.random.choice(6, 4, replace=True, p=p))
+
 
 
 

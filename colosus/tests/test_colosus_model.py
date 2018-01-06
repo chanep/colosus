@@ -48,8 +48,6 @@ class PositionTestCase(unittest.TestCase):
         board5 = pos2.board
         t_board5 = np.transpose(board5, [1, 2, 0])
 
-
-
         input4 = np.expand_dims(t_board4, axis=0)
         print("shape")
         print(input4.shape)
@@ -81,7 +79,7 @@ class PositionTestCase(unittest.TestCase):
 
         colosus = ColosusModel()
         colosus.build()
-        value, policy = colosus.predict(pos.board)
+        policy, value = colosus.predict(pos.board)
         print(value)
         print(policy)
         print(policy.sum())
@@ -95,7 +93,7 @@ class PositionTestCase(unittest.TestCase):
         colosus = ColosusModel()
         colosus.build()
 
-        value, policy = colosus.predict(pos.board)
+        policy, value = colosus.predict(pos.board)
         print(value)
         print(policy)
 
@@ -110,14 +108,18 @@ class PositionTestCase(unittest.TestCase):
         policies = [policies]
         policies = np.stack(policies)
 
-
         colosus.train(boards, policies, values)
 
-        value, policy = colosus.predict(pos.board)
+        policy, value = colosus.predict(pos.board)
         print(value)
         print(policy)
 
-
+    def test_legal_policy(self):
+        policy = np.array([0.25, 0.25, 0.25, 0.25])
+        moves = [1,3]
+        legal_policy = ColosusModel.legal_policy(policy, moves)
+        self.assertEqual(0.0, legal_policy[0])
+        self.assertEqual(0.5, legal_policy[1])
 
 
 if __name__ == '__main__':

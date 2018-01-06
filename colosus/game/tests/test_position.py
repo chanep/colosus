@@ -39,7 +39,7 @@ class PositionTestCase(unittest.TestCase):
         pos.print()
 
         self.assertTrue(pos.is_end)
-        self.assertEqual(-1, pos.score)
+        self.assertEqual(1, pos.score)
 
         pos = Position()
         pos.side_to_move = Side.BLACK

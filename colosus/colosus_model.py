@@ -6,6 +6,7 @@ from tensorflow.python.keras.layers import Conv2D, Activation, Flatten, Dense, A
 from tensorflow.python.layers.normalization import BatchNormalization
 from tensorflow.python.keras.regularizers import l2
 
+
 class ColosusModel:
     def __init__(self):
         self.model = None  # type: Model
@@ -69,19 +70,32 @@ class ColosusModel:
         x = Activation("relu", name=res_name + "_relu2")(x)
         return x
 
-    def predict(self, board) -> (float, np.ndarray):
+    def predict(self, board) -> (np.ndarray, float):
         board_t = np.transpose(board, [1, 2, 0])
         input = np.expand_dims(board_t, axis=0)
         output = self.model.predict_on_batch(input)
         value = output[1][0][0]
         policy = output[0][0]
-        return value, policy
+        return policy, value
+
+    @staticmethod
+    def legal_policy(policy, legal_moves):
+        legal_policy = np.zeros_like(policy)
+        for m in legal_moves:
+            legal_policy[m] = policy[m]
+        return legal_policy / np.sum(legal_policy)
 
     def train(self, boards, policies, values):
-        self.model.fit(boards, [policies, values],
-                             batch_size=32,
-                             epochs=100,
-                             shuffle=True,
-                             validation_split=0,
-                             callbacks=None)
+        boards = map(lambda b: np.transpose(b, [1, 2, 0]), boards)
+        boards = np.stack(boards)
 
+        policies = np.stack(policies)
+
+        values = np.array(values)
+
+        self.model.fit(boards, [policies, values],
+                       batch_size=32,
+                       epochs=100,
+                       shuffle=True,
+                       validation_split=0,
+                       callbacks=None)
