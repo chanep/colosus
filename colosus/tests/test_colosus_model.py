@@ -79,7 +79,7 @@ class PositionTestCase(unittest.TestCase):
 
         colosus = ColosusModel()
         colosus.build()
-        policy, value = colosus.predict(pos.board)
+        policy, value = colosus.predict(pos.board, 100)
         print(value)
         print(policy)
         print(policy.sum())
@@ -93,24 +93,31 @@ class PositionTestCase(unittest.TestCase):
         colosus = ColosusModel()
         colosus.build()
 
-        policy, value = colosus.predict(pos.board)
+        policy, value = colosus.predict(pos.board, 1)
         print(value)
         print(policy)
 
-        boards = [pos.board]
-        boards = map(lambda b: np.transpose(b, [1, 2, 0]), boards)
-        boards = np.stack(boards)
+        boards = [pos.board, pos.board, pos.board]
 
-        values = np.array([1.0])
+        move_counts = [1, 98, 100]
 
-        policies = np.zeros(4096, np.float32)
-        policies[0] = 1.0
-        policies = [policies]
-        policies = np.stack(policies)
+        values = np.array([-1.0, -1.0, 0.0])
 
-        colosus.train(boards, policies, values)
+        policy = np.zeros(4096, np.float32)
+        policy[0] = 1.0
+        policies = [policy, policy, policy]
 
-        policy, value = colosus.predict(pos.board)
+        colosus.train(boards, move_counts, policies, values)
+
+        policy, value = colosus.predict(pos.board, 1)
+        print(value)
+        print(policy)
+
+        policy, value = colosus.predict(pos.board, 98)
+        print(value)
+        print(policy)
+
+        policy, value = colosus.predict(pos.board, 100)
         print(value)
         print(policy)
 

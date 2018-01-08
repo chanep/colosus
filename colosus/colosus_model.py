@@ -1,8 +1,9 @@
 import numpy as np
+import tensorflow as tf
 from tensorflow.python.keras import Input
 from tensorflow.python.keras.optimizers import Adam
 from tensorflow.python.keras.models import Model
-from tensorflow.python.keras.layers import Conv2D, Activation, Flatten, Dense, Add
+from tensorflow.python.keras.layers import Conv2D, Activation, Flatten, Dense, Add, Multiply, Lambda, Concatenate
 from tensorflow.python.layers.normalization import BatchNormalization
 from tensorflow.python.keras.regularizers import l2
 
@@ -13,6 +14,8 @@ class ColosusModel:
 
     def build(self):
         in_x = x = Input((8, 8, 4))
+
+        move_count_factor = Input((1,))
 
         # (batch, channels, height, width)
         x = Conv2D(filters=256, kernel_size=5, padding="same",
@@ -45,9 +48,11 @@ class ColosusModel:
         x = Activation("relu", name="value_relu")(x)
         x = Flatten(name="value_flatten")(x)
         x = Dense(256, kernel_regularizer=l2(1e-4), activation="relu", name="value_dense")(x)
-        value_out = Dense(1, kernel_regularizer=l2(1e-4), activation="tanh", name="value_out")(x)
 
-        self.model = Model(in_x, [policy_out, value_out], name="colosus_model")
+        x = Dense(1, kernel_regularizer=l2(1e-4), activation="tanh", name="value_out_womcf")(x)
+        value_out = Multiply(name="value_out")([x, move_count_factor])
+
+        self.model = Model([in_x, move_count_factor], [policy_out, value_out], name="colosus_model")
 
         opt = Adam()
         losses = ['categorical_crossentropy', 'mean_squared_error']  # avoid overfit for supervised
@@ -70,10 +75,11 @@ class ColosusModel:
         x = Activation("relu", name=res_name + "_relu2")(x)
         return x
 
-    def predict(self, board) -> (np.ndarray, float):
+    def predict(self, board, move_count) -> (np.ndarray, float):
         board_t = np.transpose(board, [1, 2, 0])
-        input = np.expand_dims(board_t, axis=0)
-        output = self.model.predict_on_batch(input)
+        in_board = np.expand_dims(board_t, axis=0)
+        move_count_factor = np.array([1.0]) if move_count < 100 else np.array([0.0])
+        output = self.model.predict_on_batch([in_board, move_count_factor])
         value = output[1][0][0]
         policy = output[0][0]
         return policy, value
@@ -85,17 +91,23 @@ class ColosusModel:
             legal_policy[m] = policy[m]
         return legal_policy / np.sum(legal_policy)
 
-    def train(self, boards, policies, values):
+    def train(self, boards, move_counts, policies, values):
         boards = map(lambda b: np.transpose(b, [1, 2, 0]), boards)
         boards = np.stack(boards)
+
+        move_count_factors = []
+        for mc in move_counts:
+            move_count_factors.append(np.array([1.0]) if mc < 100 else np.array([0.0]))
+        move_count_factors = np.stack(move_count_factors)
 
         policies = np.stack(policies)
 
         values = np.array(values)
 
-        self.model.fit(boards, [policies, values],
+        self.model.fit([boards, move_count_factors], [policies, values],
                        batch_size=32,
                        epochs=100,
                        shuffle=True,
                        validation_split=0,
                        callbacks=None)
+
