@@ -18,7 +18,7 @@ print("shape: {}".format(result.shape))
 
 p = np.array([0.02, 0.9, 0.02, 0.02, 0.02, 0.02])
 
-print(np.random.choice(6, 4, replace=True, p=p))
+print(np.random.choice(6, 1, p=p))
 
 
 

@@ -5,7 +5,6 @@ from .game.position import Position
 from .colosus_model import ColosusModel
 
 
-
 class State:
     cpuct = 1.41
 
@@ -22,9 +21,9 @@ class State:
         self.is_end = position.is_end
         self.children = []
 
-    def get_policy(self, tempreture):
+    def get_policy(self, temperature):
         policy_len = len(self.children)
-        inv_temp = 1 / tempreture
+        inv_temp = 1 / temperature
         policy = np.zeros(policy_len)
         total_visit = math.pow(self.N, inv_temp)
         for i in range(policy_len):
@@ -33,6 +32,11 @@ class State:
                 child_visit = math.pow(child.N, inv_temp)
                 policy[i] = child_visit / total_visit
         return policy
+
+    def play(self, policy) -> (int, 'State'):
+        move = np.random.choice(len(policy), 1, p=policy)[0]
+        new_root_state = self.children[move]
+        return move, new_root_state
 
     def select(self):
         if self.is_leaf:
