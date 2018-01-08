@@ -89,35 +89,33 @@ class PositionTestCase(unittest.TestCase):
         pos.put_piece(Side.WHITE, Piece.KING, 0, 5)
         pos.put_piece(Side.WHITE, Piece.ROOK, 0, 0)
         pos.put_piece(Side.BLACK, Piece.KING, 7, 5)
+        pos.move_count = 1
+
+        pos2 = pos.clone()
+        pos2.move_count = 100
 
         colosus = ColosusModel()
         colosus.build()
 
-        policy, value = colosus.predict(pos.board, 1)
+        policy, value = colosus.predict(pos)
         print(value)
         print(policy)
 
-        boards = [pos.board, pos.board, pos.board]
+        positions = [pos, pos2]
 
-        move_counts = [1, 98, 100]
-
-        values = np.array([-1.0, -1.0, 0.0])
+        values = np.array([-1.0, 0.0])
 
         policy = np.zeros(4096, np.float32)
         policy[0] = 1.0
-        policies = [policy, policy, policy]
+        policies = [policy, policy]
 
-        colosus.train(boards, move_counts, policies, values)
+        colosus.train(positions, policies, values)
 
-        policy, value = colosus.predict(pos.board, 1)
+        policy, value = colosus.predict(pos)
         print(value)
         print(policy)
 
-        policy, value = colosus.predict(pos.board, 98)
-        print(value)
-        print(policy)
-
-        policy, value = colosus.predict(pos.board, 100)
+        policy, value = colosus.predict(pos2)
         print(value)
         print(policy)
 

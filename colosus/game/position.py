@@ -14,6 +14,15 @@ class Position:
         self.score = None
         self.move_count = 0
 
+    def clone(self):
+        new_pos = Position()
+        new_pos.board = np.copy(self.board)
+        new_pos.side_to_move = self.side_to_move
+        new_pos.is_end = self.is_end
+        new_pos.score = self.score
+        new_pos.move_count = self.move_count
+        return new_pos
+
     def _get_board_index(self, side, piece):
         return (self.side_to_move ^ side) * Side.COUNT + piece
 

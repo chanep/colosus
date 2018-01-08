@@ -1,4 +1,5 @@
 import math
+import numpy as np
 
 from .game.position import Position
 from .colosus_model import ColosusModel
@@ -8,7 +9,7 @@ from .colosus_model import ColosusModel
 class State:
     cpuct = 1.41
 
-    def __init__(self, position: Position, p, colosus: ColosusModel, parent: 'State'):
+    def __init__(self, position: Position, p, parent: 'State', colosus: ColosusModel):
         self.parent = parent
         self.position = position
         self.colosus = colosus
@@ -21,8 +22,17 @@ class State:
         self.is_end = position.is_end
         self.children = []
 
-    def get_policy(self):
-
+    def get_policy(self, tempreture):
+        policy_len = len(self.children)
+        inv_temp = 1 / tempreture
+        policy = np.zeros(policy_len)
+        total_visit = math.pow(self.N, inv_temp)
+        for i in range(policy_len):
+            child = self.children[i]
+            if child is not None:
+                child_visit = math.pow(child.N, inv_temp)
+                policy[i] = child_visit / total_visit
+        return policy
 
     def select(self):
         if self.is_leaf:
@@ -33,10 +43,11 @@ class State:
             factor = State.cpuct * math.sqrt(self.N)
 
             for child in self.children:
-                child_score = child.Q + ((factor * child.P) / (1 + child.N))
-                if child_score > best_score:
-                    best_score = child_score
-                    selected_child = child
+                if child is not None:
+                    child_score = child.Q + ((factor * child.P) / (1 + child.N))
+                    if child_score > best_score:
+                        best_score = child_score
+                        selected_child = child
 
             selected_child.select()
 
@@ -45,13 +56,14 @@ class State:
         if self.is_end:
             value = self.position.score
         else:
-            policy, value = self.colosus.predict(self.position.board)
+            policy, value = self.colosus.predict(self.position)
             legal_moves = self.position.legal_moves()
             legal_policy = self.colosus.legal_policy(policy, legal_moves)
-            for i in range(len(legal_moves)):
-                child_pos = self.position.move(legal_moves[i])
-                child = State(child_pos, legal_policy[i], self.colosus, self)
-                self.children.append(child)
+            self.children = [None] * len(policy)
+            for move in range(len(legal_moves)):
+                child_pos = self.position.move(move)
+                child = State(child_pos, legal_policy[move], self, self.colosus)
+                self.children[move] = child
         self.backup(value)
 
     def backup(self, v):

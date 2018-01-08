@@ -9,6 +9,8 @@ from tensorflow.python.keras.regularizers import l2
 
 
 class ColosusModel:
+    policy_len = 4096
+
     def __init__(self):
         self.model = None  # type: Model
 
@@ -75,11 +77,9 @@ class ColosusModel:
         x = Activation("relu", name=res_name + "_relu2")(x)
         return x
 
-    def predict(self, board, move_count) -> (np.ndarray, float):
-        board_t = np.transpose(board, [1, 2, 0])
-        in_board = np.expand_dims(board_t, axis=0)
-        move_count_factor = np.array([1.0]) if move_count < 100 else np.array([0.0])
-        output = self.model.predict_on_batch([in_board, move_count_factor])
+    def predict(self, position) -> (np.ndarray, float):
+        board, move_count_factor = ColosusModel._positions_to_inputs(position)
+        output = self.model.predict_on_batch([board, move_count_factor])
         value = output[1][0][0]
         policy = output[0][0]
         return policy, value
@@ -91,14 +91,8 @@ class ColosusModel:
             legal_policy[m] = policy[m]
         return legal_policy / np.sum(legal_policy)
 
-    def train(self, boards, move_counts, policies, values):
-        boards = map(lambda b: np.transpose(b, [1, 2, 0]), boards)
-        boards = np.stack(boards)
-
-        move_count_factors = []
-        for mc in move_counts:
-            move_count_factors.append(np.array([1.0]) if mc < 100 else np.array([0.0]))
-        move_count_factors = np.stack(move_count_factors)
+    def train(self, positions, policies, values):
+        boards, move_count_factors = ColosusModel._positions_to_inputs(positions)
 
         policies = np.stack(policies)
 
@@ -110,4 +104,19 @@ class ColosusModel:
                        shuffle=True,
                        validation_split=0,
                        callbacks=None)
+
+
+    @staticmethod
+    def _positions_to_inputs(positions):
+        if isinstance(positions, list):
+            boards = map(lambda p: np.transpose(p.board, [1, 2, 0]), positions)
+            boards = np.stack(boards)
+
+            move_count_factors = map(lambda p: np.array([1.0]) if p.move_count < 100 else np.array([0.0]), positions)
+            move_count_factors = np.stack(move_count_factors)
+
+            return boards, move_count_factors
+        else:
+            positions = [positions]
+            return ColosusModel._positions_to_inputs(positions)
 
