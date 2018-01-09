@@ -10,6 +10,7 @@ from ..game.square import Square
 from ..game.side import Side
 from ..game.piece import Piece
 from tensorflow.python.keras import backend as K
+from tensorflow.python import debug as tf_debug
 
 
 class PositionTestCase(unittest.TestCase):
@@ -79,12 +80,20 @@ class PositionTestCase(unittest.TestCase):
 
         colosus = ColosusModel()
         colosus.build()
-        policy, value = colosus.predict(pos.board, 100)
+
+        # sess = K.get_session()
+        # sess = tf_debug.LocalCLIDebugWrapperSession(sess)
+        # K.set_session(sess)
+
+        policy, value = colosus.predict(pos)
         print(value)
         print(policy)
         print(policy.sum())
 
     def test_train(self):
+
+
+
         pos = Position()
         pos.put_piece(Side.WHITE, Piece.KING, 0, 5)
         pos.put_piece(Side.WHITE, Piece.ROOK, 0, 0)
