@@ -31,7 +31,7 @@ class State:
             if child is not None:
                 child_visit = math.pow(child.N, inv_temp)
                 policy[i] = child_visit / total_visit
-        return policy
+        return policy / np.sum(policy)
 
     def play(self, policy) -> (int, 'State'):
         move = np.random.choice(len(policy), 1, p=policy)[0]
@@ -56,24 +56,28 @@ class State:
             selected_child.select()
 
     def expand(self):
-        self.is_leaf = False
         if self.is_end:
             value = self.position.score
         else:
+            self.is_leaf = False
             policy, value = self.colosus.predict(self.position)
             legal_moves = self.position.legal_moves()
             legal_policy = self.colosus.legal_policy(policy, legal_moves)
             self.children = [None] * len(policy)
-            for move in range(len(legal_moves)):
+            for move in legal_moves:
                 child_pos = self.position.move(move)
                 child = State(child_pos, legal_policy[move], self, self.colosus)
                 self.children[move] = child
         self.backup(value)
 
     def backup(self, v):
-        self.W += v
+        self.W += -v
         self.N += 1
         self.Q = self.W / self.N
         if self.parent is not None:
-            self.parent.backup(-v)
+            self.parent.backup(v)
+
+    def print(self):
+        print("N: {}, W: {}, Q: {}".format(self.N, self.W, self.Q))
+        self.position.print()
 

@@ -143,9 +143,9 @@ class Position:
         new_pos.remove_piece(dest_rank, dest_file)
         new_pos.put_piece(side, piece, dest_rank, dest_file)
         new_pos.switch_side()
-        new_pos.move_count += 1
+        new_pos.move_count = self.move_count + 1
 
-        self._check_end()
+        new_pos._check_end()
 
         return new_pos
 
@@ -154,8 +154,12 @@ class Position:
             self.is_end = True
             self.score = 0
         elif self.checkmate():
+            print("Mate")
             self.is_end = True
-            self.score = 1
+            self.score = -1
+        elif np.sum(self.board) <= 2:
+            self.is_end = True
+            self.score = 0
 
     def in_check(self, side=None):
         if side is None:

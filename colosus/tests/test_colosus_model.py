@@ -13,7 +13,7 @@ from tensorflow.python.keras import backend as K
 from tensorflow.python import debug as tf_debug
 
 
-class PositionTestCase(unittest.TestCase):
+class ColosusModelTestCase(unittest.TestCase):
     def test_evaluate(self):
         colosus = ColosusModel()
         colosus.build()
@@ -91,9 +91,6 @@ class PositionTestCase(unittest.TestCase):
         print(policy.sum())
 
     def test_train(self):
-
-
-
         pos = Position()
         pos.put_piece(Side.WHITE, Piece.KING, 0, 5)
         pos.put_piece(Side.WHITE, Piece.ROOK, 0, 0)

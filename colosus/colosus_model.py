@@ -82,6 +82,9 @@ class ColosusModel:
         output = self.model.predict_on_batch([board, move_count_factor])
         value = output[1][0][0]
         policy = output[0][0]
+        # p = np.random.normal(np.ones(ColosusModel.policy_len), 0.01)
+        # policy = p / np.sum(p)
+        # value = np.random.normal(0.0, 0.01, None)
         return policy, value
 
     @staticmethod
