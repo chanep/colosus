@@ -68,14 +68,14 @@ class State:
                 child_pos = self.position.move(move)
                 child = State(child_pos, legal_policy[move], self, self.colosus)
                 self.children[move] = child
-        self.backup(value)
+        self.backup(-value)
 
     def backup(self, v):
-        self.W += -v
+        self.W += v
         self.N += 1
         self.Q = self.W / self.N
         if self.parent is not None:
-            self.parent.backup(v)
+            self.parent.backup(-v)
 
     def print(self):
         print("N: {}, W: {}, Q: {}".format(self.N, self.W, self.Q))

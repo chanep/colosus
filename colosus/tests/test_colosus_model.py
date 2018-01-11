@@ -3,12 +3,11 @@ import unittest
 import datetime
 import tensorflow as tf
 import numpy as np
-from ..colosus_model import ColosusModel
-from ..game.position import Position
-from ..game.move import Move
-from ..game.square import Square
-from ..game.side import Side
-from ..game.piece import Piece
+from colosus.colosus_model import ColosusModel
+from colosus.game.position import Position
+from colosus.game.move import Move
+from colosus.game.side import Side
+from colosus.game.piece import Piece
 from tensorflow.python.keras import backend as K
 from tensorflow.python import debug as tf_debug
 

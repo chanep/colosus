@@ -13,6 +13,9 @@ class Position:
         self.is_end = False
         self.score = None
         self.move_count = 0
+        self.k = [None, None]
+        self.r = [None, None]
+        self._attacks = [None, None]
 
     def clone(self):
         new_pos = Position()
@@ -21,18 +24,22 @@ class Position:
         new_pos.is_end = self.is_end
         new_pos.score = self.score
         new_pos.move_count = self.move_count
+        new_pos.k = list(self.k)
+        new_pos.r = list(self.r)
         return new_pos
 
     def _get_board_index(self, side, piece):
         return (self.side_to_move ^ side) * Side.COUNT + piece
 
-    def has_piece(self, side, piece, rank, file):
-        return self.board[self._get_board_index(side, piece), rank, file] == 1
-    
     def piece_at(self, side, rank, file):
-        for p in range(Piece.COUNT):
-            if self.has_piece(side, p, rank, file):
-                return p
+        square = Square.square(rank, file)
+        return self.piece_at(side, square)
+    
+    def piece_at(self, side, square):
+        if self.k[side] == square:
+            return Piece.KING
+        elif self.r[side] == square:
+            return Piece.ROOK
         return None
 
     def switch_side(self):
@@ -48,21 +55,23 @@ class Position:
         return rank, file
 
     def _side_attacks(self, side):
-        a = np.zeros((8, 8), np.uint8)
+        if self._attacks[side] is not None:
+            return self._attacks[side]
+        k_attacks = []
 
         # king
-        k_board = self.board[self._get_board_index(side, Piece.KING)]
-        k_rank, k_file = self._get_rank_file(k_board)
-        b = np.zeros((8, 8), np.uint8)
-        b[max(0, k_rank - 1):min(8, k_rank + 2), max(0, k_file - 1):min(8, k_file + 2)] = 1
-        b[k_rank, k_file] = 0
-        a = a + b
+        k = self.k[side]
+        k_rank, k_file = Square.to_rank_file(k)
+        for rank in range(max(0, k_rank - 1), min(8, k_rank + 2)):
+            for file in range(max(0, k_file - 1), min(8, k_file + 2)):
+                if not (rank == k_rank and file == k_file):
+                    k_attacks.append(Square.square(rank, file))
 
         #rook
-        r_board = self.board[self._get_board_index(side, Piece.ROOK)]
-        r_rank, r_file = self._get_rank_file(r_board)
-        if r_rank is not None:
-            b = np.zeros((8, 8), np.uint8)
+        r_attacks = []
+        r = self.r[side]
+        if r is not None:
+            r_rank, r_file = Square.to_rank_file(r)
             r_rank_start = 0
             r_rank_end = 8
             r_file_start = 0
@@ -77,23 +86,41 @@ class Position:
                     r_rank_end = k_rank
                 else:
                     r_rank_start = k_rank
-            b[r_rank,r_file_start:r_file_end] = 1
-            b[r_rank_start:r_rank_end,r_file] = 1
-            b[r_rank, r_file] = 0
-            a = a + b
-        return a
+
+            for rank in range(r_rank_start, r_rank_end):
+                if rank != r_rank:
+                    r_attacks.append(Square.square(rank, r_file))
+
+            for file in range(r_file_start, r_file_end):
+                if file != r_file:
+                    r_attacks.append(Square.square(r_rank, file))
+
+        self._attacks[side] = k_attacks + r_attacks
+        return self._attacks[side]
 
     def put_piece(self, side, piece, rank, file):
-        self.board[self._get_board_index(side, piece), rank, file] = 1
+        square = Square.square(rank, file)
+        self.put_piece(side, piece, square)
+
+    def put_piece(self, side, piece, square):
+        if piece == Piece.KING:
+            self.k[side] = square
+        elif piece == Piece.ROOK:
+            self.r[side] = square
 
     def remove_piece(self, rank, file):
-        self.board[:, rank , file] = 0
+        square = Square.square(rank, file)
+        self.remove_piece(square)
 
-    def clone(self):
-        cloned = Position()
-        cloned.board = np.copy(self.board)
-        cloned.side_to_move = self.side_to_move
-        return cloned
+    def remove_piece(self, square):
+        if self.k[0] == square:
+            self.k[0] = None
+        elif self.k[1] == square:
+            self.k[1] = None
+        elif self.r[0] == square:
+            self.r[0] = None
+        elif self.r[1] == square:
+            self.r[1] = None
 
     def is_legal(self, move):
         side = self.side_to_move
@@ -104,26 +131,33 @@ class Position:
             return False
 
         # king
-        if self.has_piece(side, Piece.KING, orig_rank, orig_file):
+        if self.k[side] == orig:
             if abs(dest_rank - orig_rank) > 1 or abs(dest_file - orig_file) > 1:
                 return False
-            other_attacks = self._side_attacks(side.change())
-            return other_attacks[dest_rank, dest_file] == 0
+            return dest not in self._side_attacks(side.change())
 
         # rook
-        if self.has_piece(side, Piece.ROOK, orig_rank, orig_file):
+        if self.r[side] == orig:
             if orig_rank != dest_rank and orig_file != dest_file:
                 return False
-            path = np.zeros((8, 8), np.uint8)
-            path[min(orig_rank, dest_rank):max(orig_rank, dest_rank) + 1, min(orig_file, dest_file):max(orig_file, dest_file) + 1] = 1
-            k_board = self.board[self._get_board_index(side, Piece.KING)]
-            return np.sum(path * k_board) == 0
-        
+            k = self.k[side]
+            k_rank, k_file = Square.to_rank_file(k)
+            if (orig_rank == dest_rank and orig_rank == k_rank and
+                    min(orig_file, dest_file) <= k_file <= max(orig_file, dest_file)):
+                return False
+            if (orig_file == dest_file and orig_file == k_file and
+                    min(orig_rank, dest_rank) <= k_rank <= max(orig_rank, dest_rank)):
+                return False
+            return True
+
         return False
 
     def legal_moves(self):
         moves = []
         for orig in range(64):
+            side = self.side_to_move
+            if self.k[side] != orig and self.r[side] != orig:
+                continue
             for dest in range(64):
                 if dest == orig:
                     continue
@@ -135,13 +169,11 @@ class Position:
     def move(self, move):
         side = self.side_to_move
         orig, dest = Move.to_squares(move)
-        orig_rank, orig_file = Square.to_rank_file(orig)
-        dest_rank, dest_file = Square.to_rank_file(dest)
         new_pos = self.clone()
-        piece = new_pos.piece_at(side, orig_rank, orig_file)
-        new_pos.remove_piece(orig_rank, orig_file)
-        new_pos.remove_piece(dest_rank, dest_file)
-        new_pos.put_piece(side, piece, dest_rank, dest_file)
+        piece = new_pos.piece_at(side, orig)
+        new_pos.remove_piece(orig)
+        new_pos.remove_piece(dest)
+        new_pos.put_piece(side, piece, dest)
         new_pos.switch_side()
         new_pos.move_count = self.move_count + 1
 
@@ -164,9 +196,9 @@ class Position:
     def in_check(self, side=None):
         if side is None:
             side = self.side_to_move
-        k_board = self.board[self._get_board_index(side, Piece.KING)]
+        k = self.k[side]
         other_attacks = self._side_attacks(side.change())
-        return np.sum(k_board * other_attacks) != 0
+        return k in other_attacks
 
     def checkmate(self):
         if not self.in_check():

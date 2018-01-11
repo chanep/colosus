@@ -7,6 +7,8 @@ from tensorflow.python.keras.layers import Conv2D, Activation, Flatten, Dense, A
 from tensorflow.python.layers.normalization import BatchNormalization
 from tensorflow.python.keras.regularizers import l2
 
+from colosus.train_record_set import TrainRecordSet
+
 
 class ColosusModel:
     policy_len = 4096
@@ -87,14 +89,7 @@ class ColosusModel:
         # value = np.random.normal(0.0, 0.01, None)
         return policy, value
 
-    @staticmethod
-    def legal_policy(policy, legal_moves):
-        legal_policy = np.zeros_like(policy)
-        for m in legal_moves:
-            legal_policy[m] = policy[m]
-        return legal_policy / np.sum(legal_policy)
-
-    def train(self, positions, policies, values):
+    def train(self, positions, policies, values, epochs):
         boards, move_count_factors = ColosusModel._positions_to_inputs(positions)
 
         policies = np.stack(policies)
@@ -103,11 +98,17 @@ class ColosusModel:
 
         self.model.fit([boards, move_count_factors], [policies, values],
                        batch_size=32,
-                       epochs=100,
+                       epochs=epochs,
                        shuffle=True,
                        validation_split=0,
                        callbacks=None)
 
+    @staticmethod
+    def legal_policy(policy, legal_moves):
+        legal_policy = np.zeros_like(policy)
+        for m in legal_moves:
+            legal_policy[m] = policy[m]
+        return legal_policy / np.sum(legal_policy)
 
     @staticmethod
     def _positions_to_inputs(positions):

@@ -1,4 +1,5 @@
 import unittest
+import pickle
 from ..position import Position
 from ..move import Move
 from ..square import Square
@@ -50,6 +51,18 @@ class PositionTestCase(unittest.TestCase):
         self.assertFalse(pos.is_end)
         self.assertIsNone(pos.score)
 
+    def test_save(self):
+        pos = Position()
+        pos.put_piece(Side.WHITE, Piece.KING, 4, 4)
+        pos.put_piece(Side.WHITE, Piece.ROOK, 4, 5)
+        pos.put_piece(Side.BLACK, Piece.KING, 5, 6)
+        records = [(pos, 18)]
+        with open("bin.dat", "wb") as f:
+            pickle.dump(records, f)
+
+        with open("bin.dat", "rb") as f:
+            records = pickle.load(f)
+            print(records)
 
 if __name__ == '__main__':
     unittest.main()

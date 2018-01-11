@@ -7,7 +7,7 @@ class Searcher:
         for i in range(iterations):
             root_state.select()
         policy = root_state.get_policy(self._get_temperature(root_state))
-        value = root_state.Q
+        value = -root_state.Q
         move, new_state = root_state.play(policy)
         return policy, value, move, new_state
 

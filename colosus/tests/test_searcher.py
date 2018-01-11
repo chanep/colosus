@@ -1,16 +1,11 @@
 import unittest
 
-import datetime
-import tensorflow as tf
-import numpy as np
-from ..state import State
-from ..searcher import Searcher
-from ..colosus_model import ColosusModel
-from ..game.position import Position
-from ..game.move import Move
-from ..game.square import Square
-from ..game.side import Side
-from ..game.piece import Piece
+from colosus.state import State
+from colosus.searcher import Searcher
+from colosus.colosus_model import ColosusModel
+from colosus.game.position import Position
+from colosus.game.side import Side
+from colosus.game.piece import Piece
 
 
 class SearcherTestCase(unittest.TestCase):
