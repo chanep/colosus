@@ -84,7 +84,7 @@ class ColosusModelTestCase(unittest.TestCase):
         # sess = tf_debug.LocalCLIDebugWrapperSession(sess)
         # K.set_session(sess)
 
-        policy, value = colosus.predict(pos)
+        policy, value = colosus.predict(pos.to_model_position())
         print(value)
         print(policy)
         print(policy.sum())
@@ -102,7 +102,7 @@ class ColosusModelTestCase(unittest.TestCase):
         colosus = ColosusModel()
         colosus.build()
 
-        policy, value = colosus.predict(pos)
+        policy, value = colosus.predict(pos.to_model_position())
         print(value)
         print(policy)
 
@@ -116,11 +116,11 @@ class ColosusModelTestCase(unittest.TestCase):
 
         colosus.train(positions, policies, values)
 
-        policy, value = colosus.predict(pos)
+        policy, value = colosus.predict(pos.to_model_position())
         print(value)
         print(policy)
 
-        policy, value = colosus.predict(pos2)
+        policy, value = colosus.predict(pos2.to_model_position())
         print(value)
         print(policy)
 

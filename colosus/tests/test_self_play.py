@@ -24,7 +24,7 @@ class SelfPlayTestCase(unittest.TestCase):
         # colosus.model.load_weights("weights1.h5")
 
         self_play = SelfPlay()
-        self_play.play(1, 1000, pos, colosus, "x.dat")
+        self_play.play(100, 200, pos, colosus, "x.dat")
 
         print("fin")
 

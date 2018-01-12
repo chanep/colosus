@@ -19,10 +19,10 @@ class SelfPlay:
             # print("initial state N: " + str(state.N))
             end = False
             while not end:
-                start_time = time.time()
+                # start_time = time.time()
                 policy, value, move, new_state = searcher.search(state, iterations_per_move)
-                print("time: " + str(time.time() - start_time))
-                train_record = TrainRecord(state.position, policy, value)
+                # print("time: " + str(time.time() - start_time))
+                train_record = TrainRecord(state.position.to_model_position(), policy, value)
                 train_record_set.append(train_record)
                 new_state.parent = None
                 end = new_state.position.is_end

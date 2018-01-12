@@ -1,5 +1,8 @@
+from typing import overload
+
 import numpy as np
-import math
+
+from colosus.game.model_position import ModelPosition
 from .move import Move
 from .square import Square
 from .side import Side
@@ -8,7 +11,6 @@ from .piece import Piece
 
 class Position:
     def __init__(self):
-        self.board = np.zeros((Side.COUNT * Piece.COUNT, 8, 8), np.uint8)
         self.side_to_move = Side.WHITE
         self.is_end = False
         self.score = None
@@ -19,7 +21,6 @@ class Position:
 
     def clone(self):
         new_pos = Position()
-        new_pos.board = np.copy(self.board)
         new_pos.side_to_move = self.side_to_move
         new_pos.is_end = self.is_end
         new_pos.score = self.score
@@ -28,14 +29,37 @@ class Position:
         new_pos.r = list(self.r)
         return new_pos
 
+    def to_model_position(self):
+        model_board = np.zeros((Side.COUNT * Piece.COUNT, 8, 8), np.uint8)
+        for side in range(Side.COUNT):
+            k_rank, k_file = Square.to_rank_file(self.k[side])
+            index = self._get_board_index(side, Piece.KING)
+            model_board[index, k_rank, k_file] = 1
+            r_square = self.r[side]
+            if r_square is not None:
+                r_rank, r_file = Square.to_rank_file(r_square)
+                index = self._get_board_index(side, Piece.ROOK)
+                model_board[index, r_rank, r_file] = 1
+
+        return ModelPosition(model_board, self.move_count)
+
     def _get_board_index(self, side, piece):
         return (self.side_to_move ^ side) * Side.COUNT + piece
 
-    def piece_at(self, side, rank, file):
-        square = Square.square(rank, file)
-        return self.piece_at(side, square)
-    
+    @overload
     def piece_at(self, side, square):
+        ...
+
+    @overload
+    def piece_at(self, side, rank, file):
+        ...
+
+    def piece_at(self, side, rank, file=None):
+        if file is None:
+            square = rank
+        else:
+            square = Square.square(rank, file)
+
         if self.k[side] == square:
             return Piece.KING
         elif self.r[side] == square:
@@ -43,7 +67,6 @@ class Position:
         return None
 
     def switch_side(self):
-        self.board = np.concatenate((self.board[Piece.COUNT:Piece.COUNT * 2], self.board[0:Piece.COUNT]))
         self.side_to_move = self.side_to_move.change()
 
     @staticmethod
@@ -67,7 +90,7 @@ class Position:
                 if not (rank == k_rank and file == k_file):
                     k_attacks.append(Square.square(rank, file))
 
-        #rook
+        # rook
         r_attacks = []
         r = self.r[side]
         if r is not None:
@@ -82,7 +105,7 @@ class Position:
                 else:
                     r_file_start = k_file
             if r_file == k_file:
-                if k_file > r_file:
+                if k_rank > r_rank:
                     r_rank_end = k_rank
                 else:
                     r_rank_start = k_rank
@@ -98,21 +121,33 @@ class Position:
         self._attacks[side] = k_attacks + r_attacks
         return self._attacks[side]
 
-    def put_piece(self, side, piece, rank, file):
-        square = Square.square(rank, file)
-        self.put_piece(side, piece, square)
-
+    @overload
     def put_piece(self, side, piece, square):
+        ...
+
+    @overload
+    def put_piece(self, side, piece, rank, file):
+        ...
+
+    def put_piece(self, side, piece, rank, file=None):
+        if file is None:
+            square = rank
+        else:
+            square = Square.square(rank, file)
         if piece == Piece.KING:
             self.k[side] = square
         elif piece == Piece.ROOK:
             self.r[side] = square
 
-    def remove_piece(self, rank, file):
-        square = Square.square(rank, file)
-        self.remove_piece(square)
+    @overload
+    def remove_piece(self, square): ...
 
-    def remove_piece(self, square):
+    def remove_piece(self, rank, file=None):
+        if file is None:
+            square = rank
+        else:
+            square = Square.square(rank, file)
+
         if self.k[0] == square:
             self.k[0] = None
         elif self.k[1] == square:
@@ -179,6 +214,15 @@ class Position:
 
         new_pos._check_end()
 
+        if new_pos.k[0] is None or new_pos.k[1] is None:
+            print("old position")
+            self.print()
+            print("new position")
+            new_pos.print()
+            print("move: " + str(Move.to_string(move)))
+            print("piece: " + str(piece))
+            raise Exception("invalid position")
+
         return new_pos
 
     def _check_end(self):
@@ -189,7 +233,7 @@ class Position:
             print("Mate")
             self.is_end = True
             self.score = -1
-        elif np.sum(self.board) <= 2:
+        elif self.r[0] is None and self.r[1] is None:
             self.is_end = True
             self.score = 0
 

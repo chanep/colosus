@@ -20,7 +20,7 @@ class TrainRecordSetTestCase(unittest.TestCase):
 
         value = 0.8
 
-        record = TrainRecord(pos, policy, value)
+        record = TrainRecord(pos.to_model_position(), policy, value)
 
         record_set = TrainRecordSet()
         record_set.append(record)

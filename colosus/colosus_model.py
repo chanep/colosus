@@ -7,6 +7,7 @@ from tensorflow.python.keras.layers import Conv2D, Activation, Flatten, Dense, A
 from tensorflow.python.layers.normalization import BatchNormalization
 from tensorflow.python.keras.regularizers import l2
 
+from colosus.game import model_position
 from colosus.train_record_set import TrainRecordSet
 
 
@@ -79,7 +80,7 @@ class ColosusModel:
         x = Activation("relu", name=res_name + "_relu2")(x)
         return x
 
-    def predict(self, position) -> (np.ndarray, float):
+    def predict(self, position: model_position) -> (np.ndarray, float):
         board, move_count_factor = ColosusModel._positions_to_inputs(position)
         output = self.model.predict_on_batch([board, move_count_factor])
         value = output[1][0][0]

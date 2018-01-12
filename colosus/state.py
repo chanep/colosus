@@ -60,7 +60,7 @@ class State:
             value = self.position.score
         else:
             self.is_leaf = False
-            policy, value = self.colosus.predict(self.position)
+            policy, value = self.colosus.predict(self.position.to_model_position())
             legal_moves = self.position.legal_moves()
             legal_policy = self.colosus.legal_policy(policy, legal_moves)
             self.children = [None] * len(policy)
