@@ -59,15 +59,22 @@ class State:
         if self.is_end:
             value = self.position.score
         else:
-            self.is_leaf = False
-            policy, value = self.colosus.predict(self.position.to_model_position())
             legal_moves = self.position.legal_moves()
-            legal_policy = self.colosus.legal_policy(policy, legal_moves)
-            self.children = [None] * len(policy)
-            for move in legal_moves:
-                child_pos = self.position.move(move)
-                child = State(child_pos, legal_policy[move], self, self.colosus)
-                self.children[move] = child
+            if len(legal_moves) == 0:  # stalemate
+                value = 0
+                self.is_end = True
+                self.position.is_end = True
+                self.position.score = 0
+                print("stalemate")
+            else:
+                self.is_leaf = False
+                policy, value = self.colosus.predict(self.position.to_model_position())
+                legal_policy = self.colosus.legal_policy(policy, legal_moves)
+                self.children = [None] * len(policy)
+                for move in legal_moves:
+                    child_pos = self.position.move(move)
+                    child = State(child_pos, legal_policy[move], self, self.colosus)
+                    self.children[move] = child
         self.backup(-value)
 
     def backup(self, v):
@@ -80,4 +87,3 @@ class State:
     def print(self):
         print("N: {}, W: {}, Q: {}".format(self.N, self.W, self.Q))
         self.position.print()
-

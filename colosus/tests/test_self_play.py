@@ -1,4 +1,5 @@
 import unittest
+import cProfile, pstats, io
 
 import numpy as np
 import time
@@ -13,6 +14,17 @@ from colosus.game.piece import Piece
 
 
 class SelfPlayTestCase(unittest.TestCase):
+    def test_play_p(self):
+        pr = cProfile.Profile()
+        pr.enable()
+        # ... do something ...
+        pr.disable()
+        s = io.StringIO()
+        sortby = 'cumulative'
+        ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+        ps.print_stats()
+        print(s.getvalue())
+
     def test_play(self):
         pos = Position()
         pos.put_piece(Side.WHITE, Piece.KING, 4, 3)
@@ -21,10 +33,10 @@ class SelfPlayTestCase(unittest.TestCase):
 
         colosus = ColosusModel()
         colosus.build()
-        # colosus.model.load_weights("weights1.h5")
+        # colosus.model.load_weights("weights_1000_200_8.h5")
 
         self_play = SelfPlay()
-        self_play.play(100, 200, pos, colosus, "x.dat")
+        self_play.play(1, 200, pos, colosus, "x.dat")
 
         print("fin")
 

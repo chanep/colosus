@@ -214,14 +214,14 @@ class Position:
 
         new_pos._check_end()
 
-        if new_pos.k[0] is None or new_pos.k[1] is None:
-            print("old position")
-            self.print()
-            print("new position")
-            new_pos.print()
-            print("move: " + str(Move.to_string(move)))
-            print("piece: " + str(piece))
-            raise Exception("invalid position")
+        # if new_pos.k[0] is None or new_pos.k[1] is None:
+        #     print("old position")
+        #     self.print()
+        #     print("new position")
+        #     new_pos.print()
+        #     print("move: " + str(Move.to_string(move)))
+        #     print("piece: " + str(piece))
+        #     raise Exception("invalid position")
 
         return new_pos
 
@@ -230,7 +230,7 @@ class Position:
             self.is_end = True
             self.score = 0
         elif self.checkmate():
-            print("Mate")
+            # print("Mate")
             self.is_end = True
             self.score = -1
         elif self.r[0] is None and self.r[1] is None:

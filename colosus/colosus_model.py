@@ -29,7 +29,7 @@ class ColosusModel:
         x = BatchNormalization(axis=3, name="input_batchnorm")(x)
         x = Activation("relu", name="input_relu")(x)
 
-        # for i in range(2):
+        # for i in range(6):
         #     x = self._build_residual_block(x, i + 1)
 
         res_out = x
@@ -64,17 +64,16 @@ class ColosusModel:
         self.model.compile(optimizer=opt, loss=losses, loss_weights=[1.25, 1.0])
 
     def _build_residual_block(self, x, index):
-        mc = self.config.model
         in_x = x
         res_name = "res" + str(index)
-        x = Conv2D(filters=mc.cnn_filter_num, kernel_size=mc.cnn_filter_size, padding="same",
-                   data_format="channels_last", use_bias=False, kernel_regularizer=l2(mc.l2_reg),
-                   name=res_name + "_conv1-" + str(mc.cnn_filter_size) + "-" + str(mc.cnn_filter_num))(x)
+        x = Conv2D(filters=256, kernel_size=3, padding="same",
+                   data_format="channels_last", use_bias=False, kernel_regularizer=l2(1e-4),
+                   name=res_name + "_conv1-3-256")(x)
         x = BatchNormalization(axis=3, name=res_name + "_batchnorm1")(x)
         x = Activation("relu", name=res_name + "_relu1")(x)
-        x = Conv2D(filters=mc.cnn_filter_num, kernel_size=mc.cnn_filter_size, padding="same",
-                   data_format="channels_last", use_bias=False, kernel_regularizer=l2(mc.l2_reg),
-                   name=res_name + "_conv2-" + str(mc.cnn_filter_size) + "-" + str(mc.cnn_filter_num))(x)
+        x = Conv2D(filters=256, kernel_size=3, padding="same",
+                   data_format="channels_last", use_bias=False, kernel_regularizer=l2(1e-4),
+                   name=res_name + "_conv2-3-256")(x)
         x = BatchNormalization(axis=3, name="res" + str(index) + "_batchnorm2")(x)
         x = Add(name=res_name + "_add")([in_x, x])
         x = Activation("relu", name=res_name + "_relu2")(x)
@@ -101,7 +100,8 @@ class ColosusModel:
                        batch_size=32,
                        epochs=epochs,
                        shuffle=True,
-                       validation_split=0,
+                       validation_split=0.02,
+                       verbose=2,
                        callbacks=None)
 
     @staticmethod

@@ -1,5 +1,6 @@
 import unittest
 
+import pickle
 import numpy as np
 
 from colosus.game.piece import Piece
@@ -31,6 +32,24 @@ class TrainRecordSetTestCase(unittest.TestCase):
         record_set2 = TrainRecordSet.load_from_file(filename)
 
         self.assertEqual(value, record_set2.records[0].value)
+
+    def test_save_and_load_multiple(self):
+
+        x = "hola"
+        y = "chau"
+        filename = "bin2.dat"
+
+        with open(filename, "wb") as f:
+            pickle.dump(x, f)
+            pickle.dump(y, f)
+
+        with open(filename, "rb") as f:
+            try:
+                print(pickle.load(f))
+                print(pickle.load(f))
+                print(pickle.load(f))
+            except EOFError:
+                ...
 
 
 if __name__ == '__main__':
