@@ -23,7 +23,7 @@ class ColosusModel:
         move_count_factor = Input((1,))
 
         # (batch, channels, height, width)
-        x = Conv2D(filters=256, kernel_size=5, padding="same",
+        x = Conv2D(filters=256, kernel_size=2, padding="same",
                    data_format="channels_last", use_bias=False, kernel_regularizer=l2(1e-4),
                    name="input_conv-ini")(x)
         x = BatchNormalization(axis=3, name="input_batchnorm")(x)
@@ -35,13 +35,12 @@ class ColosusModel:
         res_out = x
 
         # for policy output
-        x = Conv2D(filters=2, kernel_size=1, data_format="channels_last", use_bias=False,
+        x = Conv2D(filters=4, kernel_size=1, data_format="channels_last", use_bias=False,
                    kernel_regularizer=l2(1e-4),
                    name="policy_conv-1-2")(res_out)
         x = BatchNormalization(axis=3, name="policy_batchnorm")(x)
         x = Activation("relu", name="policy_relu")(x)
         x = Flatten(name="policy_flatten")(x)
-        # no output for 'pass'
         policy_out = Dense(64 * 64, kernel_regularizer=l2(1e-4), activation="softmax",
                            name="policy_out")(x)
 
@@ -66,12 +65,12 @@ class ColosusModel:
     def _build_residual_block(self, x, index):
         in_x = x
         res_name = "res" + str(index)
-        x = Conv2D(filters=256, kernel_size=3, padding="same",
+        x = Conv2D(filters=256, kernel_size=2, padding="same",
                    data_format="channels_last", use_bias=False, kernel_regularizer=l2(1e-4),
                    name=res_name + "_conv1-3-256")(x)
         x = BatchNormalization(axis=3, name=res_name + "_batchnorm1")(x)
         x = Activation("relu", name=res_name + "_relu1")(x)
-        x = Conv2D(filters=256, kernel_size=3, padding="same",
+        x = Conv2D(filters=256, kernel_size=2, padding="same",
                    data_format="channels_last", use_bias=False, kernel_regularizer=l2(1e-4),
                    name=res_name + "_conv2-3-256")(x)
         x = BatchNormalization(axis=3, name="res" + str(index) + "_batchnorm2")(x)

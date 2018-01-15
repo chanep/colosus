@@ -9,8 +9,8 @@ from colosus.game.piece import Piece
 
 class SelfPlayTestCase(unittest.TestCase):
     def test_train(self):
-        train_filename = "train_1000_200.dat"
-        # weights_filename = "weights_res1_1000_200_2.h5"
+        train_filename = "train_2_1000_200.dat"
+        # weights_filename = "weights_2_1000_200_10.h5"
         weights_filename = "x.h5"
 
         trainer = Trainer()
