@@ -12,6 +12,7 @@ class Searcher:
         return policy, value, move, new_state
 
     def _get_temperature(self, state: State):
+        # return 1
         if state.position.move_count <= 10:
             return 1.0
         else:

@@ -11,6 +11,12 @@ from colosus.game.piece import Piece
 from tensorflow.python.keras import backend as K
 from tensorflow.python import debug as tf_debug
 
+from colosus.searcher import Searcher
+from colosus.state import State
+from colosus.train_record import TrainRecord
+from colosus.train_record_set import TrainRecordSet
+from colosus.trainer import Trainer
+
 
 class ColosusModelTestCase(unittest.TestCase):
     def test_evaluate(self):
@@ -73,21 +79,60 @@ class ColosusModelTestCase(unittest.TestCase):
 
     def test_predict(self):
         pos = Position()
-        pos.put_piece(Side.WHITE, Piece.KING, 0, 5)
-        pos.put_piece(Side.WHITE, Piece.ROOK, 0, 0)
-        pos.put_piece(Side.BLACK, Piece.KING, 7, 5)
+        pos.put_piece(Side.WHITE, Piece.KING, 4, 5)
+        pos.put_piece(Side.WHITE, Piece.ROOK, 7, 2)
+        pos.put_piece(Side.BLACK, Piece.KING, 4, 7)
+
+        pos.print()
 
         colosus = ColosusModel()
         colosus.build()
+        # colosus.model.load_weights("w2_1_1000_200.h5")
+        colosus.model.load_weights("w1.h5")
 
         # sess = K.get_session()
         # sess = tf_debug.LocalCLIDebugWrapperSession(sess)
         # K.set_session(sess)
 
         policy, value = colosus.predict(pos.to_model_position())
-        print(value)
-        print(policy)
-        print(policy.sum())
+        print("value: " + str(value))
+        print("moves prob")
+        sorted_policy = self.sort_policy(policy)
+        for i in range(10):
+            m = sorted_policy[i]
+            print("{} - {}".format(m[0], m[1]))
+
+        searcher = Searcher();
+        state = State(pos, None, None, colosus)
+        policy, value, move, new_state = searcher.search(state, 500)
+        print("value: " + str(value))
+        print("moves prob")
+        sorted_policy = self.sort_policy(policy)
+        for i in range(10):
+            m = sorted_policy[i]
+            print("{} - {}".format(m[0], m[1]))
+
+        for m in range(len(state.children)):
+            c = state.children[m]
+            if c is not None:
+                print("{} N: {}, W: {}, Q: {}, p:{}".format(Move.to_string(m), c.N, round(c.W, 5),
+                                                            round(c.Q, 5), round(c.P, 5)))
+
+        # train_record_set = TrainRecordSet()
+        # train_record = TrainRecord(state.position.to_model_position(), policy, value)
+        # train_record_set.append(train_record)
+        # train_record_set.save_to_file("x1.dat")
+        #
+        # trainer = Trainer()
+        # trainer.train("x1.dat", "w1.h5", 100)
+
+
+    def sort_policy(self, policy):
+        move_policy = []
+        for m in range(len(policy)):
+            m_str = Move.to_string(m)
+            move_policy.append((m_str, policy[m]))
+        return sorted(move_policy, key=lambda t: t[1], reverse=True)
 
     def test_train(self):
         pos = Position()

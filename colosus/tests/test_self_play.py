@@ -33,10 +33,10 @@ class SelfPlayTestCase(unittest.TestCase):
 
         colosus = ColosusModel()
         colosus.build()
-        colosus.model.load_weights("weights_2_1000_200_10.h5")
+        colosus.model.load_weights("w2_1_1000_200.h5")
 
         self_play = SelfPlay()
-        # self_play.play(1000, 200, pos, colosus, "train_2_1000_200.dat")
+        # self_play.play(1000, 200, pos, colosus, "t2_1_1000_200.dat")
         self_play.play(50, 200, pos, colosus, "x.dat")
 
         print("fin")

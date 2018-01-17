@@ -29,7 +29,7 @@ class ColosusModel:
         x = BatchNormalization(axis=3, name="input_batchnorm")(x)
         x = Activation("relu", name="input_relu")(x)
 
-        # for i in range(6):
+        # for i in range(3):
         #     x = self._build_residual_block(x, i + 1)
 
         res_out = x
@@ -96,7 +96,7 @@ class ColosusModel:
         values = np.array(values)
 
         self.model.fit([boards, move_count_factors], [policies, values],
-                       batch_size=32,
+                       batch_size=256,
                        epochs=epochs,
                        shuffle=True,
                        validation_split=0.02,

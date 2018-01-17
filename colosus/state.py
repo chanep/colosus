@@ -46,9 +46,17 @@ class State:
             best_score = -10000
             factor = State.cpuct * math.sqrt(self.N)
 
-            for child in self.children:
+            if self.is_root():
+                noise = np.random.dirichlet([0.3] * len(self.children))
+
+            for i in range(len(self.children)):
+                child = self.children[i]
                 if child is not None:
-                    child_score = child.Q + ((factor * child.P) / (1 + child.N))
+                    if self.is_root():
+                        child_p = 0.75 * child.P + 0.25 * noise[i]
+                    else:
+                        child_p = child.P
+                    child_score = child.Q + ((factor * child_p) / (1 + child.N))
                     if child_score > best_score:
                         best_score = child_score
                         selected_child = child
@@ -65,7 +73,6 @@ class State:
                 self.is_end = True
                 self.position.is_end = True
                 self.position.score = 0
-                print("stalemate")
             else:
                 self.is_leaf = False
                 policy, value = self.colosus.predict(self.position.to_model_position())
@@ -87,3 +94,6 @@ class State:
     def print(self):
         print("N: {}, W: {}, Q: {}".format(self.N, self.W, self.Q))
         self.position.print()
+
+    def is_root(self):
+        return self.parent is None

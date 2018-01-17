@@ -22,6 +22,11 @@ print("shape: {}".format(result.shape))
 # print(np.random.normal(np.ones(10), 0.01))
 
 
-p = np.random.normal(np.ones(10), 0.01)
-print(p/np.sum(p))
+# p = np.random.normal(np.ones(10), 0.01)
+# print(p/np.sum(p))
 
+print("dirichlettttt")
+p = np.random.dirichlet([0.3] * 10)
+print(p)
+print(sum(p))
+print(np.std(p))
