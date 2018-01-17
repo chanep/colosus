@@ -31,15 +31,25 @@ class SelfPlayTestCase(unittest.TestCase):
         pos.put_piece(Side.WHITE, Piece.ROOK, 4, 4)
         pos.put_piece(Side.BLACK, Piece.KING, 5, 5)
 
-        colosus = ColosusModel()
-        colosus.build()
-        colosus.model.load_weights("w2_1_1000_200.h5")
-
+        start_time = time.time()
         self_play = SelfPlay()
         # self_play.play(1000, 200, pos, colosus, "t2_1_1000_200.dat")
-        self_play.play(50, 200, pos, colosus, "x.dat")
+        self_play.play(6, 200, pos, "x.dat", None)
 
-        print("fin")
+        print("fin. time: " + str(time.time() - start_time))
+
+    def test_play_parallel(self):
+        pos = Position()
+        pos.put_piece(Side.WHITE, Piece.KING, 4, 3)
+        pos.put_piece(Side.WHITE, Piece.ROOK, 4, 4)
+        pos.put_piece(Side.BLACK, Piece.KING, 5, 5)
+
+        start_time = time.time()
+        self_play = SelfPlay()
+        # self_play.play(1000, 200, pos, colosus, "t2_1_1000_200.dat")
+        self_play.play_parallel(6, 200, pos, "x.dat", 2, None)
+
+        print("fin. time: " + str(time.time() - start_time))
 
     def test_play2(self):
         pos = Position()
@@ -61,6 +71,14 @@ class SelfPlayTestCase(unittest.TestCase):
         print(Move.to_string(move))
         print(value)
 
+    def test_named_params(self):
+        print("test named params")
+        def method(x, o1=None, o2=None):
+            print("x: {}, o1: {}, o2:{}".format(x, o1, o2))
+
+        method(10, 1)
+        method(10, o1=1)
+        method(10, o2=2)
 
 if __name__ == '__main__':
     unittest.main()
