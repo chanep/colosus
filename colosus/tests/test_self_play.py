@@ -17,7 +17,9 @@ class SelfPlayTestCase(unittest.TestCase):
     def test_play_p(self):
         pr = cProfile.Profile()
         pr.enable()
-        # ... do something ...
+
+        self.test_play()
+
         pr.disable()
         s = io.StringIO()
         sortby = 'cumulative'
@@ -34,7 +36,7 @@ class SelfPlayTestCase(unittest.TestCase):
         start_time = time.time()
         self_play = SelfPlay()
         # self_play.play(1000, 200, pos, colosus, "t2_1_1000_200.dat")
-        self_play.play(6, 200, pos, "x.dat", None)
+        self_play.play(100, 200, pos, "x.dat", "w2_1_1000_200.h5")
 
         print("fin. time: " + str(time.time() - start_time))
 
@@ -47,7 +49,7 @@ class SelfPlayTestCase(unittest.TestCase):
         start_time = time.time()
         self_play = SelfPlay()
         # self_play.play(1000, 200, pos, colosus, "t2_1_1000_200.dat")
-        self_play.play_parallel(6, 200, pos, "x.dat", 2, None)
+        self_play.play_parallel(6, 200, pos, "x.dat", 4, None)
 
         print("fin. time: " + str(time.time() - start_time))
 
