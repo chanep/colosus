@@ -58,7 +58,7 @@ class ColosusModel:
 
         self.model = Model([in_x, move_count_factor], [policy_out, value_out], name="colosus_model")
 
-        opt = Adam()
+        opt = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-8)
         losses = ['categorical_crossentropy', 'mean_squared_error']  # avoid overfit for supervised
         self.model.compile(optimizer=opt, loss=losses, loss_weights=[1.25, 1.0])
 

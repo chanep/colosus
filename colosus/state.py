@@ -20,6 +20,7 @@ class State:
         self.is_leaf = True
         self.is_end = position.is_end
         self.children = []
+        self.noise = None
 
     def get_policy(self, temperature):
         policy_len = len(self.children)
@@ -36,6 +37,7 @@ class State:
     def play(self, policy) -> (int, 'State'):
         move = np.random.choice(len(policy), 1, p=policy)[0]
         new_root_state = self.children[move]
+        self.noise = None
         return move, new_root_state
 
     def select(self):
@@ -46,14 +48,14 @@ class State:
             best_score = -10000
             factor = State.cpuct * math.sqrt(self.N)
 
-            if self.is_root():
-                noise = np.random.dirichlet([0.3] * len(self.children))
+            if self.is_root() and self.noise is None:
+                self.noise = np.random.dirichlet([0.3] * len(self.children))
 
             for i in range(len(self.children)):
                 child = self.children[i]
                 if child is not None:
                     if self.is_root():
-                        child_p = 0.75 * child.P + 0.25 * noise[i]
+                        child_p = 0.75 * child.P + 0.25 * self.noise[i]
                     else:
                         child_p = child.P
                     child_score = child.Q + ((factor * child_p) / (1 + child.N))
