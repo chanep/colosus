@@ -53,16 +53,16 @@ def build_model():
     in_x = x = Input((8, 8, 2))
 
     x = Conv2D(filters=128, kernel_size=3, padding="same",
-               data_format="channels_last", use_bias=True, kernel_regularizer=reg,
+               data_format="channels_last", use_bias=False, kernel_regularizer=reg,
                name="c1")(x)
     x = BatchNormalization(axis=3, name="bn1")(x)
     x = Activation("relu", name="relu1")(x)
 
-    # x = Conv2D(filters=64, kernel_size=5, padding="same",
-    #            data_format="channels_last", use_bias=False, kernel_regularizer=reg,
-    #            name="c2")(x)
-    # x = BatchNormalization(axis=3, name="bn2")(x)
-    # x = Activation("relu", name="relu2")(x)
+    x = Conv2D(filters=128, kernel_size=5, padding="same",
+               data_format="channels_last", use_bias=False, kernel_regularizer=reg,
+               name="c2")(x)
+    x = BatchNormalization(axis=3, name="bn2")(x)
+    x = Activation("relu", name="relu2")(x)
     #
     # x = Conv2D(filters=128, kernel_size=3, padding="same",
     #            data_format="channels_last", use_bias=False, kernel_regularizer=reg,
@@ -75,7 +75,7 @@ def build_model():
 
     res_out = x
     x = Flatten(name="flatten")(x)
-    x = Dense(512, kernel_regularizer=reg, activation="relu", name="value_dense")(x)
+    # x = Dense(512, kernel_regularizer=reg, activation="relu", name="value_dense")(x)
     y = Dense(1, kernel_regularizer=reg, activation="sigmoid", name="y")(x)
 
     model = Model(in_x, y, name="model")

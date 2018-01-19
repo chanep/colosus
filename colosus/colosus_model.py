@@ -18,13 +18,16 @@ class ColosusModel:
         self.model = None  # type: Model
 
     def build(self):
+        reg = l2(1e-4)
+        # reg = None
+
         in_x = x = Input((8, 8, 4))
 
         move_count_factor = Input((1,))
 
         # (batch, channels, height, width)
-        x = Conv2D(filters=256, kernel_size=2, padding="same",
-                   data_format="channels_last", use_bias=False, kernel_regularizer=l2(1e-4),
+        x = Conv2D(filters=256, kernel_size=3, padding="same",
+                   data_format="channels_last", use_bias=False, kernel_regularizer=reg,
                    name="input_conv-ini")(x)
         x = BatchNormalization(axis=3, name="input_batchnorm")(x)
         x = Activation("relu", name="input_relu")(x)
@@ -36,29 +39,31 @@ class ColosusModel:
 
         # for policy output
         x = Conv2D(filters=4, kernel_size=1, data_format="channels_last", use_bias=False,
-                   kernel_regularizer=l2(1e-4),
+                   kernel_regularizer=reg,
                    name="policy_conv-1-2")(res_out)
         x = BatchNormalization(axis=3, name="policy_batchnorm")(x)
         x = Activation("relu", name="policy_relu")(x)
         x = Flatten(name="policy_flatten")(x)
-        policy_out = Dense(64 * 64, kernel_regularizer=l2(1e-4), activation="softmax",
+        policy_out = Dense(64 * 64, kernel_regularizer=reg, activation="softmax",
                            name="policy_out")(x)
 
         # for value output
         x = Conv2D(filters=4, kernel_size=1, data_format="channels_last", use_bias=False,
-                   kernel_regularizer=l2(1e-4),
+                   kernel_regularizer=reg,
                    name="value_conv-1-4")(res_out)
         x = BatchNormalization(axis=3, name="value_batchnorm")(x)
         x = Activation("relu", name="value_relu")(x)
         x = Flatten(name="value_flatten")(x)
-        x = Dense(256, kernel_regularizer=l2(1e-4), activation="relu", name="value_dense")(x)
+        x = Dense(256, kernel_regularizer=reg, activation="relu", name="value_dense")(x)
 
-        x = Dense(1, kernel_regularizer=l2(1e-4), activation="tanh", name="value_out_womcf")(x)
+        x = Dense(1, kernel_regularizer=reg, activation="tanh", name="value_out_womcf")(x)
         value_out = Multiply(name="value_out")([x, move_count_factor])
 
         self.model = Model([in_x, move_count_factor], [policy_out, value_out], name="colosus_model")
 
         opt = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-8)
+        # opt = tf.keras.optimizers.Adamax(lr=0.002)
+        # opt = tf.keras.optimizers.Nadam(lr=0.002)
         losses = ['categorical_crossentropy', 'mean_squared_error']  # avoid overfit for supervised
         self.model.compile(optimizer=opt, loss=losses, loss_weights=[1.25, 1.0])
 
@@ -66,12 +71,12 @@ class ColosusModel:
         in_x = x
         res_name = "res" + str(index)
         x = Conv2D(filters=256, kernel_size=2, padding="same",
-                   data_format="channels_last", use_bias=False, kernel_regularizer=l2(1e-4),
+                   data_format="channels_last", use_bias=False, kernel_regularizer=reg,
                    name=res_name + "_conv1-3-256")(x)
         x = BatchNormalization(axis=3, name=res_name + "_batchnorm1")(x)
         x = Activation("relu", name=res_name + "_relu1")(x)
         x = Conv2D(filters=256, kernel_size=2, padding="same",
-                   data_format="channels_last", use_bias=False, kernel_regularizer=l2(1e-4),
+                   data_format="channels_last", use_bias=False, kernel_regularizer=reg,
                    name=res_name + "_conv2-3-256")(x)
         x = BatchNormalization(axis=3, name="res" + str(index) + "_batchnorm2")(x)
         x = Add(name=res_name + "_add")([in_x, x])

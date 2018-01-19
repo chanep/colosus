@@ -10,11 +10,11 @@ from colosus.game.piece import Piece
 class SelfPlayTestCase(unittest.TestCase):
     def test_train(self):
         train_filename = "t2_1_1000_200.dat"
-        weights_filename = "w2_1_1000_200_3000.h5"
-        # weights_filename = "x.h5"
+        # weights_filename = "w2_1_1000_200_3000.h5"
+        weights_filename = "x.h5"
 
         trainer = Trainer()
-        trainer.train(train_filename, weights_filename, 3000)
+        trainer.train(train_filename, weights_filename, 30)
 
     def test_rotate(self):
         x = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
