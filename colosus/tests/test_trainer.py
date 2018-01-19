@@ -16,43 +16,6 @@ class SelfPlayTestCase(unittest.TestCase):
         trainer = Trainer()
         trainer.train(train_filename, weights_filename, 30)
 
-    def test_rotate(self):
-        x = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
-        todos = []
-        aux = x
-        for i in range(4):
-            # a = np.flipud(aux)
-            b = np.fliplr(aux)
-            todos.append(aux)
-            # todos.append(a)
-            todos.append(b)
-            aux = np.rot90(aux, 1)
-
-        unicos = []
-        len_todos = len(todos)
-        print("todos: " + str(len_todos))
-        for i in range(len_todos):
-            e = todos[i]
-            ya_esta = False
-            for j in range(len(unicos)):
-                if np.array_equal(e, unicos[j]):
-                    ya_esta = True
-                    break
-            if not ya_esta:
-                unicos.append(e)
-
-        print("unicos: " + str(len(unicos)))
-
-    def test_rotate2(self):
-        x = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
-        i = np.identity(3)
-        rx = np.rot90(x)
-        ri = np.rot90(i)
-        xi = np.dot(x, ri)
-        print(rx)
-        print(ri)
-        print(xi)
-
     def test_generator(self):
 
         def generator():

@@ -14,7 +14,7 @@ class Trainer:
         colosus.build()
 
         train_record_set = TrainRecordSet.load_from_file(train_filename)
-        records = train_record_set.records
+        records = train_record_set.records_with_rotations()
         positions = list(map(lambda r: r.position, records))
         policies = list(map(lambda r: r.policy, records))
         values = list(map(lambda r: r.value, records))
