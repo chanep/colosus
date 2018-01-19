@@ -23,3 +23,11 @@ class Square:
         r = rank + 1
         f = files[file]
         return f + str(r)
+
+    @staticmethod
+    def piece_rank_file(board):
+        if np.sum(board) == 0:
+            return None, None
+        rank = np.sum(np.sum(board, axis=1) * np.arange(8)).astype(np.uint8)
+        file = np.sum(np.sum(board, axis=0) * np.arange(8)).astype(np.uint8)
+        return rank, file

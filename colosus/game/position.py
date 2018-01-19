@@ -69,13 +69,7 @@ class Position:
     def switch_side(self):
         self.side_to_move = self.side_to_move.change()
 
-    @staticmethod
-    def _get_rank_file(piece_board):
-        if np.sum(piece_board) == 0:
-            return None, None
-        rank = np.sum(np.sum(piece_board, axis=1) * np.arange(8)).astype(np.uint8)
-        file = np.sum(np.sum(piece_board, axis=0) * np.arange(8)).astype(np.uint8)
-        return rank, file
+
 
     def _side_attacks(self, side):
         if self._attacks[side] is not None:

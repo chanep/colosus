@@ -7,6 +7,10 @@ class Move:
         return orig + (dest << 6)
 
     @staticmethod
+    def from_rank_files(o_rank, o_file, d_rank, d_file):
+        return Move.from_squares(Square.square(o_rank, o_file), Square.square(d_rank, d_file))
+
+    @staticmethod
     def to_squares(move):
         return move & 63, move >> 6
 

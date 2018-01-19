@@ -1,10 +1,10 @@
 import numpy as np
 
-from colosus.game import model_position
+from colosus.game.model_position import ModelPosition
 
 
 class TrainRecord:
-    def __init__(self, position: model_position, policy: np.array, value: float):
+    def __init__(self, position: ModelPosition, policy: np.array, value: float):
         self.position = position
         self.policy = policy
         self.value = value
