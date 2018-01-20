@@ -22,6 +22,9 @@ class State:
         self.children = []
         self.noise = None
 
+    def build_initial(self, position_ini: Position):
+        return self.__class__(position_ini.clone(), None, None, self.colosus)
+
     def get_policy(self, temperature):
         policy_len = len(self.children)
         inv_temp = 1 / temperature
@@ -46,7 +49,7 @@ class State:
         else:
             selected_child = None
             best_score = -10000
-            factor = State.cpuct * math.sqrt(self.N)
+            factor = self.__class__.cpuct * math.sqrt(self.N)
 
             if self.is_root() and self.noise is None:
                 self.noise = np.random.dirichlet([0.3] * len(self.children))
@@ -82,7 +85,7 @@ class State:
                 self.children = [None] * len(policy)
                 for move in legal_moves:
                     child_pos = self.position.move(move)
-                    child = State(child_pos, legal_policy[move], self, self.colosus)
+                    child = self.__class__(child_pos, legal_policy[move], self, self.colosus)
                     self.children[move] = child
         self.backup(-value)
 
@@ -91,7 +94,7 @@ class State:
         self.N += 1
         self.Q = self.W / self.N
         if self.parent is not None:
-            self.parent.backup(-v)
+            self.parent.backup(-v * 0.999)
 
     def print(self):
         print("N: {}, W: {}, Q: {}".format(self.N, self.W, self.Q))

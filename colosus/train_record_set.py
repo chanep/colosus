@@ -16,14 +16,14 @@ class TrainRecordSet:
         with open(filename, "wb") as f:
             pickle.dump(self, f)
 
-    def records_with_rotations(self) -> List[TrainRecord]:
+    def do_rotations(self):
         rotator = Rotator()
         with_rotations = []
         for r in self.records:
             with_rotations.extend(rotator.rotations(r))
-        return with_rotations
+        self.records = with_rotations
 
     @classmethod
-    def load_from_file(cls, filename):
+    def load_from_file(cls, filename) -> 'TrainRecordSet':
         with open(filename, "rb") as f:
             return pickle.load(f)

@@ -4,6 +4,7 @@ import datetime
 import tensorflow as tf
 import numpy as np
 from colosus.colosus_model import ColosusModel
+from colosus.config import SearchConfig
 from colosus.game.position import Position
 from colosus.game.move import Move
 from colosus.game.side import Side
@@ -38,7 +39,6 @@ class ColosusModelTestCase(unittest.TestCase):
         board2 = tf.cast(pos2.board, tf.float32)
         t_board2 = tf.transpose(board2, perm=[1, 2, 0])
         input2 = tf.expand_dims(t_board2, axis=0)
-
 
         output = colosus.model(input)
         value = output[1]
@@ -79,6 +79,10 @@ class ColosusModelTestCase(unittest.TestCase):
 
     def test_predict(self):
         pos = Position()
+        # pos.put_piece(Side.WHITE, Piece.KING, 2, 5)
+        # pos.put_piece(Side.WHITE, Piece.ROOK, 6, 2)
+        # pos.put_piece(Side.BLACK, Piece.KING, 0, 5)
+
         pos.put_piece(Side.WHITE, Piece.KING, 4, 5)
         pos.put_piece(Side.WHITE, Piece.ROOK, 7, 2)
         pos.put_piece(Side.BLACK, Piece.KING, 4, 7)
@@ -87,8 +91,9 @@ class ColosusModelTestCase(unittest.TestCase):
 
         colosus = ColosusModel()
         colosus.build()
-        # colosus.model.load_weights("w2_1_1000_200.h5")
-        colosus.model.load_weights("w1.h5")
+        colosus.model.load_weights("w_2_1200_800.h5")
+        # colosus.model.load_weights("w999_2_1200_800.h5")
+        # colosus.model.load_weights("res.h5")
 
         # sess = K.get_session()
         # sess = tf_debug.LocalCLIDebugWrapperSession(sess)
@@ -102,9 +107,11 @@ class ColosusModelTestCase(unittest.TestCase):
             m = sorted_policy[i]
             print("{} - {}".format(m[0], m[1]))
 
-        searcher = Searcher();
+        print('')
+
+        searcher = Searcher(SearchConfig());
         state = State(pos, None, None, colosus)
-        policy, value, move, new_state = searcher.search(state, 500)
+        policy, value, move, new_state = searcher.search(state, 1600)
         print("value: " + str(value))
         print("moves prob")
         sorted_policy = self.sort_policy(policy)

@@ -3,6 +3,9 @@ from .state import State
 
 
 class Searcher:
+    def __init__(self, config):
+        self.config = config
+
     def search(self, root_state: State, iterations: int) -> (np.array, float, int, State):
         for i in range(iterations):
             root_state.select()
