@@ -5,6 +5,7 @@ import numpy as np
 import time
 
 from colosus.colosus_model import ColosusModel
+from colosus.config import SelfPlayConfig
 from colosus.game.move import Move
 from colosus.game.square import Square
 from colosus.self_play import SelfPlay
@@ -34,10 +35,11 @@ class SelfPlayTestCase(unittest.TestCase):
         pos.put_piece(Side.BLACK, Piece.KING, 5, 5)
 
         start_time = time.time()
-        self_play = SelfPlay()
+        config = SelfPlayConfig()
+        self_play = SelfPlay(config)
         # self_play.play(150, 800, pos, "t999_2_150_800.dat", "w999_1_1200_800.h5")
-        # self_play.play(10, 800, pos, "x.dat", "w_1_1000_800.h5")
-        self_play.play(100, 2, pos, "x.dat", None)
+        self_play.play(10, 200, pos, "x.dat", "wpp_1_1200_800.h5")
+        # self_play.play(150, 800, pos, "tpp_1_150_800.dat", None)
 
         print("fin. time: " + str(time.time() - start_time))
 

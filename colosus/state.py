@@ -1,14 +1,16 @@
 import math
 import numpy as np
 
+from colosus.config import StateConfig
 from .game.position import Position
 from .colosus_model import ColosusModel
 
 
 class State:
-    cpuct = 1.41
 
-    def __init__(self, position: Position, p, parent: 'State', colosus: ColosusModel):
+    def __init__(self, position: Position, p, parent: 'State', colosus: ColosusModel, config: StateConfig):
+        self.config = config
+
         self.parent = parent
         self.position = position
         self.colosus = colosus
@@ -21,9 +23,6 @@ class State:
         self.is_end = position.is_end
         self.children = []
         self.noise = None
-
-    def build_initial(self, position_ini: Position):
-        return self.__class__(position_ini.clone(), None, None, self.colosus)
 
     def get_policy(self, temperature):
         policy_len = len(self.children)
@@ -49,16 +48,16 @@ class State:
         else:
             selected_child = None
             best_score = -10000
-            factor = self.__class__.cpuct * math.sqrt(self.N)
+            factor = self.config.cpuct * math.sqrt(self.N)
 
             if self.is_root() and self.noise is None:
-                self.noise = np.random.dirichlet([0.3] * len(self.children))
+                self.noise = np.random.dirichlet([self.config.noise_alpha] * len(self.children))
 
             for i in range(len(self.children)):
                 child = self.children[i]
                 if child is not None:
                     if self.is_root():
-                        child_p = 0.75 * child.P + 0.25 * self.noise[i]
+                        child_p = (1 - self.config.noise_factor) * child.P + self.config.noise_factor * self.noise[i]
                     else:
                         child_p = child.P
                     child_score = child.Q + ((factor * child_p) / (1 + child.N))
@@ -85,7 +84,7 @@ class State:
                 self.children = [None] * len(policy)
                 for move in legal_moves:
                     child_pos = self.position.move(move)
-                    child = self.__class__(child_pos, legal_policy[move], self, self.colosus)
+                    child = self.__class__(child_pos, legal_policy[move], self, self.colosus, self.config)
                     self.children[move] = child
         self.backup(-value)
 
@@ -94,7 +93,7 @@ class State:
         self.N += 1
         self.Q = self.W / self.N
         if self.parent is not None:
-            self.parent.backup(-v * 0.999)
+            self.parent.backup(-v)
 
     def print(self):
         print("N: {}, W: {}, Q: {}".format(self.N, self.W, self.Q))

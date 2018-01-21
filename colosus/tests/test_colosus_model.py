@@ -4,7 +4,7 @@ import datetime
 import tensorflow as tf
 import numpy as np
 from colosus.colosus_model import ColosusModel
-from colosus.config import SearchConfig
+from colosus.config import SearchConfig, StateConfig
 from colosus.game.position import Position
 from colosus.game.move import Move
 from colosus.game.side import Side
@@ -91,8 +91,8 @@ class ColosusModelTestCase(unittest.TestCase):
 
         colosus = ColosusModel()
         colosus.build()
-        colosus.model.load_weights("w_2_1200_800.h5")
-        # colosus.model.load_weights("w999_2_1200_800.h5")
+        # colosus.model.load_weights("w_2_1200_800.h5")
+        colosus.model.load_weights("w_1_1000_800.h5")
         # colosus.model.load_weights("res.h5")
 
         # sess = K.get_session()
@@ -110,7 +110,7 @@ class ColosusModelTestCase(unittest.TestCase):
         print('')
 
         searcher = Searcher(SearchConfig());
-        state = State(pos, None, None, colosus)
+        state = State(pos, None, None, colosus, StateConfig())
         policy, value, move, new_state = searcher.search(state, 1600)
         print("value: " + str(value))
         print("moves prob")

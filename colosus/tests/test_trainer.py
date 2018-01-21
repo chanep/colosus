@@ -18,18 +18,18 @@ class Person:
 
 class SelfPlayTestCase(unittest.TestCase):
     def test_train(self):
-        train_filename = "t_2_1200_800.dat"
+        train_filename = "tpp_1_1200_800.dat"
         # weights_filename = "x.h5"
-        weights_filename = "w_2_1200_800.h5"
-        prev_weights_filename = "w_1_1000_800.h5"
-        # prev_weights_filename = None
+        weights_filename = "wpp_1_1200_800.h5"
+        # prev_weights_filename = "w_1_1000_800.h5"
+        prev_weights_filename = None
 
         trainer = Trainer()
         trainer.train(train_filename, weights_filename, 30, prev_weights_filename)
 
     def test_save_rotated_records(self):
-        input_filename = "t999_2_150_800.dat"
-        rotated_filename = "t999_2_1200_800.dat"
+        input_filename = "tpp_1_150_800.dat"
+        rotated_filename = "tpp_1_1200_800.dat"
         recordset = TrainRecordSet.load_from_file(input_filename)
         recordset.do_rotations()
         recordset.save_to_file(rotated_filename)

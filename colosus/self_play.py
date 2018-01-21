@@ -4,7 +4,7 @@ import threading
 import tensorflow as tf
 
 from colosus.colosus_model import ColosusModel
-from colosus.config import SearchConfig
+from colosus.config import SearchConfig, SelfPlayConfig
 from .game.position import Position
 from .state import State
 from .searcher import Searcher
@@ -13,6 +13,9 @@ from .train_record_set import TrainRecordSet
 
 
 class SelfPlay:
+    def __init__(self, config: SelfPlayConfig):
+        self.config = config
+
     def play(self, games: int, iterations_per_move: int, initial_pos: Position, train_filename, weights_filename, update_stats=None):
         train_record_set = TrainRecordSet()
 
@@ -21,11 +24,11 @@ class SelfPlay:
         if weights_filename is not None:
             colosus.model.load_weights(weights_filename)
 
-        searcher = Searcher(SearchConfig())
+        searcher = Searcher(self.config.search_config)
         mates = 0
         mc_mates = 0
         for i in range(games):
-            state = State(initial_pos, None, None, colosus)
+            state = State(initial_pos, None, None, colosus, self.config.state_config)
             # print("initial state N: " + str(state.N))
             end = False
             while not end:
