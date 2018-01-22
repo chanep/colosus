@@ -1,18 +1,15 @@
 import unittest
 import pickle
 from ..position import Position
-from ..move import Move
 from ..square import Square
 from ..side import Side
-from ..piece import Piece
 
 
 class PositionTestCase(unittest.TestCase):
     def test_print(self):
         pos = Position()
-        pos.put_piece(Side.WHITE, Piece.KING, 0, 5)
-        pos.put_piece(Side.WHITE, Piece.ROOK, 0, 0)
-        pos.put_piece(Side.BLACK, Piece.KING, 7, 5)
+        pos.put_piece(Side.WHITE, 3, 7)
+        pos.put_piece(Side.BLACK, 4, 4)
         pos.print()
 
     def test_move(self):

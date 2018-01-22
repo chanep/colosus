@@ -1,5 +1,6 @@
 import tensorflow as tf
 import numpy as np
+import time
 
 v = np.random.random_integers(1,9,(3,1,1,2))
 x = tf.cast(v,tf.float32)
@@ -31,4 +32,44 @@ print("shape: {}".format(result.shape))
 # print(type(p))
 # print(np.std(p))
 
-print("game: {}, tow_win_rate: {:.1%}, mates_move_mean: {:.3g}".format(3, 0.44664, 17.467))
+x = np.array([15], dtype=">u2")
+# x = np.array([2], np.uint8)
+
+# print(x)
+# print(type(x))
+#
+# y = x.view(np.uint8)
+#
+# print(y)
+# print(type(y))
+# print(y.shape)
+# print(y.dtype)
+# print(np.flip(np.unpackbits(y), axis=0))
+#
+# print("\n\n")
+#
+# x = 15
+# a = np.zeros((16,), np.uint8)
+#
+# start = time.time()
+#
+# for n in range(100000):
+#     a = np.zeros((16,), np.uint8)
+#     for i in range(16):
+#         a[i] = (x & (1 << i)) >> i
+#
+# print(a)
+# print(str(time.time() - start))
+#
+# start = time.time()
+#
+# for n in range(100000):
+#     y = np.array([x], dtype=">u2")
+#     z = y.view(np.uint8)
+#     a = np.flip(np.unpackbits(z), axis=0)
+#
+# print(a)
+# print(str(time.time() - start))
+x = np.zeros((3, 3))
+x[0, :] = np.array([1, 2, 3])
+print(x)

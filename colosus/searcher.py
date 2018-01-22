@@ -11,10 +11,7 @@ class Searcher:
     def search(self, root_state: State, iterations: int) -> (np.array, float, int, State):
         for i in range(iterations):
             root_state.select()
-        policy = root_state.get_policy(1)
-        play_policy = root_state.get_policy(self._get_temperature(root_state))
-        value = -root_state.Q
-        move, new_state = root_state.play(play_policy)
+        policy, value, move, new_state = root_state.play(self._get_temperature(root_state))
         return policy, value, move, new_state
 
     def _get_temperature(self, state: State):

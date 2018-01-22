@@ -3,261 +3,168 @@ from typing import overload
 import numpy as np
 
 from colosus.game.model_position import ModelPosition
-from .move import Move
 from .square import Square
 from .side import Side
-from .piece import Piece
+
 
 
 class Position:
-    def __init__(self):
+    RANKS_I = 0
+    FILES_I = 1
+    DIAG_DOWN_I = 2
+    DIAG_UP_I = 3
+    BOARDS_COUNT = 4
+    B_SIZE = 16
+    DIAGS = (B_SIZE - 5 + 1) * 2 - 1  # 23 diagonals
+    DIAG_LEN = [5, 6, 7, 8, 9, 10, 11, 12, 11, 10, 9, 8, 7, 6, 5]
+
+    def __init__(self, initialize_boards=True):
         self.side_to_move = Side.WHITE
         self.is_end = False
         self.score = None
         self.move_count = 0
-        self.k = [None, None]
-        self.r = [None, None]
-        self._attacks = [None, None]
+        self.boards = [None] * self.BOARDS_COUNT
+        # 23
+        if initialize_boards:
+            self.boards[self.RANKS_I] = np.zeros((2, self.B_SIZE), np.uint16)
+            self.boards[self.FILES_I] = np.zeros((2, self.B_SIZE), np.uint16)
+            self.boards[self.DIAG_DOWN_I] = np.zeros((2, self.DIAGS), np.uint16)
+            self.boards[self.DIAG_UP_I] = np.zeros((2, self.DIAGS), np.uint16)
 
     def clone(self):
-        new_pos = Position()
+        new_pos = Position(False)
         new_pos.side_to_move = self.side_to_move
         new_pos.is_end = self.is_end
         new_pos.score = self.score
         new_pos.move_count = self.move_count
-        new_pos.k = list(self.k)
-        new_pos.r = list(self.r)
+        for i in range(self.BOARDS_COUNT):
+            new_pos.boards[i] = np.copy(self.boards[i])
         return new_pos
 
     def to_model_position(self):
-        model_board = np.zeros((Side.COUNT * Piece.COUNT, 8, 8), np.uint8)
+        model_board = np.zeros((Side.COUNT, self.B_SIZE, self.B_SIZE), np.uint8)
         for side in range(Side.COUNT):
-            k_rank, k_file = Square.to_rank_file(self.k[side])
-            index = self._get_board_index(side, Piece.KING)
-            model_board[index, k_rank, k_file] = 1
-            r_square = self.r[side]
-            if r_square is not None:
-                r_rank, r_file = Square.to_rank_file(r_square)
-                index = self._get_board_index(side, Piece.ROOK)
-                model_board[index, r_rank, r_file] = 1
+            b_index = self._get_board_index(side)
+            for r in range(self.B_SIZE):
+                bit_rank = self.boards[self.RANKS_I][side, r]
+                aux = np.array([bit_rank], dtype=">u2")
+                aux2 = aux.view(np.uint8)
+                model_board[b_index, r, :] = np.flip(np.unpackbits(aux2), axis=0)
 
-        return ModelPosition(model_board, self.move_count)
+        return ModelPosition(model_board)
 
-    def _get_board_index(self, side, piece):
-        return (self.side_to_move ^ side) * Side.COUNT + piece
-
-    @overload
-    def piece_at(self, side, square):
-        ...
-
-    @overload
-    def piece_at(self, side, rank, file):
-        ...
-
-    def piece_at(self, side, rank, file=None):
-        if file is None:
-            square = rank
-        else:
-            square = Square.square(rank, file)
-
-        if self.k[side] == square:
-            return Piece.KING
-        elif self.r[side] == square:
-            return Piece.ROOK
-        return None
+    def _get_board_index(self, side):
+        return self.side_to_move ^ side
 
     def switch_side(self):
         self.side_to_move = self.side_to_move.change()
 
+    def _get_coords(self, rank, file):
+        rank_coords = (rank, file)
 
+        file_coords = (file, rank)
 
-    def _side_attacks(self, side):
-        if self._attacks[side] is not None:
-            return self._attacks[side]
-        k_attacks = []
+        diag_down_index = self.B_SIZE - 5 - rank + file
+        diag_down_bit = min(rank, file)
+        diag_down_coords = None
+        if 0 <= diag_down_index < self.DIAGS:
+            diag_down_coords = (diag_down_index, diag_down_bit)
 
-        # king
-        k = self.k[side]
-        k_rank, k_file = Square.to_rank_file(k)
-        for rank in range(max(0, k_rank - 1), min(8, k_rank + 2)):
-            for file in range(max(0, k_file - 1), min(8, k_file + 2)):
-                if not (rank == k_rank and file == k_file):
-                    k_attacks.append(Square.square(rank, file))
+        diag_up_index = rank + file - 5
+        diag_up_bit = file - min(rank + file - 15, 0)
+        diag_up_coords = None
+        if 0 <= diag_up_index < self.DIAGS:
+            diag_up_coords = (diag_up_index, diag_up_bit)
 
-        # rook
-        r_attacks = []
-        r = self.r[side]
-        if r is not None:
-            r_rank, r_file = Square.to_rank_file(r)
-            r_rank_start = 0
-            r_rank_end = 8
-            r_file_start = 0
-            r_file_end = 8
-            if r_rank == k_rank:
-                if k_file > r_file:
-                    r_file_end = k_file
-                else:
-                    r_file_start = k_file
-            if r_file == k_file:
-                if k_rank > r_rank:
-                    r_rank_end = k_rank
-                else:
-                    r_rank_start = k_rank
+        return [rank_coords, file_coords, diag_down_coords, diag_up_coords]
 
-            for rank in range(r_rank_start, r_rank_end):
-                if rank != r_rank:
-                    r_attacks.append(Square.square(rank, r_file))
-
-            for file in range(r_file_start, r_file_end):
-                if file != r_file:
-                    r_attacks.append(Square.square(r_rank, file))
-
-        self._attacks[side] = k_attacks + r_attacks
-        return self._attacks[side]
+    def piece_at(self, side, rank, file):
+        return self.boards[self.RANKS_I][side, rank] & (1 << file) != 0
 
     @overload
-    def put_piece(self, side, piece, square):
+    def put_piece(self, side, square):
         ...
 
     @overload
-    def put_piece(self, side, piece, rank, file):
+    def put_piece(self, side, rank, file):
         ...
 
-    def put_piece(self, side, piece, rank, file=None):
+    def put_piece(self, side, rank, file=None):
         if file is None:
-            square = rank
-        else:
-            square = Square.square(rank, file)
-        if piece == Piece.KING:
-            self.k[side] = square
-        elif piece == Piece.ROOK:
-            self.r[side] = square
-
-    @overload
-    def remove_piece(self, square): ...
-
-    def remove_piece(self, rank, file=None):
-        if file is None:
-            square = rank
-        else:
-            square = Square.square(rank, file)
-
-        if self.k[0] == square:
-            self.k[0] = None
-        elif self.k[1] == square:
-            self.k[1] = None
-        elif self.r[0] == square:
-            self.r[0] = None
-        elif self.r[1] == square:
-            self.r[1] = None
+            rank, file = Square.to_rank_file(rank)
+        coords = self._get_coords(rank, file)
+        for i in range(self.BOARDS_COUNT):
+            coord = coords[i]
+            if coord is not None:
+                r, f = coord
+                self.boards[i][side, r] |= 1 << f
+        self.move_count += 1
 
     def is_legal(self, move):
-        side = self.side_to_move
-        orig, dest = Move.to_squares(move)
-        orig_rank, orig_file = Square.to_rank_file(orig)
-        dest_rank, dest_file = Square.to_rank_file(dest)
-        if orig_rank == dest_rank and orig_file == dest_file:
+        r, f = Square.to_rank_file(move)
+        rank = self.boards[self.RANKS_I][Side.WHITE,  r] | self.boards[self.RANKS_I][Side.BLACK,  r]
+        if rank & (1 << f) != 0:
             return False
-
-        # king
-        if self.k[side] == orig:
-            if abs(dest_rank - orig_rank) > 1 or abs(dest_file - orig_file) > 1:
-                return False
-            return dest not in self._side_attacks(side.change())
-
-        # rook
-        if self.r[side] == orig:
-            if orig_rank != dest_rank and orig_file != dest_file:
-                return False
-            k = self.k[side]
-            k_rank, k_file = Square.to_rank_file(k)
-            if (orig_rank == dest_rank and orig_rank == k_rank and
-                    min(orig_file, dest_file) <= k_file <= max(orig_file, dest_file)):
-                return False
-            if (orig_file == dest_file and orig_file == k_file and
-                    min(orig_rank, dest_rank) <= k_rank <= max(orig_rank, dest_rank)):
-                return False
+        else:
             return True
-
-        return False
 
     def legal_moves(self):
         moves = []
-        for orig in range(64):
-            side = self.side_to_move
-            if self.k[side] != orig and self.r[side] != orig:
-                continue
-            for dest in range(64):
-                if dest == orig:
-                    continue
-                move = Move.from_squares(orig, dest)
-                if self.is_legal(move):
-                    moves.append(move)
+        for m in range(self.B_SIZE * self.B_SIZE):
+            if self.is_legal(m):
+                moves.append(m)
         return moves
 
     def move(self, move):
         side = self.side_to_move
-        orig, dest = Move.to_squares(move)
         new_pos = self.clone()
-        piece = new_pos.piece_at(side, orig)
-        new_pos.remove_piece(orig)
-        new_pos.remove_piece(dest)
-        new_pos.put_piece(side, piece, dest)
+        new_pos.put_piece(side, move)
         new_pos.switch_side()
-        new_pos.move_count = self.move_count + 1
-
-        new_pos._check_end()
-
-        # if new_pos.k[0] is None or new_pos.k[1] is None:
-        #     print("old position")
-        #     self.print()
-        #     print("new position")
-        #     new_pos.print()
-        #     print("move: " + str(Move.to_string(move)))
-        #     print("piece: " + str(piece))
-        #     raise Exception("invalid position")
-
+        new_pos._check_end(move)
         return new_pos
 
-    def _check_end(self):
-        if self.move_count >= 100:
+    def _check_end(self, last_move):
+        if self.move_count >= (self.B_SIZE * self.B_SIZE):
             self.is_end = True
             self.score = 0
-        elif self.checkmate():
-            # print("Mate")
+        elif self.check_win(last_move):
             self.is_end = True
-            self.score = -1
-        elif self.r[0] is None and self.r[1] is None:
-            self.is_end = True
-            self.score = 0
+            self.score = 1
 
-    def in_check(self, side=None):
-        if side is None:
-            side = self.side_to_move
-        k = self.k[side]
-        other_attacks = self._side_attacks(side.change())
-        return k in other_attacks
+    def check_win(self, last_move):
+        side = self.side_to_move.change()
+        r, f = Square.to_rank_file(last_move)
+        coords = self._get_coords(r, f)
+        mask = 0b11111
+        shifts = self.B_SIZE - 5
+        for i in range(self.BOARDS_COUNT):
+            coord = coords[i]
+            if coord is not None:
+                index, bit = coord
+                if i > 1:
+                    shifts = self.DIAG_LEN[index]
+                for s in range(shifts):
+                    shifted_mask = mask << s
+                    if self.board[i][side, index] & shifted_mask == shifted_mask:
+                        return True
 
-    def checkmate(self):
-        if not self.in_check():
-            return False
-        return len(self.legal_moves()) == 0
+        return False
 
     def print(self):
-        p_str = ['R', 'K']
-        for r in reversed(range(8)):
+        p_str = ['O', 'X']
+        for r in reversed(range(self.B_SIZE)):
             rank_str = ''
-            for f in range(8):
-                p = self.piece_at(Side.WHITE, r, f)
-                if p is not None:
-                    rank_str += p_str[p] + ' '
-                    continue
-                p = self.piece_at(Side.BLACK, r, f)
-                if p is not None:
-                    rank_str += p_str[p].lower() + ' '
-                    continue
-                rank_str += '- '
+            for f in range(self.B_SIZE):
+                if self.piece_at(Side.WHITE, r, f):
+                    rank_str += p_str[Side.WHITE] + ' '
+                elif self.piece_at(Side.BLACK, r, f):
+                    rank_str += p_str[Side.BLACK] + ' '
+                else:
+                    rank_str += '- '
+            rank_str += str(r)
             print(rank_str)
+        print('0 1 2 3 4 5 6 7 8 9101112131415')
+
 
 
 

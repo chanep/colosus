@@ -1,5 +1,4 @@
 class ModelPosition:
-    def __init__(self, board, move_count):
+    def __init__(self, board):
         self.board = board
-        self.move_count = move_count
 

@@ -24,23 +24,28 @@ class State:
         self.children = []
         self.noise = None
 
-    def get_policy(self, temperature):
+    @staticmethod
+    def apply_temperature(self, policy, temperature):
+        temp_policy = np.power(policy, 1 / temperature)
+        return temp_policy / np.sum(temp_policy)
+
+    def get_policy(self):
         policy_len = len(self.children)
-        inv_temp = 1 / temperature
         policy = np.zeros(policy_len)
-        total_visit = math.pow(self.N, inv_temp)
         for i in range(policy_len):
             child = self.children[i]
             if child is not None:
-                child_visit = math.pow(child.N, inv_temp)
-                policy[i] = child_visit / total_visit
-        return policy / np.sum(policy)
+                policy[i] = child.N / self.N
+        return policy
 
-    def play(self, policy) -> (int, 'State'):
-        move = np.random.choice(len(policy), 1, p=policy)[0]
+    def play(self, temperature) -> (int, 'State'):
+        policy = self.get_policy()
+        value = - self.Q
+        temp_policy = self.apply_temperature(policy, temperature)
+        move = np.random.choice(len(temp_policy), 1, p=temp_policy)[0]
         new_root_state = self.children[move]
         self.noise = None
-        return move, new_root_state
+        return policy, value, move, new_root_state
 
     def select(self):
         if self.is_leaf:
