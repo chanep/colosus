@@ -12,6 +12,9 @@ class TrainRecordSet:
     def append(self, record: TrainRecord):
         self.records.append(record)
 
+    def extend(self, records: List[TrainRecord]):
+        self.records.extend(records)
+
     def save_to_file(self, filename):
         with open(filename, "wb") as f:
             pickle.dump(self, f)

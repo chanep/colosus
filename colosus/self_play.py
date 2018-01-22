@@ -31,16 +31,24 @@ class SelfPlay:
             state = State(initial_pos, None, None, colosus, self.config.state_config)
             # print("initial state N: " + str(state.N))
             end = False
+            game_records = []
             while not end:
                 # start_time = time.time()
                 policy, value, move, new_state = searcher.search(state, iterations_per_move)
                 # print("time: " + str(time.time() - start_time))
                 train_record = TrainRecord(state.position.to_model_position(), policy, value)
-                train_record_set.append(train_record)
+                game_records.append(train_record)
                 new_state.parent = None
                 end = new_state.is_end
                 state = new_state
                 mc = state.position.move_count
+
+            z = - state.position.score
+            for j in reversed(range(len(game_records))):
+                game_records[j].value = z
+                z = -z
+
+            train_record_set.extend(game_records)
 
             if update_stats is None:
                 print("fin game " + str(i))

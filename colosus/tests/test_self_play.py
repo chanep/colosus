@@ -43,6 +43,22 @@ class SelfPlayTestCase(unittest.TestCase):
 
         print("fin. time: " + str(time.time() - start_time))
 
+    def test_play2(self):
+        pos = Position()
+        pos.put_piece(Side.WHITE, Piece.KING, 4, 5)
+        pos.put_piece(Side.WHITE, Piece.ROOK, 6, 2)
+        pos.put_piece(Side.BLACK, Piece.KING, 5, 7)
+        pos.side_to_move = Side.BLACK
+
+        start_time = time.time()
+        config = SelfPlayConfig()
+        self_play = SelfPlay(config)
+        # self_play.play(150, 800, pos, "t999_2_150_800.dat", "w999_1_1200_800.h5")
+        # self_play.play(10, 200, pos, "x.dat", "wpp_1_1200_800.h5")
+        self_play.play(1, 200, pos, "x.dat", None)
+
+        print("fin. time: " + str(time.time() - start_time))
+
     def test_play_parallel(self):
         pos = Position()
         pos.put_piece(Side.WHITE, Piece.KING, 4, 3)
@@ -55,26 +71,6 @@ class SelfPlayTestCase(unittest.TestCase):
         self_play.play_parallel(6, 200, pos, "x.dat", 4, None)
 
         print("fin. time: " + str(time.time() - start_time))
-
-    def test_play2(self):
-        pos = Position()
-        # pos.put_piece(Side.WHITE, Piece.KING, 4, 3)
-        # pos.put_piece(Side.WHITE, Piece.ROOK, 4, 4)
-        # pos.put_piece(Side.BLACK, Piece.KING, 5, 5)
-        pos.put_piece(Side.WHITE, Piece.KING, 5, 5)
-        pos.put_piece(Side.WHITE, Piece.ROOK, 2, 0)
-        pos.put_piece(Side.BLACK, Piece.KING, 7, 5)
-
-        colosus = ColosusModel()
-        colosus.build()
-        colosus.model.load_weights("weights1.h5")
-
-        pos.print()
-        policy, value = colosus.predict(pos)
-        print(policy)
-        move = np.random.choice(len(policy), 1, p=policy)[0]
-        print(Move.to_string(move))
-        print(value)
 
     def test_named_params(self):
         print("test named params")
