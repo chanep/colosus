@@ -15,6 +15,7 @@ class SelfPlayConfig:
         self.state_config = StateConfig()
         self.search_config = SearchConfig()
 
+
 class EvaluatorConfig:
     def __init__(self):
         self.state_config = StateConfig()

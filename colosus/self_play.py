@@ -49,7 +49,7 @@ class SelfPlay:
                     mc_mates += mc
                 mates_rate = mates / (i + 1)
                 mc_mean = mc_mates / max(1, mates)
-                print("mates rate: {}, mc mean: {}".format(mates_rate, mc_mean))
+                print("mates rate: {:.1%}, mc mean: {:.3g}".format(mates_rate, mc_mean))
             else:
                 mate = state.position.score != 0
                 update_stats(mate, mc)

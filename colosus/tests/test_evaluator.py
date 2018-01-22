@@ -20,7 +20,7 @@ class EvaluatorTestCase(unittest.TestCase):
         config = EvaluatorConfig()
         evaluator = Evaluator(config)
 
-        evaluator.evalueate(10, 200, pos, "w999_2_1200_800.h5", "w_2_1200_800.h5")
+        evaluator.evalueate(20, 200, pos, "wpp_3_1600_800.h5", "wpp_2_1200_800.h5")
 
 
 if __name__ == '__main__':

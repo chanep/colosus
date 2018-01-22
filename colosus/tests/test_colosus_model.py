@@ -92,7 +92,7 @@ class ColosusModelTestCase(unittest.TestCase):
         colosus = ColosusModel()
         colosus.build()
         # colosus.model.load_weights("w_2_1200_800.h5")
-        colosus.model.load_weights("w_1_1000_800.h5")
+        colosus.model.load_weights("wpp_3_1600_800.h5")
         # colosus.model.load_weights("res.h5")
 
         # sess = K.get_session()
@@ -111,7 +111,7 @@ class ColosusModelTestCase(unittest.TestCase):
 
         searcher = Searcher(SearchConfig());
         state = State(pos, None, None, colosus, StateConfig())
-        policy, value, move, new_state = searcher.search(state, 1600)
+        policy, value, move, new_state = searcher.search(state, 2600)
         print("value: " + str(value))
         print("moves prob")
         sorted_policy = self.sort_policy(policy)

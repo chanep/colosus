@@ -50,13 +50,13 @@ class State:
             best_score = -10000
             factor = self.config.cpuct * math.sqrt(self.N)
 
-            if self.is_root() and self.noise is None:
+            if self.is_root() and self.noise is None and self.config.noise_factor > 0:
                 self.noise = np.random.dirichlet([self.config.noise_alpha] * len(self.children))
 
             for i in range(len(self.children)):
                 child = self.children[i]
                 if child is not None:
-                    if self.is_root():
+                    if self.noise is not None:
                         child_p = (1 - self.config.noise_factor) * child.P + self.config.noise_factor * self.noise[i]
                     else:
                         child_p = child.P
