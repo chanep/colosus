@@ -7,7 +7,6 @@ from .square import Square
 from .side import Side
 
 
-
 class Position:
     RANKS_I = 0
     FILES_I = 1
@@ -16,7 +15,7 @@ class Position:
     BOARDS_COUNT = 4
     B_SIZE = 16
     DIAGS = (B_SIZE - 5 + 1) * 2 - 1  # 23 diagonals
-    DIAG_LEN = [5, 6, 7, 8, 9, 10, 11, 12, 11, 10, 9, 8, 7, 6, 5]
+    DIAG_LEN = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5]
 
     def __init__(self, initialize_boards=True):
         self.side_to_move = Side.WHITE
@@ -26,10 +25,10 @@ class Position:
         self.boards = [None] * self.BOARDS_COUNT
         # 23
         if initialize_boards:
-            self.boards[self.RANKS_I] = np.zeros((2, self.B_SIZE), np.uint16)
-            self.boards[self.FILES_I] = np.zeros((2, self.B_SIZE), np.uint16)
-            self.boards[self.DIAG_DOWN_I] = np.zeros((2, self.DIAGS), np.uint16)
-            self.boards[self.DIAG_UP_I] = np.zeros((2, self.DIAGS), np.uint16)
+            self.boards[self.RANKS_I] = np.zeros((2, self.B_SIZE), np.int)  # better bitwise performance than uint16
+            self.boards[self.FILES_I] = np.zeros((2, self.B_SIZE), np.int)
+            self.boards[self.DIAG_DOWN_I] = np.zeros((2, self.DIAGS), np.int)
+            self.boards[self.DIAG_UP_I] = np.zeros((2, self.DIAGS), np.int)
 
     def clone(self):
         new_pos = Position(False)
@@ -58,6 +57,8 @@ class Position:
 
     def switch_side(self):
         self.side_to_move = self.side_to_move.change()
+        if self.score is not None:
+            self.score = - self.score
 
     def _get_coords(self, rank, file):
         rank_coords = (rank, file)
@@ -70,8 +71,8 @@ class Position:
         if 0 <= diag_down_index < self.DIAGS:
             diag_down_coords = (diag_down_index, diag_down_bit)
 
-        diag_up_index = rank + file - 5
-        diag_up_bit = file - min(rank + file - 15, 0)
+        diag_up_index = rank + file - 4
+        diag_up_bit = file - max(rank + file - 15, 0)
         diag_up_coords = None
         if 0 <= diag_up_index < self.DIAGS:
             diag_up_coords = (diag_up_index, diag_up_bit)
@@ -91,14 +92,18 @@ class Position:
 
     def put_piece(self, side, rank, file=None):
         if file is None:
+            square = rank
             rank, file = Square.to_rank_file(rank)
+        else:
+            square = Square.square(rank, file)
         coords = self._get_coords(rank, file)
         for i in range(self.BOARDS_COUNT):
             coord = coords[i]
             if coord is not None:
                 r, f = coord
-                self.boards[i][side, r] |= 1 << f
+                self.boards[i][side, r] |= (1 << f)
         self.move_count += 1
+        self._check_end(square)
 
     def is_legal(self, move):
         r, f = Square.to_rank_file(move)
@@ -120,32 +125,32 @@ class Position:
         new_pos = self.clone()
         new_pos.put_piece(side, move)
         new_pos.switch_side()
-        new_pos._check_end(move)
         return new_pos
 
     def _check_end(self, last_move):
-        if self.move_count >= (self.B_SIZE * self.B_SIZE):
-            self.is_end = True
-            self.score = 0
-        elif self.check_win(last_move):
+        if self.check_win(last_move):
             self.is_end = True
             self.score = 1
+        elif self.move_count >= (self.B_SIZE * self.B_SIZE):
+            self.is_end = True
+            self.score = 0
 
     def check_win(self, last_move):
-        side = self.side_to_move.change()
+        side = self.side_to_move
         r, f = Square.to_rank_file(last_move)
         coords = self._get_coords(r, f)
         mask = 0b11111
-        shifts = self.B_SIZE - 5
+        shifts = self.B_SIZE - 5 + 1
         for i in range(self.BOARDS_COUNT):
             coord = coords[i]
             if coord is not None:
                 index, bit = coord
+                line = int(self.boards[i][side, index])
                 if i > 1:
-                    shifts = self.DIAG_LEN[index]
+                    shifts = self.DIAG_LEN[index] - 5 + 1
                 for s in range(shifts):
                     shifted_mask = mask << s
-                    if self.board[i][side, index] & shifted_mask == shifted_mask:
+                    if line & shifted_mask == shifted_mask:
                         return True
 
         return False

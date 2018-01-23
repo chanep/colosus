@@ -2,8 +2,7 @@ import numpy as np
 
 from typing import List
 from colosus.game.model_position import ModelPosition
-from colosus.game.move import Move
-from colosus.game.piece import Piece
+from colosus.game.position import Position
 from colosus.game.side import Side
 from colosus.game.square import Square
 from colosus.train_record import TrainRecord
@@ -13,9 +12,10 @@ class Rotator:
     def __init__(self):
         self.square_flip = flip = []
         self.square_rot90 = rot = []
-        for s in range(64):
+        size = Position.B_SIZE
+        for s in range(size * size):
             rank, file = Square.to_rank_file(s)
-            board = np.zeros((8, 8), np.uint8)
+            board = np.zeros((size, size), np.uint8)
             board[rank, file] = 1
             board_flip = np.fliplr(board)
             board_rot = np.rot90(board)
@@ -29,36 +29,30 @@ class Rotator:
     def _flip_policy(self, policy: np.array):
         policy_flip = np.zeros_like(policy)
         for m in range(len(policy)):
-            orig, dest = Move.to_squares(m)
-            orig_flip = self.square_flip[orig]
-            dest_flip = self.square_flip[dest]
-            move_flip = Move.from_squares(orig_flip, dest_flip)
+            move_flip = self.square_flip[m]
             policy_flip[move_flip] = policy[m]
         return policy_flip
 
     def _rot90_policy(self, policy: np.array):
         policy_rot = np.zeros_like(policy)
         for m in range(len(policy)):
-            orig, dest = Move.to_squares(m)
-            orig_rot = self.square_rot90[orig]
-            dest_rot = self.square_rot90[dest]
-            move_rot = Move.from_squares(orig_rot, dest_rot)
+            move_rot = self.square_rot90[m]
             policy_rot[move_rot] = policy[m]
         return policy_rot
 
     def _flip_position(self, position: ModelPosition):
         board = []
-        for p in range(Side.COUNT * Piece.COUNT):
-            board.append(np.fliplr(position.board[p]))
+        for s in range(Side.COUNT):
+            board.append(np.fliplr(position.board[s]))
         board = np.stack(board)
-        return ModelPosition(board, position.move_count)
+        return ModelPosition(board)
 
     def _rot90_position(self, position: ModelPosition):
         board = []
-        for p in range(Side.COUNT * Piece.COUNT):
-            board.append(np.rot90(position.board[p]))
+        for s in range(Side.COUNT):
+            board.append(np.rot90(position.board[s]))
         board = np.stack(board)
-        return ModelPosition(board, position.move_count)
+        return ModelPosition(board)
 
     def rotations(self, record: TrainRecord) -> List[TrainRecord]:
         rotations = []

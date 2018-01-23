@@ -25,8 +25,8 @@ class SelfPlay:
             colosus.model.load_weights(weights_filename)
 
         searcher = Searcher(self.config.search_config)
-        mates = 0
-        mc_mates = 0
+        wins = 0
+        mc_wins = 0
         for i in range(games):
             state = State(initial_pos, None, None, colosus, self.config.state_config)
             # print("initial state N: " + str(state.N))
@@ -40,24 +40,26 @@ class SelfPlay:
                 game_records.append(train_record)
                 new_state.parent = None
                 end = new_state.is_end
+                end = True  # TODO: remove
                 state = new_state
                 mc = state.position.move_count
 
-            z = - state.position.score
-            for j in reversed(range(len(game_records))):
-                game_records[j].value = z
-                z = -z
+            # z = - state.position.score
+            # for j in reversed(range(len(game_records))):
+            #     game_records[j].value = z
+            #     z = -z
+            state.position.print()
 
             train_record_set.extend(game_records)
 
             if update_stats is None:
                 print("fin game " + str(i))
                 if state.position.score != 0:
-                    mates += 1
-                    mc_mates += mc
-                mates_rate = mates / (i + 1)
-                mc_mean = mc_mates / max(1, mates)
-                print("mates rate: {:.1%}, mc mean: {:.3g}".format(mates_rate, mc_mean))
+                    wins += 1
+                    mc_wins += mc
+                wins_rate = wins / (i + 1)
+                mc_mean = mc_wins / max(1, wins)
+                print("wins rate: {:.1%}, mc mean: {:.3g}".format(wins_rate, mc_mean))
             else:
                 mate = state.position.score != 0
                 update_stats(mate, mc)

@@ -2,8 +2,8 @@ import unittest
 import numpy as np
 
 from colosus.game.model_position import ModelPosition
-from colosus.game.move import Move
-from colosus.game.piece import Piece
+
+from colosus.game.position import Position
 from colosus.game.rotator import Rotator
 from colosus.game.side import Side
 from colosus.game.square import Square
@@ -12,23 +12,19 @@ from colosus.train_record import TrainRecord
 
 class PositionTestCase(unittest.TestCase):
     def test_rotations(self):
+        size = Position.B_SIZE
         assertEqual = self.assertEqual
-        assertTrue = self.assertTrue
 
-        board = np.zeros((Side.COUNT * Piece.COUNT, 8, 8), np.uint8)
-        board[0, 1, 2] = 1
-        board[1, 7, 5] = 1
-        board[2, 1, 3] = 1
+        board = np.zeros((Side.COUNT, size, size), np.uint8)
+        board[0, 13, 4] = 1
+        board[1, 11, 5] = 1
 
-        orig = Square.square(1, 2)
-        dest = Square.square(1, 3)
-        move = Move.from_squares(orig, dest)
-        policy = np.array([0.0] * (64 * 64))
+        move = Square.square(9, 14)
+        policy = np.array([0.0] * (size * size))
         policy[move] = 1.0
-        move_count = 10
         value = 0.8
 
-        position = ModelPosition(board, move_count)
+        position = ModelPosition(board)
 
         record = TrainRecord(position, policy, value)
 
@@ -42,8 +38,8 @@ class PositionTestCase(unittest.TestCase):
         rec = rotations[0]
         b = rec.position.board
         p = rec.policy
-        assertEqual(1, b[0, 1, 2])
-        assertEqual(1, b[2, 1, 3])
+        assertEqual(1, b[0, 13, 4])
+        assertEqual(1, b[1, 11, 5])
         assertEqual(1.0, p[move])
         assertEqual(value, rec.value)
 
@@ -52,13 +48,13 @@ class PositionTestCase(unittest.TestCase):
         b = rec.position.board
         p = rec.policy
 
-        m = Move.from_rank_files(1, 5, 1, 4)
+        m = Square.square(9, 1)
 
-        assertEqual(0, b[0, 1, 2])
-        assertEqual(1, b[0, 1, 5])
+        assertEqual(0, b[0, 13, 4])
+        assertEqual(1, b[0, 13, 11])
 
-        assertEqual(0, b[1, 7, 5])
-        assertEqual(1, b[1, 7, 2])
+        assertEqual(0, b[1, 11, 5])
+        assertEqual(1, b[1, 11, 10])
 
         assertEqual(0, p[move])
         assertEqual(1.0, p[m])
@@ -68,19 +64,13 @@ class PositionTestCase(unittest.TestCase):
         b = rec.position.board
         p = rec.policy
 
-        m = Move.from_rank_files(5, 1, 4, 1)
+        m = Square.square(1, 9)
 
-        # print("rot90 board")
-        # print(b)
+        assertEqual(0, b[0, 13, 4])
+        assertEqual(1, b[0, 11, 13])
 
-        assertEqual(0, b[0, 1, 2])
-        assertEqual(1, b[0, 5, 1])
-
-        assertEqual(0, b[1, 7, 5])
-        assertEqual(1, b[1, 2, 7])
-
-        assertEqual(0, b[2, 1, 3])
-        assertEqual(1, b[2, 4, 1])
+        assertEqual(0, b[1, 11, 5])
+        assertEqual(1, b[1, 10, 11])
 
         assertEqual(0, p[move])
         assertEqual(1.0, p[m])
@@ -90,19 +80,13 @@ class PositionTestCase(unittest.TestCase):
         b = rec.position.board
         p = rec.policy
 
-        m = Move.from_rank_files(5, 6, 4, 6)
+        m = Square.square(1, 6)
 
-        # print("flip rot90 board")
-        # print(b)
+        assertEqual(0, b[0, 13, 4])
+        assertEqual(1, b[0, 11, 2])
 
-        assertEqual(0, b[0, 1, 2])
-        assertEqual(1, b[0, 5, 6])
-
-        assertEqual(0, b[1, 7, 5])
-        assertEqual(1, b[1, 2, 0])
-
-        assertEqual(0, b[2, 1, 3])
-        assertEqual(1, b[2, 4, 6])
+        assertEqual(0, b[1, 11, 5])
+        assertEqual(1, b[1, 10, 4])
 
         assertEqual(0, p[move])
         assertEqual(1.0, p[m])
@@ -112,19 +96,13 @@ class PositionTestCase(unittest.TestCase):
         b = rec.position.board
         p = rec.policy
 
-        m = Move.from_rank_files(6, 5, 6, 4)
+        m = Square.square(6, 1)
 
-        # print("rot180 board")
-        # print(b)
+        assertEqual(0, b[0, 13, 4])
+        assertEqual(1, b[0, 2, 11])
 
-        assertEqual(0, b[0, 1, 2])
-        assertEqual(1, b[0, 6, 5])
-
-        assertEqual(0, b[1, 7, 5])
-        assertEqual(1, b[1, 0, 2])
-
-        assertEqual(0, b[2, 1, 3])
-        assertEqual(1, b[2, 6, 4])
+        assertEqual(0, b[1, 11, 5])
+        assertEqual(1, b[1, 4, 10])
 
         assertEqual(0, p[move])
         assertEqual(1.0, p[m])
@@ -134,19 +112,13 @@ class PositionTestCase(unittest.TestCase):
         b = rec.position.board
         p = rec.policy
 
-        m = Move.from_rank_files(6, 2, 6, 3)
+        m = Square.square(6, 14)
 
-        # print("flip rot180 board")
-        # print(b)
+        assertEqual(0, b[0, 13, 4])
+        assertEqual(1, b[0, 2, 4])
 
-        assertEqual(0, b[0, 1, 2])
-        assertEqual(1, b[0, 6, 2])
-
-        assertEqual(0, b[1, 7, 5])
-        assertEqual(1, b[1, 0, 5])
-
-        assertEqual(0, b[2, 1, 3])
-        assertEqual(1, b[2, 6, 3])
+        assertEqual(0, b[1, 11, 5])
+        assertEqual(1, b[1, 4, 5])
 
         assertEqual(0, p[move])
         assertEqual(1.0, p[m])
@@ -156,19 +128,13 @@ class PositionTestCase(unittest.TestCase):
         b = rec.position.board
         p = rec.policy
 
-        m = Move.from_rank_files(2, 6, 3, 6)
+        m = Square.square(14, 6)
 
-        # print("rot270 board")
-        # print(b)
+        assertEqual(0, b[0, 13, 4])
+        assertEqual(1, b[0, 4, 2])
 
-        assertEqual(0, b[0, 1, 2])
-        assertEqual(1, b[0, 2, 6])
-
-        assertEqual(0, b[1, 7, 5])
-        assertEqual(1, b[1, 5, 0])
-
-        assertEqual(0, b[2, 1, 3])
-        assertEqual(1, b[2, 3, 6])
+        assertEqual(0, b[1, 11, 5])
+        assertEqual(1, b[1, 5, 4])
 
         assertEqual(0, p[move])
         assertEqual(1.0, p[m])
@@ -178,27 +144,16 @@ class PositionTestCase(unittest.TestCase):
         b = rec.position.board
         p = rec.policy
 
-        m = Move.from_rank_files(2, 1, 3, 1)
+        m = Square.square(14, 9)
 
-        # print("flip rot270 board")
-        # print(b)
+        assertEqual(0, b[0, 13, 4])
+        assertEqual(1, b[0, 4, 13])
 
-        assertEqual(0, b[0, 1, 2])
-        assertEqual(1, b[0, 2, 1])
-
-        assertEqual(0, b[1, 7, 5])
-        assertEqual(1, b[1, 5, 7])
-
-        assertEqual(0, b[2, 1, 3])
-        assertEqual(1, b[2, 3, 1])
+        assertEqual(0, b[1, 11, 5])
+        assertEqual(1, b[1, 5, 11])
 
         assertEqual(0, p[move])
         assertEqual(1.0, p[m])
-
-
-
-
-
 
 
 if __name__ == '__main__':

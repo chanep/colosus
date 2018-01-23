@@ -34,24 +34,35 @@ class Evaluator:
         self.searcher = Searcher(self.config.search_config)
         self.searcher2 = Searcher2(self.config.search_config)
 
-        total_score_two = 0.0
-        move_count_mate_two = 0
-        mates_two = 0
-        win_rate_two = 0
+        total_score_1 = 0.0
+        total_score_2 = 0.0
+
+        mc_win_1 = 0
+        mc_win_2 = 0
+
+        wins_1 = 0
+        wins_2 = 0
+        win_rate_2 = 0
 
         for game_num in range(games):
-            game_score_two, game_move_count = self.play_game(iterations, game_num, position_ini)
-            total_score_two += game_score_two
-            win_rate_two = total_score_two / (game_num + 1)
-            if game_score_two == 1:
-                mates_two += 1
-                move_count_mate_two += game_move_count
-            mates_move_mean = 0 if mates_two == 0 else move_count_mate_two / mates_two
+            game_score_2, game_mc = self.play_game(iterations, game_num, position_ini)
+            total_score_1 += 1 - game_score_2
+            total_score_2 += game_score_2
+            win_rate_2 = total_score_2 / (game_num + 1)
+            if game_score_2 == 1:
+                wins_2 += 1
+                mc_win_2 += game_mc
+            elif game_score_2 == 0:
+                wins_1 += 1
+                mc_win_1 += game_mc
 
-            print("game: {}, tow_win_rate: {:.1%}, mates_move_mean: {:.3g}".format(game_num + 1, win_rate_two,
-                                                                                   mates_move_mean))
+            mc_win_1_mean = 0 if wins_1 == 0 else mc_win_1 / wins_1
+            mc_win_2_mean = 0 if wins_2 == 0 else mc_win_2 / wins_2
 
-        return win_rate_two
+            print("game: {}, {}-{}, wr2:{:.1%}, mc1: {:.3g}, mc2: {:.3g}".format(game_num + 1, total_score_1, total_score_2,
+                                                                             win_rate_2, mc_win_1_mean, mc_win_2_mean))
+
+        return win_rate_2
 
     def is_two(self, game_num: int, move_num: int):
         return (game_num + move_num) % 2 != 0

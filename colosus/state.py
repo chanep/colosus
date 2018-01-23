@@ -25,7 +25,7 @@ class State:
         self.noise = None
 
     @staticmethod
-    def apply_temperature(self, policy, temperature):
+    def apply_temperature(policy, temperature):
         temp_policy = np.power(policy, 1 / temperature)
         return temp_policy / np.sum(temp_policy)
 
@@ -77,11 +77,8 @@ class State:
             value = self.position.score
         else:
             legal_moves = self.position.legal_moves()
-            if len(legal_moves) == 0:  # stalemate
-                value = 0
-                self.is_end = True
-                self.position.is_end = True
-                self.position.score = 0
+            if len(legal_moves) == 0:
+                raise Exception('No legal moves but position is not end')
             else:
                 self.is_leaf = False
                 policy, value = self.colosus.predict(self.position.to_model_position())
