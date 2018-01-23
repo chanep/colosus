@@ -39,7 +39,7 @@ class SelfPlayTestCase(unittest.TestCase):
         self_play = SelfPlay(config)
         # self_play.play(150, 800, pos, "t999_2_150_800.dat", "w999_1_1200_800.h5")
         # self_play.play(10, 200, pos, "x.dat", "wpp_1_1200_800.h5")
-        self_play.play(200, 800, pos, "tpp_3_200_800.dat", "wpp_2_1200_800.h5")
+        self_play.play(200, 800, pos, "tz_3_200_800.dat", "wz_2_1200_800.h5")
 
         print("fin. time: " + str(time.time() - start_time))
 
