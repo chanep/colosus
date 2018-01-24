@@ -16,13 +16,14 @@ class SelfPlay:
     def __init__(self, config: SelfPlayConfig):
         self.config = config
 
-    def play(self, games: int, iterations_per_move: int, initial_pos: Position, train_filename, weights_filename, update_stats=None):
+    def play(self, games: int, iterations_per_move: int, initial_pos: Position, train_filename, weights_filename=None, update_stats=None, colosus: ColosusModel = None):
         train_record_set = TrainRecordSet()
 
-        colosus = ColosusModel()
-        colosus.build()
-        if weights_filename is not None:
-            colosus.model.load_weights(weights_filename)
+        if colosus is None:
+            colosus = ColosusModel(self.config.colosus_config)
+            colosus.build()
+            if weights_filename is not None:
+                colosus.model.load_weights(weights_filename)
 
         searcher = Searcher(self.config.search_config)
         wins = 0
@@ -44,7 +45,9 @@ class SelfPlay:
                 mc = state.position().move_count
                 # state.position().print()
                 # print("mc: {}".format(state.position().move_count))
-            state.position().print()
+
+            # state.position().print()
+
             # z = - state.position().score
             # for j in reversed(range(len(game_records))):
             #     game_records[j].value = z
@@ -54,7 +57,7 @@ class SelfPlay:
 
             if update_stats is None:
                 print("fin game " + str(i))
-                if state._position.score != 0:
+                if state.position().score != 0:
                     wins += 1
                     mc_wins += mc
                     # state.position().print()
@@ -62,7 +65,7 @@ class SelfPlay:
                 mc_mean = mc_wins / max(1, wins)
                 print("wins rate: {:.1%}, mc mean: {:.3g}".format(wins_rate, mc_mean))
             else:
-                mate = state._position.score != 0
+                mate = state.position().score != 0
                 update_stats(mate, mc)
 
         train_record_set.save_to_file(train_filename)
@@ -70,22 +73,29 @@ class SelfPlay:
     def play_parallel(self, games: int, iterations_per_move: int, initial_pos: Position, train_filename, threads: int, weights_filename=None):
         lock = threading.Lock()
         games_played = 0
-        mates = 0
-        mc_mates = 0
+        wins = 0
+        mc_wins = 0
 
         def update_stats(mate, move_count):
-            nonlocal mates, games_played, mc_mates
+            nonlocal wins, games_played, mc_wins
 
             lock.acquire()
             games_played += 1
             if mate:
-                mates += 1
-                mc_mates += move_count
-            mates_rate = mates / (games_played + 1)
-            mc_mean = mc_mates / max(1, mates)
+                wins += 1
+                mc_wins += move_count
+                wins_rate = wins / (games_played + 1)
+            mc_mean = mc_wins / max(1, wins)
             print("fin game " + str(games_played))
-            print("mates rate: {}, mc mean: {}".format(mates_rate, mc_mean))
+            print("wins rate: {:.1%}, mc mean: {:.3g}".format(wins_rate, mc_mean))
             lock.release()
+
+        colosus_config = self.config.colosus_config
+        colosus_config.thread_safe = True
+        colosus = ColosusModel(colosus_config)
+        colosus.build()
+        if weights_filename is not None:
+            colosus.model.load_weights(weights_filename)
 
         workers = []
         games_per_worker = games // threads
@@ -94,9 +104,9 @@ class SelfPlay:
         worker_games[0] = games_first_worker
         train_filename_parts = train_filename.split(".")
         for i in range(threads):
-            worker_train_filename = train_filename_parts[0] + str(i) + "." + train_filename_parts[1]
+            worker_train_filename = train_filename_parts[0] + "_" + str(i) + "." + train_filename_parts[1]
             play_args = (worker_games[i], iterations_per_move, initial_pos.clone(), worker_train_filename, weights_filename,
-                         update_stats)
+                         update_stats, colosus)
             w = threading.Thread(target=self.play, args=play_args)
             workers.append(w)
             w.start()

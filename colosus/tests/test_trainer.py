@@ -33,6 +33,9 @@ class SelfPlayTestCase(unittest.TestCase):
         recordset.do_rotations()
         recordset.save_to_file(rotated_filename)
 
+    def test_merge_records(self):
+        merged_filename = "x.dat"
+        TrainRecordSet.merge_and_rotate(merged_filename, 4)
 
     def test_generator(self):
 

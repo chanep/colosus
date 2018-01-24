@@ -1,5 +1,6 @@
 import numpy as np
 import tensorflow as tf
+import threading
 from tensorflow.python.keras import Input
 from tensorflow.python.keras.optimizers import Adam
 from tensorflow.python.keras.models import Model
@@ -7,6 +8,7 @@ from tensorflow.python.keras.layers import Conv2D, Activation, Flatten, Dense, A
 from tensorflow.python.layers.normalization import BatchNormalization
 from tensorflow.python.keras.regularizers import l2
 
+from colosus.config import ColosusConfig
 from colosus.game import model_position
 from colosus.game.model_position import ModelPosition
 from colosus.game.position import Position
@@ -15,11 +17,13 @@ from colosus.game.position import Position
 class ColosusModel:
     B_SIZE = Position.B_SIZE
 
-    def __init__(self):
+    def __init__(self, config: ColosusConfig):
+        self.config = config
         self.model = None  # type: Model
         self.reg = None
         self.graph = None
         self.session = None
+        self.lock = threading.Lock()
 
     def __del__(self):
         if self.session is not None:
@@ -91,12 +95,21 @@ class ColosusModel:
         return x
 
     def predict(self, position: ModelPosition) -> (np.ndarray, float):
-        self.session.as_default()
+        # board = self._positions_to_inputs(position)
 
-        board = self._positions_to_inputs(position)
-        output = self.model.predict_on_batch(board)
-        value = output[1][0][0]
-        policy = output[0][0]
+        if self.config.thread_safe:
+            self.lock.acquire()
+
+        # self.session.as_default()
+        # output = self.model.predict_on_batch(board)
+        # value = output[1][0][0]
+        # policy = output[0][0]
+        policy = np.random.dirichlet([100] * (self.B_SIZE * self.B_SIZE))
+        value = np.random.normal(scale=0.01)
+
+        if self.config.thread_safe:
+            self.lock.release()
+
         return policy, value
 
     def train(self, positions, policies, values, epochs):

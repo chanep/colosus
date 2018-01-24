@@ -1,3 +1,8 @@
+class ColosusConfig:
+    def __init__(self):
+        self.thread_safe = False
+
+
 class StateConfig:
     def __init__(self):
         self.cpuct = 1.41
@@ -12,6 +17,7 @@ class SearchConfig:
 
 class SelfPlayConfig:
     def __init__(self):
+        self.colosus_config = ColosusConfig()
         self.state_config = StateConfig()
         self.search_config = SearchConfig()
 
