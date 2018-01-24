@@ -1,5 +1,6 @@
 import unittest
 
+from colosus.config import StateConfig, SearchConfig
 from colosus.state import State
 from colosus.searcher import Searcher
 from colosus.colosus_model import ColosusModel
@@ -14,13 +15,13 @@ class SearcherTestCase(unittest.TestCase):
         colosus.build()
 
         pos = Position()
-        pos.put_piece(Side.WHITE, Piece.KING, 4, 3)
-        pos.put_piece(Side.WHITE, Piece.ROOK, 4, 4)
-        pos.put_piece(Side.BLACK, Piece.KING, 5, 5)
+        pos.put_piece(Side.WHITE, Piece.KING, 3, 5)
+        pos.put_piece(Side.WHITE, Piece.ROOK, 6, 1)
+        pos.put_piece(Side.BLACK, Piece.KING, 3, 7)
 
-        state = State(pos, None, None, colosus)
+        state = State(pos, None, None, colosus, StateConfig())
 
-        searcher = Searcher()
+        searcher = Searcher(SearchConfig())
         policy, value, move, new_state = searcher.search(state, 1000)
 
         state.print()
