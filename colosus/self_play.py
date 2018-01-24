@@ -37,16 +37,15 @@ class SelfPlay:
                 # start_time = time.time()
                 policy, value, move, new_state = searcher.search(state, iterations_per_move)
                 # print("time: " + str(time.time() - start_time))
-                train_record = TrainRecord(state.position().to_model_position(), policy, value)
+                train_record = TrainRecord(state.position.to_model_position(), policy, value)
                 game_records.append(train_record)
                 new_state.parent = None
-                end = new_state.position().is_end
+                end = new_state.position.is_end
                 state = new_state
-                mc = state.position().move_count
-                # state.position().print()
+                mc = state.position.move_count
                 # print("mc: {}".format(state.position().move_count))
 
-            # state.position().print()
+            state.position.print()
 
             # z = - state.position().score
             # for j in reversed(range(len(game_records))):
@@ -57,10 +56,10 @@ class SelfPlay:
 
             if update_stats is None:
                 print("fin game " + str(i))
-                if state.position().score != 0:
+                if state.position.score != 0:
                     wins += 1
                     mc_wins += mc
-                    # state.position().print()
+                    # state.position.print()
                 wins_rate = wins / (i + 1)
                 mc_mean = mc_wins / max(1, wins)
                 print("wins rate: {:.1%}, mc mean: {:.3g}".format(wins_rate, mc_mean))
@@ -99,9 +98,11 @@ class SelfPlay:
 
         workers = []
         games_per_worker = games // threads
-        games_first_worker = games_per_worker + (games - games_per_worker * threads)
+        remaining_games = games % threads
         worker_games = [games_per_worker] * threads
-        worker_games[0] = games_first_worker
+        for g in range(remaining_games):
+            worker_games[g] += 1
+
         train_filename_parts = train_filename.split(".")
         for i in range(threads):
             worker_train_filename = train_filename_parts[0] + "_" + str(i) + "." + train_filename_parts[1]

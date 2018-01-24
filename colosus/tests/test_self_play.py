@@ -39,7 +39,7 @@ class SelfPlayTestCase(unittest.TestCase):
 
         # self_play.play(200, 30, pos, "c_1_200_30.dat", None)
 
-        self_play.play(10, 30, pos, "x.dat", None, colosus=colosus)
+        self_play.play(10, 256, pos, "x.dat", None, colosus=colosus)
 
         print("fin. time: " + str(time.time() - start_time))
 
@@ -51,7 +51,7 @@ class SelfPlayTestCase(unittest.TestCase):
         config = SelfPlayConfig()
         self_play = SelfPlay(config)
         # self_play.play(1000, 200, pos, colosus, "t2_1_1000_200.dat")
-        self_play.play_parallel(20, 30, pos, "x.dat", 4, None)
+        self_play.play_parallel(15, 30, pos, "x.dat", 4, None)
 
         print("fin. time: " + str(time.time() - start_time))
 
