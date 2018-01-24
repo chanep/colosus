@@ -7,7 +7,7 @@ class StateConfig:
 
 class SearchConfig:
     def __init__(self):
-        self.move_count_temp0 = 10
+        self.move_count_temp0 = 16
 
 
 class SelfPlayConfig:

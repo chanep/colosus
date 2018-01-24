@@ -36,32 +36,33 @@ class SelfPlay:
                 # start_time = time.time()
                 policy, value, move, new_state = searcher.search(state, iterations_per_move)
                 # print("time: " + str(time.time() - start_time))
-                train_record = TrainRecord(state.position.to_model_position(), policy, value)
+                train_record = TrainRecord(state.position().to_model_position(), policy, value)
                 game_records.append(train_record)
                 new_state.parent = None
-                end = new_state.is_end
-                end = True  # TODO: remove
+                end = new_state.position().is_end
                 state = new_state
-                mc = state.position.move_count
-
-            # z = - state.position.score
+                mc = state.position().move_count
+                # state.position().print()
+                # print("mc: {}".format(state.position().move_count))
+            state.position().print()
+            # z = - state.position().score
             # for j in reversed(range(len(game_records))):
             #     game_records[j].value = z
             #     z = -z
-            state.position.print()
 
             train_record_set.extend(game_records)
 
             if update_stats is None:
                 print("fin game " + str(i))
-                if state.position.score != 0:
+                if state._position.score != 0:
                     wins += 1
                     mc_wins += mc
+                    # state.position().print()
                 wins_rate = wins / (i + 1)
                 mc_mean = mc_wins / max(1, wins)
                 print("wins rate: {:.1%}, mc mean: {:.3g}".format(wins_rate, mc_mean))
             else:
-                mate = state.position.score != 0
+                mate = state._position.score != 0
                 update_stats(mate, mc)
 
         train_record_set.save_to_file(train_filename)

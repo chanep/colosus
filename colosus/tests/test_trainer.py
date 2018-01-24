@@ -5,7 +5,6 @@ from colosus.train_record_set import TrainRecordSet
 from colosus.trainer import Trainer
 from colosus.game.position import Position
 from colosus.game.side import Side
-from colosus.game.piece import Piece
 
 
 class Person:
@@ -18,18 +17,18 @@ class Person:
 
 class SelfPlayTestCase(unittest.TestCase):
     def test_train(self):
-        train_filename = "tpp_3_1600_800.dat"
+        train_filename = "c_1_1600_30.dat"
         weights_filename = "x.h5"
         # weights_filename = "wpp_3_1600_800.h5"
         # prev_weights_filename = "wpp_2_1200_800.h5"
         prev_weights_filename = None
 
         trainer = Trainer()
-        trainer.train(train_filename, weights_filename, 30, prev_weights_filename)
+        trainer.train(train_filename, weights_filename, 3, prev_weights_filename)
 
     def test_save_rotated_records(self):
-        input_filename = "tpp_3_200_800.dat"
-        rotated_filename = "tpp_3_1600_800.dat"
+        input_filename = "c_1_200_30.dat"
+        rotated_filename = "c_1_1600_30.dat"
         recordset = TrainRecordSet.load_from_file(input_filename)
         recordset.do_rotations()
         recordset.save_to_file(rotated_filename)

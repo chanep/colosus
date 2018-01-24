@@ -1,13 +1,13 @@
 import tensorflow as tf
 import numpy as np
+import types
 import time
 
-v = np.random.random_integers(1,9,(3,1,1,2))
-x = tf.cast(v,tf.float32)
-w = tf.ones((1,1,2,1))
+v = np.random.random_integers(1, 9, (3, 1, 1, 2))
+x = tf.cast(v, tf.float32)
+w = tf.ones((1, 1, 2, 1))
 
-conv = tf.nn.conv2d(x, w, strides=[1,1,1,1], padding='SAME')
-
+conv = tf.nn.conv2d(x, w, strides=[1, 1, 1, 1], padding='SAME')
 
 with tf.Session() as sess:
     result = sess.run(conv)
@@ -70,6 +70,12 @@ x = np.array([15], dtype=">u2")
 #
 # print(a)
 # print(str(time.time() - start))
-x = np.zeros((3, 3))
-x[0, :] = np.array([1, 2, 3])
-print(x)
+
+
+fs = []
+for i in range(10):
+    f = lambda _, i = i: print(str(i))
+    fs.append(f)
+
+for fun in fs:
+    fun(None)

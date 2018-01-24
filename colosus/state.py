@@ -1,4 +1,6 @@
 import math
+import types
+
 import numpy as np
 
 from colosus.config import StateConfig
@@ -12,7 +14,7 @@ class State:
         self.config = config
 
         self.parent = parent
-        self.position = position
+        self._position = position
         self.colosus = colosus
         self.P = p
 
@@ -20,7 +22,7 @@ class State:
         self.W = 0
         self.Q = 0.0
         self.is_leaf = True
-        self.is_end = position.is_end
+        self._is_end = None
         self.children = []
         self.noise = None
 
@@ -48,6 +50,8 @@ class State:
         return policy, value, move, new_root_state
 
     def select(self):
+        self._resolve_position()
+
         if self.is_leaf:
             self.expand()
         else:
@@ -73,19 +77,20 @@ class State:
             selected_child.select()
 
     def expand(self):
-        if self.is_end:
-            value = self.position.score
+        if self._is_end:
+            value = self._position.score
         else:
-            legal_moves = self.position.legal_moves()
+            legal_moves = self._position.legal_moves()
             if len(legal_moves) == 0:
                 raise Exception('No legal moves but position is not end')
             else:
                 self.is_leaf = False
-                policy, value = self.colosus.predict(self.position.to_model_position())
+                policy, value = self.colosus.predict(self._position.to_model_position())
                 legal_policy = self.colosus.legal_policy(policy, legal_moves)
                 self.children = [None] * len(policy)
                 for move in legal_moves:
-                    child_pos = self.position.move(move)
+                    child_pos = lambda _, m = move: self._position.move(m)
+                    # child_pos = self._position.move(move)
                     child = self.__class__(child_pos, legal_policy[move], self, self.colosus, self.config)
                     self.children[move] = child
         self.backup(-value)
@@ -99,7 +104,17 @@ class State:
 
     def print(self):
         print("N: {}, W: {}, Q: {}".format(self.N, self.W, self.Q))
-        self.position.print()
+        self._position.print()
 
     def is_root(self):
         return self.parent is None
+
+    def _resolve_position(self):
+        if isinstance(self._position, types.FunctionType):
+            self._position = self._position(None)
+        self._is_end = self._position.is_end
+
+    def position(self):
+        self._resolve_position()
+        return self._position
+

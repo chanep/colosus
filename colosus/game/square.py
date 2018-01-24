@@ -30,6 +30,4 @@ class Square:
     @staticmethod
     def to_string(square):
         rank, file = Square.to_rank_file(square)
-        r = rank + 1
-        f = files[file]
-        return f + str(r)
+        return "({},{})".format(rank, file)

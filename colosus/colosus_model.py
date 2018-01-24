@@ -9,10 +9,11 @@ from tensorflow.python.keras.regularizers import l2
 
 from colosus.game import model_position
 from colosus.game.model_position import ModelPosition
+from colosus.game.position import Position
 
 
 class ColosusModel:
-    policy_len = 256
+    B_SIZE = Position.B_SIZE
 
     def __init__(self):
         self.model = None  # type: Model
@@ -32,7 +33,7 @@ class ColosusModel:
         self.reg = l2(1e-4)
         # reg = None
 
-        in_x = x = Input((16, 16, 2))
+        in_x = x = Input((self.B_SIZE, self.B_SIZE, 2))
 
         # (batch, channels, height, width)
         x = Conv2D(filters=256, kernel_size=6, padding="same",
@@ -53,7 +54,7 @@ class ColosusModel:
         x = BatchNormalization(axis=3, name="policy_batchnorm")(x)
         x = Activation("relu", name="policy_relu")(x)
         x = Flatten(name="policy_flatten")(x)
-        policy_out = Dense(64 * 64, kernel_regularizer=self.reg, activation="softmax",
+        policy_out = Dense(self.B_SIZE * self.B_SIZE, kernel_regularizer=self.reg, activation="softmax",
                            name="policy_out")(x)
 
         # for value output
@@ -70,8 +71,6 @@ class ColosusModel:
         self.model = Model(in_x, [policy_out, value_out], name="colosus_model")
 
         opt = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-8)
-        # opt = tf.keras.optimizers.Adamax(lr=0.002)
-        # opt = tf.keras.optimizers.Nadam(lr=0.002)
         losses = ['categorical_crossentropy', 'mean_squared_error']  # avoid overfit for supervised
         self.model.compile(optimizer=opt, loss=losses, loss_weights=[1.25, 1.0])
 

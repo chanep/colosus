@@ -139,20 +139,21 @@ class Position:
         side = self.side_to_move
         r, f = Square.to_rank_file(last_move)
         coords = self._get_coords(r, f)
-        mask = 0b11111
-        shifts = self.B_SIZE - 5 + 1
+        # mask = 0b11111
+        # shifts = self.B_SIZE - 5 + 1
         for i in range(self.BOARDS_COUNT):
             coord = coords[i]
             if coord is not None:
                 index, bit = coord
-                line = int(self.boards[i][side, index])
-                if i > 1:
-                    shifts = self.DIAG_LEN[index] - 5 + 1
-                for s in range(shifts):
-                    shifted_mask = mask << s
-                    if line & shifted_mask == shifted_mask:
-                        return True
-
+                line = self.boards[i][side, index]
+                if "11111" in bin(line):
+                    return True
+                # if i > 1:
+                #     shifts = self.DIAG_LEN[index] - 5 + 1
+                # for s in range(shifts):
+                #     shifted_mask = mask << s
+                #     if line & shifted_mask == shifted_mask:
+                #         return True
         return False
 
     def print(self):

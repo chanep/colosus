@@ -6,17 +6,13 @@ import numpy as np
 from colosus.colosus_model import ColosusModel
 from colosus.config import SearchConfig, StateConfig
 from colosus.game.position import Position
-from colosus.game.move import Move
 from colosus.game.side import Side
-from colosus.game.piece import Piece
 from tensorflow.python.keras import backend as K
-from tensorflow.python import debug as tf_debug
 
+from colosus.game.square import Square
 from colosus.searcher import Searcher
 from colosus.state import State
-from colosus.train_record import TrainRecord
-from colosus.train_record_set import TrainRecordSet
-from colosus.trainer import Trainer
+
 
 
 class ColosusModelTestCase(unittest.TestCase):
@@ -79,31 +75,29 @@ class ColosusModelTestCase(unittest.TestCase):
 
     def test_predict(self):
         pos = Position()
-        # pos.put_piece(Side.WHITE, Piece.KING, 2, 5)
-        # pos.put_piece(Side.WHITE, Piece.ROOK, 6, 2)
-        # pos.put_piece(Side.BLACK, Piece.KING, 0, 5)
 
-        pos.put_piece(Side.WHITE, Piece.KING, 4, 5)
-        pos.put_piece(Side.WHITE, Piece.ROOK, 7, 2)
-        pos.put_piece(Side.BLACK, Piece.KING, 4, 7)
+        pos.put_piece(Side.BLACK, 1, 1)
+        pos.put_piece(Side.BLACK, 4, 2)
+        pos.put_piece(Side.BLACK, 13, 0)
+        pos.put_piece(Side.BLACK, 2, 9)
 
-        pos.print()
+        pos.put_piece(Side.WHITE, 11, 6)
+        pos.put_piece(Side.WHITE, 12, 7)
+        # pos.put_piece(Side.WHITE, 13, 8)
+        pos.put_piece(Side.WHITE, 14, 9)
+        pos.put_piece(Side.WHITE, 15, 10)
 
         colosus = ColosusModel()
         colosus.build()
-        # colosus.model.load_weights("w_2_1200_800.h5")
-        colosus.model.load_weights("wpp_3_1600_800.h5")
-        # colosus.model.load_weights("res.h5")
+        # colosus.model.load_weights("c_1_1600_30.h5")
 
-        # sess = K.get_session()
-        # sess = tf_debug.LocalCLIDebugWrapperSession(sess)
-        # K.set_session(sess)
+        pos.print()
 
         policy, value = colosus.predict(pos.to_model_position())
         print("value: " + str(value))
         print("moves prob")
         sorted_policy = self.sort_policy(policy)
-        for i in range(10):
+        for i in range(20):
             m = sorted_policy[i]
             print("{} - {}".format(m[0], m[1]))
 
@@ -111,7 +105,7 @@ class ColosusModelTestCase(unittest.TestCase):
 
         searcher = Searcher(SearchConfig());
         state = State(pos, None, None, colosus, StateConfig())
-        policy, value, move, new_state = searcher.search(state, 2600)
+        policy, value, move, new_state = searcher.search(state, 256)
         print("value: " + str(value))
         print("moves prob")
         sorted_policy = self.sort_policy(policy)
@@ -122,22 +116,12 @@ class ColosusModelTestCase(unittest.TestCase):
         for m in range(len(state.children)):
             c = state.children[m]
             if c is not None:
-                print("{} N: {}, W: {}, Q: {}, p:{}".format(Move.to_string(m), c.N, round(c.W, 5),
-                                                            round(c.Q, 5), round(c.P, 5)))
-
-        # train_record_set = TrainRecordSet()
-        # train_record = TrainRecord(state.position.to_model_position(), policy, value)
-        # train_record_set.append(train_record)
-        # train_record_set.save_to_file("x1.dat")
-        #
-        # trainer = Trainer()
-        # trainer.train("x1.dat", "w1.h5", 100)
-
+                print("{} N: {}, W: {:.3g}, Q: {:.3g}, p:{:.3g}".format(Square.to_string(m), c.N, c.W, c.Q, c.P))
 
     def sort_policy(self, policy):
         move_policy = []
         for m in range(len(policy)):
-            m_str = Move.to_string(m)
+            m_str = Square.to_string(m)
             move_policy.append((m_str, policy[m]))
         return sorted(move_policy, key=lambda t: t[1], reverse=True)
 
