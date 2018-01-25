@@ -14,6 +14,9 @@ class SearchConfig:
     def __init__(self):
         self.move_count_temp0 = 16
 
+class TrainerConfig:
+    def __init__(self):
+        self.colosus_config = ColosusConfig()
 
 class SelfPlayConfig:
     def __init__(self):
@@ -24,6 +27,7 @@ class SelfPlayConfig:
 
 class EvaluatorConfig:
     def __init__(self):
+        self.colosus_config = ColosusConfig()
         self.state_config = StateConfig()
         self.search_config = SearchConfig()
         self.state_config.noise_factor = 0.0

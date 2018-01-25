@@ -19,17 +19,17 @@ class Evaluator:
         self.searcher = None
         self.searcher2 = None
 
-    def evalueate(self, games: int, iterations: int, position_ini: Position, weights_filename, weights_filename2):
+    def evaluate(self, games: int, iterations: int, position_ini: Position, weights_filename, weights_filename2):
 
-        self.colosus = ColosusModel()
+        self.colosus = ColosusModel(self.config.colosus_config)
         self.colosus.build()
         if weights_filename is not None:
-            self.colosus.model.load_weights(weights_filename)
+            self.colosus.load_weights(weights_filename)
 
-        self.colosus2 = ColosusModel2()
+        self.colosus2 = ColosusModel2(self.config.colosus_config)
         self.colosus2.build()
         if weights_filename2 is not None:
-            self.colosus2.model.load_weights(weights_filename2)
+            self.colosus2.load_weights(weights_filename2)
 
         self.searcher = Searcher(self.config.search_config)
         self.searcher2 = Searcher2(self.config.search_config)

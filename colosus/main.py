@@ -3,19 +3,19 @@ import numpy as np
 import types
 import time
 
-v = np.random.random_integers(1, 9, (3, 1, 1, 2))
-x = tf.cast(v, tf.float32)
-w = tf.ones((1, 1, 2, 1))
-
-conv = tf.nn.conv2d(x, w, strides=[1, 1, 1, 1], padding='SAME')
-
-with tf.Session() as sess:
-    result = sess.run(conv)
-    x_res = sess.run(x)
-
-print("result: {}".format(result))
-print("x: {}".format(x_res))
-print("shape: {}".format(result.shape))
+# v = np.random.random_integers(1, 9, (3, 1, 1, 2))
+# x = tf.cast(v, tf.float32)
+# w = tf.ones((1, 1, 2, 1))
+#
+# conv = tf.nn.conv2d(x, w, strides=[1, 1, 1, 1], padding='SAME')
+#
+# with tf.Session() as sess:
+#     result = sess.run(conv)
+#     x_res = sess.run(x)
+#
+# print("result: {}".format(result))
+# print("x: {}".format(x_res))
+# print("shape: {}".format(result.shape))
 
 # p = np.array([0.02, 0.9, 0.02, 0.02, 0.02, 0.02])
 #
@@ -32,7 +32,7 @@ print("shape: {}".format(result.shape))
 # print(type(p))
 # print(np.std(p))
 
-x = np.array([15], dtype=">u2")
+# x = np.array([15], dtype=">u2")
 # x = np.array([2], np.uint8)
 
 # print(x)
@@ -70,12 +70,19 @@ x = np.array([15], dtype=">u2")
 #
 # print(a)
 # print(str(time.time() - start))
+import time
 
+from colosus.config import SelfPlayConfig
+from colosus.game.position import Position
+from colosus.self_play import SelfPlay
 
-fs = []
-for i in range(10):
-    f = lambda _, i = i: print(str(i))
-    fs.append(f)
+pos = Position()
 
-for fun in fs:
-    fun(None)
+start_time = time.time()
+
+config = SelfPlayConfig()
+self_play = SelfPlay(config)
+# self_play.play(1000, 200, pos, colosus, "t2_1_1000_200.dat")
+self_play.play_parallel(20, 30, pos, "x.dat", 10, None)
+
+print("fin. time: " + str(time.time() - start_time))

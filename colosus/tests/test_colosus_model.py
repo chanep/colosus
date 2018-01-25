@@ -4,7 +4,7 @@ import datetime
 import tensorflow as tf
 import numpy as np
 from colosus.colosus_model import ColosusModel
-from colosus.config import SearchConfig, StateConfig
+from colosus.config import SearchConfig, StateConfig, ColosusConfig
 from colosus.game.position import Position
 from colosus.game.side import Side
 from tensorflow.python.keras import backend as K
@@ -87,9 +87,9 @@ class ColosusModelTestCase(unittest.TestCase):
         pos.put_piece(Side.WHITE, 14, 9)
         pos.put_piece(Side.WHITE, 15, 10)
 
-        colosus = ColosusModel()
+        colosus = ColosusModel(ColosusConfig())
         colosus.build()
-        # colosus.model.load_weights("c_1_1600_30.h5")
+        colosus.load_weights("c_2_800_800.h5")
 
         pos.print()
 
@@ -105,7 +105,7 @@ class ColosusModelTestCase(unittest.TestCase):
 
         searcher = Searcher(SearchConfig());
         state = State(pos, None, None, colosus, StateConfig())
-        policy, value, move, new_state = searcher.search(state, 256)
+        policy, value, move, new_state = searcher.search(state, 800)
         print("value: " + str(value))
         print("moves prob")
         sorted_policy = self.sort_policy(policy)
@@ -113,8 +113,8 @@ class ColosusModelTestCase(unittest.TestCase):
             m = sorted_policy[i]
             print("{} - {}".format(m[0], m[1]))
 
-        for m in range(len(state.children)):
-            c = state.children[m]
+        for m in range(len(state.children())):
+            c = state.children()[m]
             if c is not None:
                 print("{} N: {}, W: {:.3g}, Q: {:.3g}, p:{:.3g}".format(Square.to_string(m), c.N, c.W, c.Q, c.P))
 

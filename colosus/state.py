@@ -13,7 +13,7 @@ class State:
         self.config = config
 
         self.parent = parent
-        self.position = position
+        self._position = position
         self.colosus = colosus
         self.P = p
 
@@ -21,8 +21,9 @@ class State:
         self.W = 0
         self.Q = 0.0
         self.is_leaf = True
-        self.is_end = position.is_end
         self._children = None
+        self._prev_position = None
+        self._move = None
         self.noise = None
         self.legal_policy = None
 
@@ -75,15 +76,15 @@ class State:
             selected_child.select()
 
     def expand(self):
-        if self.is_end:
-            value = self.position.score
+        if self.position().is_end:
+            value = self.position().score
         else:
-            legal_moves = self.position.legal_moves()
+            legal_moves = self.position().legal_moves()
             if len(legal_moves) == 0:
                 raise Exception('No legal moves but position is not end')
             else:
                 self.is_leaf = False
-                policy, value = self.colosus.predict(self.position.to_model_position())
+                policy, value = self.colosus.predict(self.position().to_model_position())
                 legal_policy = self.colosus.legal_policy(policy, legal_moves)
                 self.legal_policy = [None] * len(policy)
                 for m in legal_moves:
@@ -108,15 +109,26 @@ class State:
         for move in range(len(self.legal_policy)):
             p = self.legal_policy[move]
             if p is not None:
-                child_pos = self.position.move(move)
-                child = self.__class__(child_pos, p, self, self.colosus, self.config)
+                child = self.__class__(None, p, self, self.colosus, self.config)
+                child._prev_position = self._position
+                child._move = move
                 self._children[move] = child
         self.legal_policy = None
         return self._children
 
+    def position(self):
+        if self._position is not None:
+            return self._position
+        if self._prev_position is None:
+            raise Exception("State _position and _position are both None")
+
+        self._position = self._prev_position.move(self._move)
+        self._prev_position = None
+        return self._position
+
     def print(self):
         print("N: {}, W: {}, Q: {}".format(self.N, self.W, self.Q))
-        self.position.print()
+        self.position().print()
 
     def is_root(self):
         return self.parent is None

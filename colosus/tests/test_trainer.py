@@ -1,6 +1,7 @@
 import unittest
 import numpy as np
 
+from colosus.config import TrainerConfig
 from colosus.train_record_set import TrainRecordSet
 from colosus.trainer import Trainer
 from colosus.game.position import Position
@@ -17,14 +18,14 @@ class Person:
 
 class SelfPlayTestCase(unittest.TestCase):
     def test_train(self):
-        train_filename = "c_1_1600_30.dat"
-        weights_filename = "x.h5"
+        train_filename = "c_2_800_800.dat"
+        weights_filename = "c_2_800_800.h5"
         # weights_filename = "wpp_3_1600_800.h5"
-        # prev_weights_filename = "wpp_2_1200_800.h5"
-        prev_weights_filename = None
+        prev_weights_filename = "c_1_2000_256.h5"
+        # prev_weights_filename = None
 
-        trainer = Trainer()
-        trainer.train(train_filename, weights_filename, 3, prev_weights_filename)
+        trainer = Trainer(TrainerConfig())
+        trainer.train(train_filename, weights_filename, 10, prev_weights_filename)
 
     def test_save_rotated_records(self):
         input_filename = "c_1_200_30.dat"
@@ -34,7 +35,7 @@ class SelfPlayTestCase(unittest.TestCase):
         recordset.save_to_file(rotated_filename)
 
     def test_merge_records(self):
-        merged_filename = "x.dat"
+        merged_filename = "c_2_100_800.dat"
         TrainRecordSet.merge_and_rotate(merged_filename, 4)
 
     def test_generator(self):
