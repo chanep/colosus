@@ -41,12 +41,22 @@ class State:
                 policy[i] = child.N / self.N
         return policy
 
-    def play(self, temperature) -> (int, 'State'):
+    def play(self, temperature) -> (int, float, int, 'State'):
         policy = self.get_policy()
         value = - self.Q
         temp_policy = self.apply_temperature(policy, temperature)
         move = np.random.choice(len(temp_policy), 1, p=temp_policy)[0]
         new_root_state = self.children()[move]
+        self.noise = None
+        return policy, value, move, new_root_state
+
+    def play_static_policy(self, temperature) -> (int, float, int, 'State'):
+        self.select()
+        policy = np.nan_to_num(np.array(self.legal_policy, np.float), 0)
+        value = - self.Q
+        temp_policy = self.apply_temperature(policy, temperature)
+        move = np.random.choice(len(temp_policy), 1, p=temp_policy)[0]
+        new_root_state = None
         self.noise = None
         return policy, value, move, new_root_state
 

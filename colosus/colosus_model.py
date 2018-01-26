@@ -1,3 +1,5 @@
+from typing import List
+
 import numpy as np
 import tensorflow as tf
 from threading import Lock
@@ -117,6 +119,22 @@ class ColosusModel:
         policy = output[0][0]
         # policy = np.random.dirichlet([100] * (self.B_SIZE * self.B_SIZE))
         # value = np.random.normal(scale=0.01)
+
+        if self.config.thread_safe:
+            self.lock.release()
+
+        return policy, value
+
+    def predict_on_batch(self, positions: List[ModelPosition]) -> (np.ndarray, np.ndarray):
+        board = self._positions_to_inputs(positions)
+
+        if self.config.thread_safe:
+            self.lock.acquire()
+
+        with self.session.as_default():
+            output = self.model.predict_on_batch(board)
+        value = np.squeeze(output[1])
+        policy = output[0]
 
         if self.config.thread_safe:
             self.lock.release()

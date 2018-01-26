@@ -1,6 +1,7 @@
 import unittest
 
 import datetime
+import time
 import tensorflow as tf
 import numpy as np
 from colosus.colosus_model import ColosusModel
@@ -127,6 +128,44 @@ class ColosusModelTestCase(unittest.TestCase):
             c = state.children()[m]
             if c is not None:
                 print("{} N: {}, W: {:.3g}, Q: {:.3g}, p:{:.3g}".format(Square.to_string(m), c.N, c.W, c.Q, c.P))
+
+    def test_predict_on_batch(self):
+        pos = Position()
+
+        # poner la 4ta en 3
+        pos.put_piece(Side.BLACK, 1, 1)
+        pos.put_piece(Side.BLACK, 4, 2)
+        pos.put_piece(Side.BLACK, 13, 0)
+
+        pos.put_piece(Side.WHITE, 11, 6)
+        pos.put_piece(Side.WHITE, 12, 7)
+        pos.put_piece(Side.WHITE, 13, 8)
+
+        colosus = ColosusModel(ColosusConfig())
+        colosus.build()
+
+        positions = []
+        position = pos
+        for m in range(8):
+            positions.append(position.to_model_position())
+            position = position.move(m)
+
+        policies, values = colosus.predict_on_batch(positions)
+
+        cant = 1000
+        start = time.time()
+        for i in range(cant):
+            policies, values = colosus.predict_on_batch(positions)
+        print("predict_on_batch time: " + str(time.time() - start))
+
+        start = time.time()
+        for i in range(cant):
+            for p in positions:
+                policy, value = colosus.predict(p)
+        print("predict time: " + str(time.time() - start))
+
+
+
 
     def sort_policy(self, policy):
         move_policy = []

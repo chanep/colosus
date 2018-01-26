@@ -94,6 +94,8 @@ class SelfPlay:
             while not end:
                 # start_time = time.time()
                 policy, value, move, new_state = searcher.search(state, iterations_per_move)
+                if new_state is None:
+                    new_state = State(state.position().move(move), None, None, colosus, self.config.state_config)
                 # print("time: " + str(time.time() - start_time))
                 train_record = TrainRecord(state.position().to_model_position(), policy, value)
                 game_records.append(train_record)
