@@ -18,8 +18,10 @@ class Person:
 
 class SelfPlayTestCase(unittest.TestCase):
     def test_train(self):
-        train_filename = "c_2_800_800.dat"
-        weights_filename = "c_2_800_800.h5"
+        # train_filename = "c_2_800_800.dat"
+        # weights_filename = "c_2_800_800.h5"
+        train_filename = "c_2_2480_256.dat"
+        weights_filename = "x.h5"
         # weights_filename = "wpp_3_1600_800.h5"
         prev_weights_filename = "c_1_2000_256.h5"
         # prev_weights_filename = None
@@ -35,7 +37,7 @@ class SelfPlayTestCase(unittest.TestCase):
         recordset.save_to_file(rotated_filename)
 
     def test_merge_records(self):
-        merged_filename = "c_2_100_800.dat"
+        merged_filename = "c_2_310_256.dat"
         TrainRecordSet.merge_and_rotate(merged_filename, 4)
 
     def test_generator(self):

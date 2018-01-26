@@ -76,20 +76,30 @@ class ColosusModelTestCase(unittest.TestCase):
     def test_predict(self):
         pos = Position()
 
-        pos.put_piece(Side.BLACK, 1, 1)
-        pos.put_piece(Side.BLACK, 4, 2)
-        pos.put_piece(Side.BLACK, 13, 0)
-        pos.put_piece(Side.BLACK, 2, 9)
+        # tapar 4
+        # pos.put_piece(Side.BLACK, 1, 1)
+        # pos.put_piece(Side.BLACK, 4, 2)
+        # pos.put_piece(Side.BLACK, 13, 0)
+        # pos.put_piece(Side.BLACK, 2, 9)
+        #
+        # pos.put_piece(Side.WHITE, 11, 6)
+        # pos.put_piece(Side.WHITE, 12, 7)
+        # pos.put_piece(Side.WHITE, 14, 9)
+        # pos.put_piece(Side.WHITE, 15, 10)
 
-        pos.put_piece(Side.WHITE, 11, 6)
-        pos.put_piece(Side.WHITE, 12, 7)
+        # poner la 4ta en 3
+        # pos.put_piece(Side.BLACK, 1, 1)
+        # pos.put_piece(Side.BLACK, 4, 2)
+        # pos.put_piece(Side.BLACK, 13, 0)
+        #
+        # pos.put_piece(Side.WHITE, 11, 6)
+        # pos.put_piece(Side.WHITE, 12, 7)
         # pos.put_piece(Side.WHITE, 13, 8)
-        pos.put_piece(Side.WHITE, 14, 9)
-        pos.put_piece(Side.WHITE, 15, 10)
 
         colosus = ColosusModel(ColosusConfig())
         colosus.build()
-        colosus.load_weights("c_2_800_800.h5")
+        # colosus.load_weights("c_1_2000_256.h5")
+        colosus.load_weights("c_2_1600_400.h5")
 
         pos.print()
 
@@ -105,7 +115,7 @@ class ColosusModelTestCase(unittest.TestCase):
 
         searcher = Searcher(SearchConfig());
         state = State(pos, None, None, colosus, StateConfig())
-        policy, value, move, new_state = searcher.search(state, 800)
+        policy, value, move, new_state = searcher.search(state, 256)
         print("value: " + str(value))
         print("moves prob")
         sorted_policy = self.sort_policy(policy)

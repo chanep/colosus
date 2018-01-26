@@ -92,6 +92,8 @@ class Evaluator:
             # print('')
             end = position.is_end
             if end:
+                position.print()
+                print('')
                 score = (-position.score + 1) / 2
                 if self.is_two(game_num, move_num):
                     return score, move_num

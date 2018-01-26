@@ -14,9 +14,10 @@ class EvaluatorTestCase(unittest.TestCase):
         pos = Position()
 
         config = EvaluatorConfig()
+        # config.state_config.noise_factor = 0.25
         evaluator = Evaluator(config)
 
-        evaluator.evaluate(10, 256, pos, "c_2_800_800.h5", "c_1_2000_256.h5")
+        evaluator.evaluate(20, 512, pos, "c_2_1600_400.h5", "c_2_2480_256.h5")
 
 
 if __name__ == '__main__':

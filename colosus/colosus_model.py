@@ -51,7 +51,7 @@ class ColosusModel:
             res_out = x
 
             # for policy output
-            x = Conv2D(filters=16, kernel_size=1, data_format="channels_last", use_bias=False,
+            x = Conv2D(filters=16, kernel_size=1, padding="same", data_format="channels_last", use_bias=False,
                        kernel_regularizer=self.reg,
                        name="policy_conv-1-2")(res_out)
             x = BatchNormalization(axis=3, name="policy_batchnorm")(x)
@@ -73,21 +73,11 @@ class ColosusModel:
 
             self.model = Model(in_x, [policy_out, value_out], name="colosus_model")
 
-            opt = Adam(lr=0.0003, beta_1=0.9, beta_2=0.999, epsilon=1e-8)
+            opt = Adam(lr=0.00005, beta_1=0.9, beta_2=0.999, epsilon=1e-8)
             losses = ['categorical_crossentropy', 'mean_squared_error']  # avoid overfit for supervised
 
             self.model.compile(optimizer=opt, loss=losses, loss_weights=[1.25, 1.0])
             self.model._make_predict_function()  # for multithread
-
-    def load_weights(self, filename):
-        with self.graph.as_default():
-            with self.session.as_default():
-                self.model.load_weights(filename)
-
-    def save_weights(self, filename):
-        with self.graph.as_default():
-            with self.session.as_default():
-                self.model.save_weights(filename)
 
     def _build_residual_block(self, x, index):
         in_x = x
@@ -104,6 +94,16 @@ class ColosusModel:
         x = Add(name=res_name + "_add")([in_x, x])
         x = Activation("relu", name=res_name + "_relu2")(x)
         return x
+
+    def load_weights(self, filename):
+        with self.graph.as_default():
+            with self.session.as_default():
+                self.model.load_weights(filename)
+
+    def save_weights(self, filename):
+        with self.graph.as_default():
+            with self.session.as_default():
+                self.model.save_weights(filename)
 
     def predict(self, position: ModelPosition) -> (np.ndarray, float):
         board = self._positions_to_inputs(position)
