@@ -27,6 +27,13 @@ class SelfPlayConfig:
         self.search_config = SearchConfig()
 
 
+class SelfPlayMpConfig:
+    def __init__(self):
+        self.colosus_config = ColosusConfig()
+        self.state_config = StateConfig()
+        self.search_config = SearchConfig()
+
+
 class EvaluatorConfig:
     def __init__(self):
         self.colosus_config = ColosusConfig()

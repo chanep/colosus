@@ -107,12 +107,19 @@ class State:
             else:
                 self.is_leaf = False
                 policy, value = self.colosus.predict(self.position().to_model_position())
-                legal_policy = self.colosus.legal_policy(policy, legal_moves)
+                legal_policy = self._get_legal_policy(policy, legal_moves)
                 self.legal_policy = [None] * len(policy)
                 for m in legal_moves:
                     self.legal_policy[m] = legal_policy[m]
 
         self.backup(-value)
+
+    @staticmethod
+    def _get_legal_policy(policy, legal_moves):
+        legal_policy = np.zeros_like(policy)
+        for m in legal_moves:
+            legal_policy[m] = policy[m]
+        return legal_policy / np.sum(legal_policy)
 
     def backup(self, v):
         self.W += v

@@ -135,13 +135,13 @@ class ColosusModel:
 
         with self.session.as_default():
             output = self.model.predict_on_batch(board)
-        value = np.squeeze(output[1])
-        policy = output[0]
+        values = np.squeeze(output[1], axis=1)
+        policies = output[0]
 
         if self.config.thread_safe:
             self.lock.release()
 
-        return policy, value
+        return policies, values
 
     def train(self, positions, policies, values, epochs):
 
@@ -158,13 +158,6 @@ class ColosusModel:
                                validation_split=0.02,
                                verbose=2,
                                callbacks=None)
-
-    @staticmethod
-    def legal_policy(policy, legal_moves):
-        legal_policy = np.zeros_like(policy)
-        for m in legal_moves:
-            legal_policy[m] = policy[m]
-        return legal_policy / np.sum(legal_policy)
 
     def _positions_to_inputs(self, positions):
         if isinstance(positions, list):

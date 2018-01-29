@@ -116,11 +116,21 @@ class Position:
         if rank & (1 << f) != 0:
             return False
         else:
-            for i in range(max(0, r - 1), min(self.B_SIZE, r + 2)):
+            for i in range(max(0, r - 2), min(self.B_SIZE, r + 3)):
                 rank = self.boards[self.RANKS_I][Side.WHITE, i] | self.boards[self.RANKS_I][Side.BLACK, i]
-                mask = (1 << f) | (1 << min(self.B_SIZE - 1, f + 1)) | (1 << max(0, f - 1))
+                mask = (1 << f) | (1 << min(self.B_SIZE - 1, f + 1)) | (1 << max(0, f - 1)) | \
+                       (1 << min(self.B_SIZE - 1, f + 2)) | (1 << max(0, f - 2))
                 if rank & mask != 0:
                     return True
+        return False
+
+    def esta_pegada(self, move):
+        r, f = Square.to_rank_file(move)
+        for i in range(max(0, r - 1), min(self.B_SIZE, r + 2)):
+            rank = self.boards[self.RANKS_I][Side.WHITE, i] | self.boards[self.RANKS_I][Side.BLACK, i]
+            mask = (1 << f) | (1 << min(self.B_SIZE - 1, f + 1)) | (1 << max(0, f - 1))
+            if rank & mask != 0:
+                return True
         return False
 
     def legal_moves(self):

@@ -58,6 +58,9 @@ class PositionTestCase(unittest.TestCase):
         m10 = Square.square(14, 7)
         m11 = Square.square(10, 7)
         m12 = Square.square(10, 8)
+        m13 = Square.square(15, 10)
+        m14 = Square.square(10, 5)
+        m15 = Square.square(11, 4)
 
         self.assertTrue(pos.is_legal(move))
         self.assertFalse(pos.is_legal(move2))
@@ -71,8 +74,11 @@ class PositionTestCase(unittest.TestCase):
         self.assertTrue(pos.is_legal(m8))
         self.assertTrue(pos.is_legal(m9))
         self.assertTrue(pos.is_legal(m10))
-        self.assertFalse(pos.is_legal(m11))
-        self.assertFalse(pos.is_legal(m12))
+        self.assertTrue(pos.is_legal(m11))
+        self.assertTrue(pos.is_legal(m12))
+        self.assertTrue(pos.is_legal(m13))
+        self.assertTrue(pos.is_legal(m14))
+        self.assertFalse(pos.is_legal(m15))
 
     def test_is_end(self):
         pos = Position()
