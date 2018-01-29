@@ -23,6 +23,7 @@ class ColosusModel:
         self.config = config
         self.model = None  # type: Model
         self.reg = None
+        self.conv_size = 256
         self.graph = None
         self.session = None
         self.lock = Lock()
@@ -37,18 +38,19 @@ class ColosusModel:
         with self.graph.as_default():
             self.reg = l2(2e-4)
             # reg = None
+            self.conv_size = 80
 
             in_x = x = Input((self.B_SIZE, self.B_SIZE, 2))
 
             # (batch, channels, height, width)
-            x = Conv2D(filters=256, kernel_size=6, padding="same",
+            x = Conv2D(filters=self.conv_size, kernel_size=4, padding="same",
                        data_format="channels_last", use_bias=False, kernel_regularizer=self.reg,
                        name="input_conv-ini")(x)
             x = BatchNormalization(axis=3, name="input_batchnorm")(x)
             x = Activation("relu", name="input_relu")(x)
 
-            # for i in range(1):
-            #     x = self._build_residual_block(x, i + 1)
+            for i in range(1):
+                x = self._build_residual_block(x, i + 1)
 
             res_out = x
 
@@ -84,12 +86,12 @@ class ColosusModel:
     def _build_residual_block(self, x, index):
         in_x = x
         res_name = "res" + str(index)
-        x = Conv2D(filters=256, kernel_size=3, padding="same",
+        x = Conv2D(filters=self.conv_size, kernel_size=3, padding="same",
                    data_format="channels_last", use_bias=False, kernel_regularizer=self.reg,
                    name=res_name + "_conv1-3-256")(x)
         x = BatchNormalization(axis=3, name=res_name + "_batchnorm1")(x)
         x = Activation("relu", name=res_name + "_relu1")(x)
-        x = Conv2D(filters=256, kernel_size=3, padding="same",
+        x = Conv2D(filters=self.conv_size, kernel_size=3, padding="same",
                    data_format="channels_last", use_bias=False, kernel_regularizer=self.reg,
                    name=res_name + "_conv2-3-256")(x)
         x = BatchNormalization(axis=3, name="res" + str(index) + "_batchnorm2")(x)
