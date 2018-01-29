@@ -3,7 +3,6 @@ import unittest
 import pickle
 import numpy as np
 
-from colosus.game.piece import Piece
 from colosus.game.side import Side
 from colosus.train_record import TrainRecord
 from colosus.train_record_set import TrainRecordSet
@@ -11,6 +10,12 @@ from colosus.game.position import Position
 
 
 class TrainRecordSetTestCase(unittest.TestCase):
+    def test_normalize_policy(self):
+        record_set = TrainRecordSet.load_from_file("c_gtp_4_310_300.dat")
+        for r in record_set.records:
+            r.policy = r.policy / np.sum(r.policy)
+        record_set.save_to_file("c_gtpn_4_310_300.dat")
+
     def test_save_and_load(self):
         pos = Position()
         pos.put_piece(Side.WHITE, Piece.KING, 4, 3)

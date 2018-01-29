@@ -41,6 +41,18 @@ class State:
                 policy[i] = child.N / self.N
         return policy
 
+    def get_train_policy(self):
+        policy_len = len(self.children())
+        policy = np.zeros(policy_len)
+        factor = self.config.cpuct * math.sqrt(self.N)
+        for i in range(policy_len):
+            child = self.children()[i]
+            if child is not None:
+                child_score = child.Q + ((factor * child.P) / (1 + child.N))
+                policy[i] = child_score
+        policy = policy / np.sum(policy)
+        return policy
+
     def play(self, temperature) -> (int, float, int, 'State'):
         policy = self.get_policy()
         value = - self.Q

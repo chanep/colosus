@@ -6,7 +6,7 @@ class ColosusConfig:
 class StateConfig:
     def __init__(self):
         self.cpuct = 1.41
-        self.noise_alpha = 0.3
+        self.noise_alpha = 1000
         self.noise_factor = 0.25
 
 

@@ -81,7 +81,7 @@ class SelfPlay:
             colosus = ColosusModel(self.config.colosus_config)
             colosus.build()
             if weights_filename is not None:
-                colosus.model.load_weights(weights_filename)
+                colosus.load_weights(weights_filename)
 
         searcher = Searcher(self.config.search_config)
         wins = 0
@@ -103,9 +103,10 @@ class SelfPlay:
                 end = new_state.position().is_end
                 state = new_state
                 mc = state.position().move_count
+                # state.position().print()
                 # print("mc: {}".format(state.position().move_count))
 
-            # state.position().print()
+            state.position().print()
 
             # z = - state.position().score
             # for j in reversed(range(len(game_records))):

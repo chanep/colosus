@@ -16,7 +16,7 @@ class EvaluatorTestCase(unittest.TestCase):
         config = EvaluatorConfig()
         evaluator = Evaluator(config)
 
-        evaluator.evaluate(100, 1, pos, "c_2_2480_256.h5", "c_2_1600_400.h5")
+        evaluator.evaluate(40, 256, pos, "c_5_300_400.h5", "c_6_400_400.h5")
 
 
 if __name__ == '__main__':

@@ -107,11 +107,21 @@ class Position:
 
     def is_legal(self, move):
         r, f = Square.to_rank_file(move)
+        if self.move_count == 0:
+            span = 0.49
+            mid = self.B_SIZE / 2
+            return (int(mid - span) <= r <= int(mid + span)) and (int(mid - span) <= f <= int(mid + span))
+
         rank = self.boards[self.RANKS_I][Side.WHITE,  r] | self.boards[self.RANKS_I][Side.BLACK,  r]
         if rank & (1 << f) != 0:
             return False
         else:
-            return True
+            for i in range(max(0, r - 1), min(self.B_SIZE, r + 2)):
+                rank = self.boards[self.RANKS_I][Side.WHITE, i] | self.boards[self.RANKS_I][Side.BLACK, i]
+                mask = (1 << f) | (1 << min(self.B_SIZE - 1, f + 1)) | (1 << max(0, f - 1))
+                if rank & mask != 0:
+                    return True
+        return False
 
     def legal_moves(self):
         moves = []
