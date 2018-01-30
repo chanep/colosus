@@ -26,10 +26,17 @@ class ColosusProxy:
 
 
 class Stats:
-    def __init__(self):
+    def __init__(self, total_games):
+        self.total_games = total_games
+        self.games_started = mp.Value('i', 0)
         self.games_played = mp.Value('i', 0)
         self.wins = mp.Value('i', 0)
         self.mc_total = mp.Value('i', 0)
+
+    def should_continue(self):
+        with self.games_started.get_lock():
+            self.games_started.value += 1
+            return self.games_started.value > self.total_games
 
     def update(self, win, mc):
         with self.games_played.get_lock():
@@ -49,12 +56,12 @@ class SelfPlayMp:
     def __init__(self, config: SelfPlayMpConfig):
         self.config = config
 
-    def _play(self, id: int, games: int, iterations_per_move: int, initial_pos: Position, train_filename, colosus, stats):
+    def _play(self, id: int, iterations_per_move: int, initial_pos: Position, train_filename, colosus, stats):
         np.random.seed(id)
 
         train_record_set = TrainRecordSet()
         searcher = Searcher(self.config.search_config)
-        for i in range(games):
+        while not stats.should_continue():
             state = State(initial_pos, None, None, colosus, self.config.state_config)
             end = False
             game_records = []
@@ -88,15 +95,10 @@ class SelfPlayMp:
         if weights_filename is not None:
             colosus.load_weights(weights_filename)
 
-        stats = Stats()
+        stats = Stats(games)
 
         processes = []
         conns = []
-        games_per_process = games // workers
-        remaining_games = games % workers
-        process_games = [games_per_process] * workers
-        for g in range(remaining_games):
-            process_games[g] += 1
 
         train_filename_parts = train_filename.split(".")
 
@@ -104,7 +106,7 @@ class SelfPlayMp:
             worker_train_filename = train_filename_parts[0] + "_" + str(id) + "." + train_filename_parts[1]
             server_conn, client_conn = mp.Pipe()
             colosusProxy = ColosusProxy(client_conn)
-            args = (id, process_games[id], iterations_per_move, initial_pos.clone(), worker_train_filename,
+            args = (id, iterations_per_move, initial_pos.clone(), worker_train_filename,
                     colosusProxy, stats)
             p = mp.Process(target=self._play, args=args)
             processes.append(p)
