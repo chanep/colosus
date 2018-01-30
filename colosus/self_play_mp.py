@@ -25,6 +25,22 @@ class ColosusProxy:
         self.conn.close()
 
 
+class Stats:
+    def __init__(self):
+        self.games_played = mp.Value('i', 0)
+        self.wins = mp.Value('i', 0)
+        self.mc_total = mp.Value('i', 0)
+
+    def update(self, win, mc):
+        with self.games_played.get_lock():
+            self.games_played.value += 1
+            if win:
+                self.wins.value += 1
+                self.mc_total.value += mc
+            mc_mean = 0 if self.wins.value == 0 else self.mc_total.value / self.wins.value
+        print("games: {}, wins: {}, mc mean: {:.3g}\n".format(self.games_played.value, self.wins.value, mc_mean))
+
+
 def get_time():
     return datetime.now().time().strftime("%H:%M:%S.%f")
 
@@ -33,7 +49,7 @@ class SelfPlayMp:
     def __init__(self, config: SelfPlayMpConfig):
         self.config = config
 
-    def _play(self, id: int, games: int, iterations_per_move: int, initial_pos: Position, train_filename, colosus, update_stats):
+    def _play(self, id: int, games: int, iterations_per_move: int, initial_pos: Position, train_filename, colosus, stats):
         np.random.seed(id)
 
         train_record_set = TrainRecordSet()
@@ -60,31 +76,19 @@ class SelfPlayMp:
             train_record_set.extend(game_records)
 
             win = state.position().score != 0
-            update_stats(win, mc)
+            stats.update(win, mc)
 
         colosus.close()
         train_record_set.save_to_file(train_filename)
 
     def play(self, games: int, iterations_per_move: int, initial_pos: Position, train_filename, workers: int, weights_filename=None):
-        games_played = mp.Value('i', 0)
-        wins = mp.Value('i', 0)
-        mc_total = mp.Value('i', 0)
-
-        def update_stats(win, mc):
-            with games_played.get_lock():
-                games_played.value += 1
-                if win:
-                    wins.value += 1
-                    mc_total.value += mc
-                mc_mean = 0 if wins.value == 0 else mc_total.value / wins.value
-
-            print("games: {}, wins: {}, mc mean: {:.3g}".format(games_played.value, wins.value, mc_mean))
-
         colosus_config = self.config.colosus_config
         colosus = ColosusModel(colosus_config)
         colosus.build()
         if weights_filename is not None:
             colosus.load_weights(weights_filename)
+
+        stats = Stats()
 
         processes = []
         conns = []
@@ -100,7 +104,8 @@ class SelfPlayMp:
             worker_train_filename = train_filename_parts[0] + "_" + str(id) + "." + train_filename_parts[1]
             server_conn, client_conn = mp.Pipe()
             colosusProxy = ColosusProxy(client_conn)
-            args = (id, process_games[id], iterations_per_move, initial_pos.clone(), worker_train_filename, colosusProxy, update_stats)
+            args = (id, process_games[id], iterations_per_move, initial_pos.clone(), worker_train_filename,
+                    colosusProxy, stats)
             p = mp.Process(target=self._play, args=args)
             processes.append(p)
             conns.append(server_conn)
