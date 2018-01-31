@@ -165,9 +165,6 @@ class ColosusModelTestCase(unittest.TestCase):
                 policy, value = colosus.predict(p)
         print("predict time: " + str(time.time() - start))
 
-
-
-
     def sort_policy(self, policy):
         move_policy = []
         for m in range(len(policy)):

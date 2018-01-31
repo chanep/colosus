@@ -42,3 +42,12 @@ class EvaluatorConfig:
         self.state_config.noise_factor = 0.0
         self.search_config.move_count_temp0 = 8
 
+
+class PlayerConfig:
+    def __init__(self):
+        self.colosus_config = ColosusConfig()
+        self.state_config = StateConfig()
+        self.search_config = SearchConfig()
+        self.state_config.noise_factor = 0.0
+        self.search_config.move_count_temp0 = 8
+

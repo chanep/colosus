@@ -87,10 +87,7 @@ class Evaluator:
             state = self.get_state(game_num, move_num, position)
             searcher = self.get_searcher(game_num, move_num)
             policy, value, move, new_state = searcher.search(state, iterations)
-            if new_state is not None:
-                position = new_state.position()
-            else:
-                position = position.move(move)
+            position = new_state.position()
             # position.print()
             # print('')
             end = position.is_end
