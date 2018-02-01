@@ -48,13 +48,13 @@ class PositionTestCase(unittest.TestCase):
         b = rec.position.board
         p = rec.policy
 
-        m = Square.square(9, 1)
+        m = Square.square(9, 0)
 
         assertEqual(0, b[0, 13, 4])
-        assertEqual(1, b[0, 13, 11])
+        assertEqual(1, b[0, 13, 10])
 
         assertEqual(0, b[1, 11, 5])
-        assertEqual(1, b[1, 11, 10])
+        assertEqual(1, b[1, 11, 9])
 
         assertEqual(0, p[move])
         assertEqual(1.0, p[m])
@@ -64,13 +64,13 @@ class PositionTestCase(unittest.TestCase):
         b = rec.position.board
         p = rec.policy
 
-        m = Square.square(1, 9)
+        m = Square.square(0, 9)
 
         assertEqual(0, b[0, 13, 4])
-        assertEqual(1, b[0, 11, 13])
+        assertEqual(1, b[0, 10, 13])
 
         assertEqual(0, b[1, 11, 5])
-        assertEqual(1, b[1, 10, 11])
+        assertEqual(1, b[1, 9, 11])
 
         assertEqual(0, p[move])
         assertEqual(1.0, p[m])
@@ -80,13 +80,13 @@ class PositionTestCase(unittest.TestCase):
         b = rec.position.board
         p = rec.policy
 
-        m = Square.square(1, 6)
+        m = Square.square(0, 5)
 
         assertEqual(0, b[0, 13, 4])
-        assertEqual(1, b[0, 11, 2])
+        assertEqual(1, b[0, 10, 1])
 
         assertEqual(0, b[1, 11, 5])
-        assertEqual(1, b[1, 10, 4])
+        assertEqual(1, b[1, 9, 3])
 
         assertEqual(0, p[move])
         assertEqual(1.0, p[m])
@@ -96,13 +96,13 @@ class PositionTestCase(unittest.TestCase):
         b = rec.position.board
         p = rec.policy
 
-        m = Square.square(6, 1)
+        m = Square.square(5, 0)
 
         assertEqual(0, b[0, 13, 4])
-        assertEqual(1, b[0, 2, 11])
+        assertEqual(1, b[0, 1, 10])
 
         assertEqual(0, b[1, 11, 5])
-        assertEqual(1, b[1, 4, 10])
+        assertEqual(1, b[1, 3, 9])
 
         assertEqual(0, p[move])
         assertEqual(1.0, p[m])
@@ -112,13 +112,13 @@ class PositionTestCase(unittest.TestCase):
         b = rec.position.board
         p = rec.policy
 
-        m = Square.square(6, 14)
+        m = Square.square(5, 14)
 
         assertEqual(0, b[0, 13, 4])
-        assertEqual(1, b[0, 2, 4])
+        assertEqual(1, b[0, 1, 4])
 
         assertEqual(0, b[1, 11, 5])
-        assertEqual(1, b[1, 4, 5])
+        assertEqual(1, b[1, 3, 5])
 
         assertEqual(0, p[move])
         assertEqual(1.0, p[m])
@@ -128,13 +128,13 @@ class PositionTestCase(unittest.TestCase):
         b = rec.position.board
         p = rec.policy
 
-        m = Square.square(14, 6)
+        m = Square.square(14, 5)
 
         assertEqual(0, b[0, 13, 4])
-        assertEqual(1, b[0, 4, 2])
+        assertEqual(1, b[0, 4, 1])
 
         assertEqual(0, b[1, 11, 5])
-        assertEqual(1, b[1, 5, 4])
+        assertEqual(1, b[1, 5, 3])
 
         assertEqual(0, p[move])
         assertEqual(1.0, p[m])

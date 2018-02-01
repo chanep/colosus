@@ -48,7 +48,7 @@ def prompt_move():
 def prompt_legal_move(pos: Position):
     move = prompt_move()
     rank, file = Square.to_rank_file(move)
-    if not pos.is_legal(move):
+    if not pos.is_legal_colosus(move):
         print(f"{rank} {file} is not a legal move")
         return prompt_legal_move(pos)
     else:

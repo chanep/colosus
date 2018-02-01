@@ -1,7 +1,6 @@
 import numpy as np
 
-files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p']
-SIZE = 16
+SIZE = 15
 
 
 class Square:
@@ -12,7 +11,7 @@ class Square:
 
     @staticmethod
     def to_rank_file(square):
-        return int(square // 16), square % 16
+        return int(square // SIZE), square % SIZE
 
     @staticmethod
     def board_to_rank_file(board):

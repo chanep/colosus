@@ -13,17 +13,16 @@ class Position:
     DIAG_DOWN_I = 2
     DIAG_UP_I = 3
     BOARDS_COUNT = 4
-    B_SIZE = 16
-    DIAGS = (B_SIZE - 5 + 1) * 2 - 1  # 23 diagonals
-    DIAG_LEN = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5]
+    B_SIZE = 15
+    DIAGS = (B_SIZE - 5 + 1) * 2 - 1  # 21 diagonals
+    DIAG_LEN = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5]
 
     def __init__(self, initialize_boards=True):
-        self.side_to_move = Side.WHITE
+        self.side_to_move = Side.BLACK
         self.is_end = False
         self.score = None
         self.move_count = 0
         self.boards = [None] * self.BOARDS_COUNT
-        # 23
         if initialize_boards:
             self.boards[self.RANKS_I] = np.zeros((2, self.B_SIZE), np.int)  # better bitwise performance than uint16
             self.boards[self.FILES_I] = np.zeros((2, self.B_SIZE), np.int)
@@ -48,7 +47,7 @@ class Position:
                 bit_rank = self.boards[self.RANKS_I][side, r]
                 aux = np.array([bit_rank], dtype=">u2")
                 aux2 = aux.view(np.uint8)
-                model_board[b_index, r, :] = np.flip(np.unpackbits(aux2), axis=0)
+                model_board[b_index, r, :] = np.flip(np.unpackbits(aux2), axis=0)[0:self.B_SIZE]
 
         return ModelPosition(model_board)
 
@@ -72,7 +71,7 @@ class Position:
             diag_down_coords = (diag_down_index, diag_down_bit)
 
         diag_up_index = rank + file - 4
-        diag_up_bit = file - max(rank + file - 15, 0)
+        diag_up_bit = file - max(rank + file - self.B_SIZE + 1, 0)
         diag_up_coords = None
         if 0 <= diag_up_index < self.DIAGS:
             diag_up_coords = (diag_up_index, diag_up_bit)
@@ -105,24 +104,43 @@ class Position:
         self.move_count += 1
         self._check_end(square)
 
-    def is_legal(self, move):
+    def is_legal_colosus(self, move):
         r, f = Square.to_rank_file(move)
+        mid = int(self.B_SIZE / 2)
+
         if self.move_count == 0:
-            span = 0.49
-            mid = self.B_SIZE / 2
-            return (int(mid - span) <= r <= int(mid + span)) and (int(mid - span) <= f <= int(mid + span))
+            return r == mid and f == mid
 
         rank = self.boards[self.RANKS_I][Side.WHITE,  r] | self.boards[self.RANKS_I][Side.BLACK,  r]
         if rank & (1 << f) != 0:
             return False
-        else:
-            for i in range(max(0, r - 2), min(self.B_SIZE, r + 3)):
-                rank = self.boards[self.RANKS_I][Side.WHITE, i] | self.boards[self.RANKS_I][Side.BLACK, i]
-                mask = (1 << f) | (1 << min(self.B_SIZE - 1, f + 1)) | (1 << max(0, f - 1)) | \
-                       (1 << min(self.B_SIZE - 1, f + 2)) | (1 << max(0, f - 2))
-                if rank & mask != 0:
-                    return True
+
+        if self.move_count == 2:
+            return (r == mid + 4 or r == mid - 4) and (f == mid + 4 or f == mid - 4)
+
+        for i in range(max(0, r - 2), min(self.B_SIZE, r + 3)):
+            rank = self.boards[self.RANKS_I][Side.WHITE, i] | self.boards[self.RANKS_I][Side.BLACK, i]
+            mask = (1 << f) | (1 << min(self.B_SIZE - 1, f + 1)) | (1 << max(0, f - 1)) | \
+                   (1 << min(self.B_SIZE - 1, f + 2)) | (1 << max(0, f - 2))
+            if rank & mask != 0:
+                return True
         return False
+
+    def is_legal(self, move):
+        r, f = Square.to_rank_file(move)
+        mid = int(self.B_SIZE / 2)
+
+        if self.move_count == 0:
+            return r == mid and f == mid
+
+        rank = self.boards[self.RANKS_I][Side.WHITE,  r] | self.boards[self.RANKS_I][Side.BLACK,  r]
+        if rank & (1 << f) != 0:
+            return False
+
+        if self.move_count == 2:
+            return (r >= mid + 4 or r <= mid - 4) and (f >= mid + 4 or f <= mid - 4)
+
+        return True
 
     def esta_pegada(self, move):
         r, f = Square.to_rank_file(move)
@@ -136,7 +154,7 @@ class Position:
     def legal_moves(self):
         moves = []
         for m in range(self.B_SIZE * self.B_SIZE):
-            if self.is_legal(m):
+            if self.is_legal_colosus(m):
                 moves.append(m)
         return moves
 
@@ -166,7 +184,10 @@ class Position:
             if coord is not None:
                 index, bit = coord
                 line = self.boards[i][side, index]
-                if "11111" in bin(line):
+                bin_line = bin(line)
+                if "11111" in bin_line and "111111" not in bin_line and \
+                        "1111111" not in bin_line and "11111111" not in bin_line and \
+                        "111111111" not in bin_line:
                     return True
                 # if i > 1:
                 #     shifts = self.DIAG_LEN[index] - 5 + 1
@@ -189,7 +210,7 @@ class Position:
                     rank_str += '- '
             rank_str += str(r)
             print(rank_str)
-        print('0 1 2 3 4 5 6 7 8 9101112131415')
+        print('0 1 2 3 4 5 6 7 8 91011121314')
 
 
 

@@ -32,17 +32,29 @@ class PositionTestCase(unittest.TestCase):
 
     def test_move(self):
         pos = Position()
-        pos.put_piece(Side.WHITE, 12, 7)
-        pos.put_piece(Side.BLACK, 13, 8)
+        move = Square.square(8, 8)
+        self.assertFalse(pos.is_legal_colosus(move))
+        move = Square.square(7, 7)
+        self.assertTrue(pos.is_legal_colosus(move))
+        pos = pos.move(move)
 
-        move = Square.square(14, 9)
-        new_pos = pos.move(move)
+        move = Square.square(10, 10)
+        self.assertFalse(pos.is_legal_colosus(move))
+        move = Square.square(5, 9)
+        self.assertTrue(pos.is_legal_colosus(move))
+        pos = pos.move(move)
 
-        self.assertTrue(new_pos.piece_at(Side.WHITE, 14, 9))
-        self.assertEqual(3, new_pos.move_count)
+        move = Square.square(10, 10)
+        self.assertFalse(pos.is_legal_colosus(move))
+        move = Square.square(6, 6)
+        self.assertFalse(pos.is_legal_colosus(move))
+        move = Square.square(3, 11)
+        self.assertTrue(pos.is_legal_colosus(move))
+
 
     def test_is_legal_move(self):
         pos = Position()
+        pos.put_piece(Side.BLACK, 0, 0)
         pos.put_piece(Side.WHITE, 12, 7)
         pos.put_piece(Side.BLACK, 13, 8)
 
@@ -58,34 +70,33 @@ class PositionTestCase(unittest.TestCase):
         m10 = Square.square(14, 7)
         m11 = Square.square(10, 7)
         m12 = Square.square(10, 8)
-        m13 = Square.square(15, 10)
         m14 = Square.square(10, 5)
         m15 = Square.square(11, 4)
 
-        self.assertTrue(pos.is_legal(move))
-        self.assertFalse(pos.is_legal(move2))
+        self.assertTrue(pos.is_legal_colosus(move))
+        self.assertFalse(pos.is_legal_colosus(move2))
         pos.switch_side()
-        self.assertFalse(pos.is_legal(move2))
-        self.assertTrue(pos.is_legal(m3))
-        self.assertTrue(pos.is_legal(m4))
-        self.assertTrue(pos.is_legal(m5))
-        self.assertTrue(pos.is_legal(m6))
-        self.assertTrue(pos.is_legal(m7))
-        self.assertTrue(pos.is_legal(m8))
-        self.assertTrue(pos.is_legal(m9))
-        self.assertTrue(pos.is_legal(m10))
-        self.assertTrue(pos.is_legal(m11))
-        self.assertTrue(pos.is_legal(m12))
-        self.assertTrue(pos.is_legal(m13))
-        self.assertTrue(pos.is_legal(m14))
-        self.assertFalse(pos.is_legal(m15))
+        self.assertFalse(pos.is_legal_colosus(move2))
+        self.assertTrue(pos.is_legal_colosus(m3))
+        self.assertTrue(pos.is_legal_colosus(m4))
+        self.assertTrue(pos.is_legal_colosus(m5))
+        self.assertTrue(pos.is_legal_colosus(m6))
+        self.assertTrue(pos.is_legal_colosus(m7))
+        self.assertTrue(pos.is_legal_colosus(m8))
+        self.assertTrue(pos.is_legal_colosus(m9))
+        self.assertTrue(pos.is_legal_colosus(m10))
+        self.assertTrue(pos.is_legal_colosus(m11))
+        self.assertTrue(pos.is_legal_colosus(m12))
+        self.assertTrue(pos.is_legal_colosus(m14))
+        self.assertFalse(pos.is_legal_colosus(m15))
 
     def test_is_end(self):
         pos = Position()
+        pos.switch_side()
         pos.put_piece(Side.WHITE, 12, 7)
         pos.put_piece(Side.WHITE, 13, 8)
         pos.put_piece(Side.WHITE, 14, 9)
-        pos.put_piece(Side.WHITE, 15, 10)
+        pos.put_piece(Side.WHITE, 10, 5)
 
         self.assertFalse(pos.is_end)
         pos.put_piece(Side.WHITE, 11, 6)
@@ -94,8 +105,7 @@ class PositionTestCase(unittest.TestCase):
 
     def test_is_end2(self):
         pos = Position()
-        pos.switch_side()
-        pos.put_piece(Side.BLACK, 15, 2)
+        pos.put_piece(Side.BLACK, 10, 7)
         pos.put_piece(Side.BLACK, 14, 3)
         pos.put_piece(Side.BLACK, 13, 4)
         pos.put_piece(Side.BLACK, 12, 5)
@@ -106,7 +116,6 @@ class PositionTestCase(unittest.TestCase):
 
     def test_is_end3(self):
         pos = Position()
-        pos.switch_side()
         pos.put_piece(Side.BLACK, 5, 0)
         pos.put_piece(Side.BLACK, 4, 1)
         pos.put_piece(Side.BLACK, 3, 2)
@@ -118,6 +127,7 @@ class PositionTestCase(unittest.TestCase):
 
     def test_is_end4(self):
         pos = Position()
+        pos.switch_side()
         pos.put_piece(Side.WHITE, 0, 4)
         pos.put_piece(Side.WHITE, 1, 5)
         pos.put_piece(Side.WHITE, 2, 6)
@@ -129,6 +139,7 @@ class PositionTestCase(unittest.TestCase):
 
     def test_is_end5(self):
         pos = Position()
+        pos.switch_side()
         pos.put_piece(Side.WHITE, 5, 4)
         pos.put_piece(Side.WHITE, 5, 5)
         pos.put_piece(Side.WHITE, 5, 6)
@@ -140,6 +151,7 @@ class PositionTestCase(unittest.TestCase):
 
     def test_is_end6(self):
         pos = Position()
+        pos.switch_side()
         pos.put_piece(Side.WHITE, 4, 4)
         pos.put_piece(Side.WHITE, 5, 4)
         pos.put_piece(Side.WHITE, 6, 4)
@@ -151,16 +163,31 @@ class PositionTestCase(unittest.TestCase):
 
     def test_is_end7(self):
         pos = Position()
+        pos.switch_side()
         pos.put_piece(Side.WHITE, 12, 7)
         pos.put_piece(Side.WHITE, 13, 8)
         pos.put_piece(Side.WHITE, 14, 9)
-        pos.put_piece(Side.WHITE, 15, 10)
+        pos.put_piece(Side.WHITE, 10, 5)
 
         self.assertFalse(pos.is_end)
         move = Square.square(11, 6)
         new_pos = pos.move(move)
         self.assertTrue(new_pos.is_end)
         self.assertEqual(-1, new_pos.score)
+
+    def test_is_end8(self):
+        pos = Position()
+        pos.switch_side()
+        pos.put_piece(Side.WHITE, 4, 4)
+        pos.put_piece(Side.WHITE, 5, 5)
+        pos.put_piece(Side.WHITE, 6, 6)
+        pos.put_piece(Side.WHITE, 8, 8)
+        pos.put_piece(Side.WHITE, 9, 9)
+
+        self.assertFalse(pos.is_end)
+        move = Square.square(7, 7)
+        new_pos = pos.move(move)
+        self.assertFalse(new_pos.is_end)
 
     def test_to_model_position(self):
         pos = Position()

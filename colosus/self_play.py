@@ -43,7 +43,7 @@ class SelfPlay:
                 end = new_state.position().is_end
                 state = new_state
                 mc = state.position().move_count
-                # state.position().print()
+                state.position().print()
                 # print("mc: {}".format(state.position().move_count))
 
             state.position().print()
