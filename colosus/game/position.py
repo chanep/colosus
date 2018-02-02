@@ -116,7 +116,7 @@ class Position:
             return False
 
         if self.move_count == 2:
-            return (r == mid + 4 or r == mid - 4) and (f == mid + 4 or f == mid - 4)
+            return (abs(r - mid) == 4 and abs(f - mid) <= 4) or (abs(r - mid) <= 4 and abs(f - mid) == 4)
 
         for i in range(max(0, r - 2), min(self.B_SIZE, r + 3)):
             rank = self.boards[self.RANKS_I][Side.WHITE, i] | self.boards[self.RANKS_I][Side.BLACK, i]
@@ -138,7 +138,7 @@ class Position:
             return False
 
         if self.move_count == 2:
-            return (r >= mid + 4 or r <= mid - 4) and (f >= mid + 4 or f <= mid - 4)
+            return abs(r - mid) >= 4 or abs(f - mid) >= 4
 
         return True
 

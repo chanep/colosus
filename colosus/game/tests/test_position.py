@@ -52,7 +52,7 @@ class PositionTestCase(unittest.TestCase):
         self.assertTrue(pos.is_legal_colosus(move))
 
 
-    def test_is_legal_move(self):
+    def test_is_legal_colosus(self):
         pos = Position()
         pos.put_piece(Side.BLACK, 0, 0)
         pos.put_piece(Side.WHITE, 12, 7)
@@ -89,6 +89,47 @@ class PositionTestCase(unittest.TestCase):
         self.assertTrue(pos.is_legal_colosus(m12))
         self.assertTrue(pos.is_legal_colosus(m14))
         self.assertFalse(pos.is_legal_colosus(m15))
+
+    def test_is_legal_colosus2(self):
+        pos = Position()
+        pos.put_piece(Side.BLACK, 7, 7)
+        pos.put_piece(Side.WHITE, 7, 8)
+
+        m1 = Square.square(11, 7)
+        m2 = Square.square(7, 11)
+        m3 = Square.square(8, 3)
+        m4 = Square.square(11, 11)
+        m5 = Square.square(3, 3)
+        m6 = Square.square(3, 7)
+        m7 = Square.square(3, 6)
+        m8 = Square.square(11, 5)
+        m9 = Square.square(11, 10)
+        m10 = Square.square(4, 3)
+        m11 = Square.square(10, 3)
+        m12 = Square.square(6, 3)
+
+        m14 = Square.square(10, 10)
+        m15 = Square.square(14, 14)
+        m16 = Square.square(10, 7)
+        m17 = Square.square(9, 4)
+
+        self.assertTrue(pos.is_legal_colosus(m1))
+        self.assertTrue(pos.is_legal_colosus(m2))
+        self.assertTrue(pos.is_legal_colosus(m3))
+        self.assertTrue(pos.is_legal_colosus(m4))
+        self.assertTrue(pos.is_legal_colosus(m5))
+        self.assertTrue(pos.is_legal_colosus(m6))
+        self.assertTrue(pos.is_legal_colosus(m7))
+        self.assertTrue(pos.is_legal_colosus(m8))
+        self.assertTrue(pos.is_legal_colosus(m9))
+        self.assertTrue(pos.is_legal_colosus(m10))
+        self.assertTrue(pos.is_legal_colosus(m11))
+        self.assertTrue(pos.is_legal_colosus(m12))
+
+        self.assertFalse(pos.is_legal_colosus(m14))
+        self.assertFalse(pos.is_legal_colosus(m15))
+        self.assertFalse(pos.is_legal_colosus(m16))
+        self.assertFalse(pos.is_legal_colosus(m17))
 
     def test_is_end(self):
         pos = Position()
