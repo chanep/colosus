@@ -198,7 +198,7 @@ class Position:
         return False
 
     def print(self):
-        p_str = ['O', 'X']
+        p_str = ['X', 'O']
         for r in reversed(range(self.B_SIZE)):
             rank_str = ''
             for f in range(self.B_SIZE):
