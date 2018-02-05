@@ -1,11 +1,44 @@
-from flask import Flask
-import match_controller as match_c
+from flask import Flask, request, jsonify
+from flask_socketio import SocketIO, send, emit
 
+from match_controller import MatchController
+
+_client_sid = None
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'cucamona'
 
-app.add_url_rule("/match", "match", match_c.new_match, methods=['POST'])
+socketio = SocketIO(app)
+
+
+def on_match_initilized(status):
+    socketio.emit('status_update', status, room=_client_sid)
+
+
+def on_move(status):
+    socketio.emit('status_update', status, room=_client_sid)
+
+
+match_c = MatchController(on_match_initilized, on_move)
+
+
+@socketio.on('connect')
+def handle_connect():
+    _client_sid = request.sid
+    print('Client connected ' + str(_client_sid))
+
+
+@socketio.on('new_game')
+def handle_new_game(data):
+    print("new_game:" + str(data))
+    match_c.new_match(data['blackHuman'], data['whiteHuman'], data['iterations'])
+
+
+@socketio.on('move')
+def handle_new_game(data):
+    print("move:" + str(data))
+    match_c.new_match(data['blackHuman'], data['whiteHuman'], data['iterations'])
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5001)
+    socketio.run(app, port=5003, debug=True)
