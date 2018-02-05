@@ -80,6 +80,11 @@ class SelfPlayMp:
 
             state.position().print()
 
+            # z = - state.position().score
+            # for j in reversed(range(len(game_records))):
+            #     game_records[j].value = z
+            #     z = -z
+
             train_record_set.extend(game_records)
 
             win = state.position().score != 0
