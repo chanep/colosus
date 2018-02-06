@@ -22,9 +22,13 @@ class Match:
         self._match_initialized_callback = None
         self.initialized = False
         self._executor = ThreadPoolExecutor()
+        self._thinking_future = None
 
     def new_game(self, black: PlayerSettings, white: PlayerSettings, initial_pos: Position=None,
                  move_callback=None, match_initialized_callback=None):
+        if self._thinking_future is not None:
+            self._thinking_future.cancel()
+
         if initial_pos is None:
             self.position = Position()
         else:
@@ -46,17 +50,20 @@ class Match:
         self.initialized = True
         if self._match_initialized_callback is not None:
             self._match_initialized_callback(self)
+        self._start_thinking_if_applies(False)
 
     def _current_player(self) -> Player:
         return self.players[self.position.side_to_move]
 
     def _colosus_thinks_async(self):
-        self._executor.submit(self._colosus_thinks)
+        self._thinking_future = self._executor.submit(self._colosus_thinks)
 
     def _colosus_thinks(self):
+        print("colosus_thinks")
         c_player = self._current_player()
         policy, value, move, old_state, new_state = c_player.move()
         self._move_done(move, value)
+        self._start_thinking_if_applies(True)
 
     def move(self, move):
         if not self.initialized or not self.is_human_turn():
@@ -64,6 +71,7 @@ class Match:
         if not self.position.is_legal(move):
             raise IllegalMove(move)
         self._move_done(move)
+        self._start_thinking_if_applies(False)
 
     def is_human_turn(self):
         side = self.position.side_to_move
@@ -77,8 +85,15 @@ class Match:
         if self._move_callback is not None:
             self._move_callback(self, move=move, value=value)
         self._move_done(move, self.position.clone(), value)
+
+    def _start_thinking_if_applies(self, is_in_thread=False):
         if not self.is_end() and not self.is_human_turn():
-            self._colosus_thinks()
+            if is_in_thread:
+                self._colosus_thinks()
+            else:
+                self._colosus_thinks_async()
+
+
 
 
 
