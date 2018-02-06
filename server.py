@@ -17,6 +17,7 @@ def on_match_initilized(status):
 
 
 def on_move(status):
+    print('server on_move')
     if _client_sid is not None:
         socketio.emit('status_update', status, room=_client_sid)
 
@@ -26,12 +27,14 @@ match_c = MatchController(on_match_initilized, on_move)
 
 @socketio.on('connect')
 def handle_connect():
+    global _client_sid
     _client_sid = request.sid
     print('Client connected ' + str(_client_sid))
 
 
 @socketio.on('disconnect')
 def handle_connect():
+    global _client_sid
     _client_sid = None
     print('Client disconnected')
 

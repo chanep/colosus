@@ -62,8 +62,10 @@ class Match:
         print("colosus_thinks")
         c_player = self._current_player()
         policy, value, move, old_state, new_state = c_player.move()
+        print("colosus moved")
         self._move_done(move, value)
         self._start_thinking_if_applies(True)
+        print("colosus_end thinks")
 
     def move(self, move):
         if not self.initialized or not self.is_human_turn():
@@ -84,7 +86,6 @@ class Match:
         self.position = self.position.move(move)
         if self._move_callback is not None:
             self._move_callback(self, move=move, value=value)
-        self._move_done(move, self.position.clone(), value)
 
     def _start_thinking_if_applies(self, is_in_thread=False):
         if not self.is_end() and not self.is_human_turn():
