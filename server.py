@@ -12,11 +12,13 @@ socketio = SocketIO(app)
 
 
 def on_match_initilized(status):
-    socketio.emit('status_update', status, room=_client_sid)
+    if _client_sid is not None:
+        socketio.emit('status_update', status, room=_client_sid)
 
 
 def on_move(status):
-    socketio.emit('status_update', status, room=_client_sid)
+    if _client_sid is not None:
+        socketio.emit('status_update', status, room=_client_sid)
 
 
 match_c = MatchController(on_match_initilized, on_move)
@@ -28,6 +30,12 @@ def handle_connect():
     print('Client connected ' + str(_client_sid))
 
 
+@socketio.on('disconnect')
+def handle_connect():
+    _client_sid = None
+    print('Client disconnected')
+
+
 @socketio.on('new_game')
 def handle_new_game(data):
     print("new_game:" + str(data))
@@ -35,9 +43,9 @@ def handle_new_game(data):
 
 
 @socketio.on('move')
-def handle_new_game(data):
+def handle_move(data):
     print("move:" + str(data))
-    match_c.new_match(data['blackHuman'], data['whiteHuman'], data['iterations'])
+    match_c.move(data['rank'], data['file'])
 
 
 if __name__ == '__main__':

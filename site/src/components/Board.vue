@@ -1,25 +1,35 @@
 <template>
   <table class="board">
       <tr v-for="(rank, rindex) in board">
-          <td class="square" v-for="square in rank">
-              <img class="stone" src="../assets/stoneW.svg" alt="">
+          <td class="square" v-for="(square, findex) in rank" @click="move(14 - rindex, findex)">
+              <img v-if="square=='X'" class="stone" src="../assets/stoneB.svg">
+              <img v-if="square=='O'" class="stone" src="../assets/stoneW.svg">
           </td>
-          <td class="coord">{{15 - rindex}}</td>
+          <td class="coord_r">{{15 - rindex}}</td>
       </tr>
       <tr>
-          <td class="coord" v-for="file in 15">{{file}}</td>
+          <td class="coord_f" v-for="file in 15">{{file}}</td>
       </tr>
   </table>
 </template>
 
 <script>
-import store from "../store"
-export default {
-  data () {
-    return {
-        board: store.state.board.slice().reverse()
+    import store from "../store"
+    import api from "../api"
+
+    export default {
+        data () {
+            return {
+                board: store.state.board.slice().reverse()
+                }
+            },
+        methods:{
+            move(rank, file){
+                api.move(rank, file);
+            }
         }
-    }
+
+
 }
 </script>
 
@@ -29,8 +39,21 @@ export default {
         border-collapse: collapse;
     }
     .square {
-        margin: 0;  
-        border: 1px solid;
+        margin: 0;
+        padding: 2px; 
+        border: 1px solid rgb(0, 0, 0);
+        width: 20px;
+        height: 20px;
+        background-color: rgb(255, 223, 193);
+    }
+    .coord_r {
+        padding: 1px; 
+        width: 20px;
+        height: 20px;
+    }
+    .coord_f {
+        text-align: center;
+        padding: 1px; 
         width: 20px;
         height: 20px;
     }
