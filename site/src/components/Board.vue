@@ -1,16 +1,16 @@
 <template>
-  <table class="board">
-      <tr v-for="(rank, rindex) in board">
-          <td class="square" v-for="(square, findex) in rank" @click="move(14 - rindex, findex)">
-              <img v-if="square=='X'" class="stone" src="../assets/stoneB.svg">
-              <img v-if="square=='O'" class="stone" src="../assets/stoneW.svg">
-          </td>
-          <td class="coord_r">{{15 - rindex}}</td>
-      </tr>
-      <tr>
-          <td class="coord_f" v-for="file in 15">{{file}}</td>
-      </tr>
-  </table>
+        <table class="board">
+            <tr v-for="(rank, rindex) in reversedBoard">
+                <td class="square" v-for="(square, findex) in rank" @click="move(14 - rindex, findex)">
+                    <img v-if="square=='X'" class="stone" src="../assets/stoneB.svg">
+                    <img v-if="square=='O'" class="stone" src="../assets/stoneW.svg">
+                </td>
+                <td class="coord_r">{{15 - rindex}}</td>
+            </tr>
+            <tr>
+                <td class="coord_f" v-for="file in 15">{{file}}</td>
+            </tr>
+        </table>
 </template>
 
 <script>
@@ -20,11 +20,24 @@
     export default {
         data () {
             return {
-                board: store.state.board.slice().reverse()
+                gameStatus: store.gameStatus,
+                ticker: "x"
                 }
             },
+        computed: {
+            reversedBoard: function(){
+                return this.gameStatus.board.reverse()
+            }
+        },
         methods:{
             move(rank, file){
+                var self = this;
+
+                // setInterval(function() {
+                //     self.$data.ticker = Date.now(); 
+                //     console.log('tickerrrr');
+                // }, 1000);
+
                 api.move(rank, file);
             }
         }
@@ -37,6 +50,7 @@
     .board {
         border-spacing: 0;
         border-collapse: collapse;
+        
     }
     .square {
         margin: 0;
@@ -46,6 +60,7 @@
         height: 20px;
         background-color: rgb(255, 223, 193);
     }
+
     .coord_r {
         padding: 1px; 
         width: 20px;

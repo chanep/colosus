@@ -1,3 +1,5 @@
+import logging
+
 from flask import Flask, request, jsonify
 from flask_socketio import SocketIO, send, emit
 from match_controller import MatchController
@@ -8,29 +10,23 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'cucamona'
 
 socketio = SocketIO(app)
+logging.basicConfig(level=logging.ERROR)
 
 
-def on_match_initilized(status):
+def on_status_update(status):
+    print('server on_status_update')
     if _client_sid is not None:
-        socketio.emit('status_update', status, room=_client_sid)
-
-
-def on_move(status):
-    print('server on_move')
-    if _client_sid is not None:
-        print('server emit')
         # socketio.emit('status_update', status, room=_client_sid)
         socketio.emit('status_update', status, room=_client_sid)
 
 
-match_c = MatchController(on_move, on_match_initilized)
+match_c = MatchController(on_status_update)
 
 
 @socketio.on('connect')
 def handle_connect():
     global _client_sid
     _client_sid = request.sid
-    emit('status_update', "hola")
     print('Client connected ' + str(_client_sid))
 
 
@@ -54,4 +50,4 @@ def handle_move(data):
 
 
 if __name__ == '__main__':
-    socketio.run(app, port=5003, debug=False)
+    socketio.run(app, port=5003, debug=False, log_output=False)

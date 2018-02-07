@@ -1,11 +1,17 @@
-let state = {
+let gameStatus = {
     board: null,
     humanTurn: false,
     lastMove: null,
     winner: null,
     value: null,
-    error: null
+    error: null,
+    sideToMove: null,
+    inProgress: false
 }
+
+// let gameSettings = {
+//     human
+// }
 
 let board = [];
 for(let r=0;r<15;r++){
@@ -20,13 +26,20 @@ let appState = {
     viewColosusValue: false
 }
 
-state.board = board;
+gameStatus.board = board;
 
 let store = {
-    state: state,
+    gameStatus: gameStatus,
     appState : appState,
     updateStatus(status){
-        this.state = status
+        this.gameStatus.board = status.board;
+        this.gameStatus.humanTurn = status.humanTurn;
+        this.gameStatus.lastMove = status.lastMove;
+        this.gameStatus.winner = status.winner;
+        this.gameStatus.value = status.value;
+        this.gameStatus.error = status.error;
+        this.gameStatus.sideToMove = status.sideToMove;
+        this.gameStatus.inProgress = status.inProgress;
     }
 }
 

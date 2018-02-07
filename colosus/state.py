@@ -49,7 +49,7 @@ class State:
         new_root_state = self.children()[move]
         new_root_state.parent = None
         self.noise = None
-        return policy, value, move, new_root_state
+        return policy, value, int(move), new_root_state
 
     def play_static_policy(self, temperature) -> (int, float, int, 'State'):
         self.select()

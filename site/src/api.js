@@ -1,15 +1,16 @@
 import socketio from 'socket.io-client';
+import store from "./store"
 import { log } from 'util';
 
 let socket = socketio('http://localhost:5003');
 
 socket.on('connect', () => {
-    console.log("conectado!!")
+    console.log("conectado!!");
 })
 
 socket.on('status_update', (status) => {
-    console.log("stat_update!")
     console.log(status)
+    store.updateStatus(status);
 })
 
 socket.on('disconnect', () => {
