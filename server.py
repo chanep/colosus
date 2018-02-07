@@ -1,6 +1,5 @@
 from flask import Flask, request, jsonify
 from flask_socketio import SocketIO, send, emit
-
 from match_controller import MatchController
 
 _client_sid = None
@@ -19,21 +18,24 @@ def on_match_initilized(status):
 def on_move(status):
     print('server on_move')
     if _client_sid is not None:
+        print('server emit')
+        # socketio.emit('status_update', status, room=_client_sid)
         socketio.emit('status_update', status, room=_client_sid)
 
 
-match_c = MatchController(on_match_initilized, on_move)
+match_c = MatchController(on_move, on_match_initilized)
 
 
 @socketio.on('connect')
 def handle_connect():
     global _client_sid
     _client_sid = request.sid
+    emit('status_update', "hola")
     print('Client connected ' + str(_client_sid))
 
 
 @socketio.on('disconnect')
-def handle_connect():
+def handle_disconnect():
     global _client_sid
     _client_sid = None
     print('Client disconnected')
@@ -52,4 +54,4 @@ def handle_move(data):
 
 
 if __name__ == '__main__':
-    socketio.run(app, port=5003, debug=True)
+    socketio.run(app, port=5003, debug=False)
