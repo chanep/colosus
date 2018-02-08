@@ -56,6 +56,9 @@ class Match:
         self.initialized = True
 
     def _initialize_done(self, future):
+        exception = future.exception()
+        if exception is not None:
+            raise exception
         if self._match_initialized_callback is not None:
             self._match_initialized_callback(self)
         self._start_thinking_if_applies()
