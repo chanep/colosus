@@ -1,15 +1,15 @@
 <template>
         <table class="board">
-            <tr v-for="(rank, rindex) in reversedBoard">
+            <tr v-for="(rank, rindex) in reversedBoard" :key="rindex">
                 <td class="square" :class="{'highlighted-square' : isHighlightedSquare(14 - rindex, findex)}" 
-                    v-for="(square, findex) in rank" @click="move(14 - rindex, findex)">
+                    v-for="(square, findex) in rank" :key="findex" @click="move(14 - rindex, findex)">
                     <img v-if="square=='X'" class="stone" src="../assets/stoneB.svg">
                     <img v-if="square=='O'" class="stone" src="../assets/stoneW.svg">
                 </td>
                 <td class="coord_r">{{15 - rindex}}</td>
             </tr>
             <tr>
-                <td class="coord_f" v-for="file in 15">{{file}}</td>
+                <td class="coord_f" v-for="(file, cindex) in 15" :key="cindex">{{file}}</td>
             </tr>
         </table>
 </template>
@@ -59,7 +59,7 @@
         
     }
     .highlighted-square {
-        border: 2px solid rgb(70, 12, 12) !important;
+        border: 2px solid rgb(148, 25, 25) !important;
     }
     .square {
         margin: 0;

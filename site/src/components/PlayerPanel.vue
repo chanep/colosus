@@ -44,6 +44,8 @@
             eval: function(){
                 if (this.value){
                     return "eval: " + (Math.round(this.value * 1000) / 1000)
+                } else {
+                    return "";
                 }
             }
         },
@@ -71,7 +73,7 @@
                         clearInterval(this.timerId);
                     }
                 }
-                if(newSideToMove != this.side && this.gameStatus.value){
+                if(newSideToMove != this.side){
                     this.value = this.gameStatus.value
                 }
             }
