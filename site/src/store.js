@@ -6,7 +6,8 @@ let gameStatus = {
     value: null,
     error: null,
     sideToMove: null,
-    inProgress: false
+    inProgress: false,
+    winLine: null
 }
 
 // let gameSettings = {
@@ -40,6 +41,7 @@ let store = {
         this.gameStatus.error = status.error;
         this.gameStatus.sideToMove = status.sideToMove;
         this.gameStatus.inProgress = status.inProgress;
+        this.gameStatus.winLine = status.winLine;
     }
 }
 

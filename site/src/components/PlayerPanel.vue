@@ -18,8 +18,6 @@
 <script>
     import store from "../store"
 
-    let timerId = null;
-
     export default {
         props: ['side'],
         data () {
@@ -28,7 +26,8 @@
                 time: 0,
                 prevTick: 0,
                 running: false,
-                value: null
+                value: null,
+                timerId: null
                 }
             },
         computed: {
@@ -55,11 +54,11 @@
                 }
             },
             'gameStatus.sideToMove'(newSideToMove, oldSideToMove){
-                if(newSideToMove == this.side && oldSideToMove != this.side){
+                if(newSideToMove == this.side && oldSideToMove != this.side && this.gameStatus.inProgress){
                     this.running = true;
                     this.prevTick = Date.now()
                     let self = this;
-                    timerId = setInterval(function() {
+                    this.timerId = setInterval(function() {
                         let now = Date.now(); 
                         let elapsed = now - self.$data.prevTick;
                         self.$data.time += elapsed;
@@ -68,8 +67,8 @@
                 }
                 if(newSideToMove != this.side && oldSideToMove == this.side){
                     this.running = false;
-                    if(timerId){
-                        clearInterval(timerId);
+                    if(this.timerId){
+                        clearInterval(this.timerId);
                     }
                 }
                 if(newSideToMove != this.side && this.gameStatus.value){

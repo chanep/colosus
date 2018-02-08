@@ -1,5 +1,6 @@
 import logging
 
+import time
 from flask import Flask, request, jsonify
 from flask_socketio import SocketIO, send, emit
 from match_controller import MatchController
@@ -10,7 +11,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'cucamona'
 
 socketio = SocketIO(app)
-logging.basicConfig(level=logging.ERROR)
+# logging.basicConfig(level=logging.ERROR)
 
 
 def on_status_update(status):
@@ -32,8 +33,8 @@ def handle_connect():
 
 @socketio.on('disconnect')
 def handle_disconnect():
-    global _client_sid
-    _client_sid = None
+    # global _client_sid
+    # _client_sid = None
     print('Client disconnected')
 
 

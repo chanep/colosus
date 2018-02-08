@@ -93,6 +93,8 @@ class Evaluator:
             end = position.is_end
             if end:
                 position.print()
+                # win_line = position.win_line()
+                # print(win_line)
                 print('')
                 score = (-position.score + 1) / 2
                 if self.is_two(game_num, move_num):

@@ -3,7 +3,10 @@
     <div class="board"><Board/></div>
     <div class="left">
       <CommandPanel/>
-      <PlayerPanel side=0 />
+      <div class="panels">
+        <PlayerPanel side=0 />
+        <PlayerPanel side=1 />
+      </div>
     </div>
   </div>
 </template>
@@ -30,5 +33,9 @@
     .left{
       display: flex;
       flex-direction: column;
+    }
+    .panels{
+      display: flex;
+      flex-direction: row;
     }
 </style>

@@ -9,7 +9,7 @@ from colosus.match import Match, PlayerSettings
 from colosus.player_type import PlayerType
 
 _match = Match()
-_weights_filename = None
+_weights_filename = "./colosus/tests/c_10_800_1200.h5"
 
 
 class MatchController:
@@ -46,8 +46,14 @@ class MatchController:
 
     def _create_match_status(self, match: Match, last_move=None, value=None, error: str=None):
         winner = None
+        win_line = []
         if match.is_end():
             winner = match.position.side_to_move.change()
+            for (rank, file) in match.position.win_line():
+                win_line.append({'rank': rank, 'file': file})
+        if last_move is not None:
+            rank, file = Square.to_rank_file(last_move)
+            last_move = {'rank': rank, 'file': file}
 
         return {
             'board': self._position_dto(match.position),
@@ -57,7 +63,8 @@ class MatchController:
             'value': value,
             'error': error,
             'sideToMove': match.position.side_to_move,
-            'inProgress': match.in_progress
+            'inProgress': match.in_progress,
+            'winLine': win_line
         }
 
     def _position_dto(self, position: Position):

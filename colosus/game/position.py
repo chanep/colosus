@@ -78,6 +78,20 @@ class Position:
 
         return [rank_coords, file_coords, diag_down_coords, diag_up_coords]
 
+    def _coord_to_rank_file(self, board, line, bit):
+        if board == 0:
+            return line, bit
+        elif board == 1:
+            return bit, line
+        elif board == 2:
+            rank = max(0, self.B_SIZE - 5 - line) + bit
+            file = line + 5 + rank - self.B_SIZE
+            return rank, file
+        else:
+            rank = min(self.B_SIZE - 1, line + 4) - bit
+            file = line - rank + 4
+            return rank, file
+
     def piece_at(self, side, rank, file):
         return self.boards[self.RANKS_I][side, rank] & (1 << file) != 0
 
@@ -173,6 +187,29 @@ class Position:
             self.is_end = True
             self.score = 0
 
+    def win_line(self):
+        win_line = []
+        mask = 0b11111
+        overline_mask = 0b111111
+        shifts = self.B_SIZE - 5 + 1
+        for i in range(self.BOARDS_COUNT):
+            board = self.boards[i]
+            for s in range(Side.COUNT):
+                lines = board[s, :]
+                for l in range(len(lines)):
+                    line = lines[l]
+                    if i > 1:
+                        shifts = self.DIAG_LEN[l] - 5 + 1
+                    for s in range(shifts):
+                        shifted_mask = mask << s
+                        shifted_overline_mask = overline_mask << s
+                        if line & shifted_mask == shifted_mask and \
+                                line & shifted_overline_mask != shifted_overline_mask:
+                            for j in range(5):
+                                rank, file = self._coord_to_rank_file(i, l, s + j)
+                                win_line.append((rank, file))
+        return win_line
+
     def check_win(self, last_move):
         side = self.side_to_move
         r, f = Square.to_rank_file(last_move)
@@ -185,9 +222,7 @@ class Position:
                 index, bit = coord
                 line = self.boards[i][side, index]
                 bin_line = bin(line)
-                if "11111" in bin_line and "111111" not in bin_line and \
-                        "1111111" not in bin_line and "11111111" not in bin_line and \
-                        "111111111" not in bin_line:
+                if "11111" in bin_line and "111111" not in bin_line:
                     return True
                 # if i > 1:
                 #     shifts = self.DIAG_LEN[index] - 5 + 1

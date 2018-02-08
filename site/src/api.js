@@ -2,7 +2,7 @@ import socketio from 'socket.io-client';
 import store from "./store"
 import { log } from 'util';
 
-let socket = socketio('http://localhost:5003');
+let socket = socketio('http://localhost:5003', {transports: ['polling']});
 
 socket.on('connect', () => {
     console.log("conectado!!");

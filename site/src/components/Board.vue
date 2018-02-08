@@ -1,7 +1,8 @@
 <template>
         <table class="board">
             <tr v-for="(rank, rindex) in reversedBoard">
-                <td class="square" v-for="(square, findex) in rank" @click="move(14 - rindex, findex)">
+                <td class="square" :class="{'highlighted-square' : isHighlightedSquare(14 - rindex, findex)}" 
+                    v-for="(square, findex) in rank" @click="move(14 - rindex, findex)">
                     <img v-if="square=='X'" class="stone" src="../assets/stoneB.svg">
                     <img v-if="square=='O'" class="stone" src="../assets/stoneW.svg">
                 </td>
@@ -27,18 +28,23 @@
         computed: {
             reversedBoard: function(){
                 return this.gameStatus.board.reverse()
-            }
+            },
+
         },
         methods:{
             move(rank, file){
-                var self = this;
-
-                // setInterval(function() {
-                //     self.$data.ticker = Date.now(); 
-                //     console.log('tickerrrr');
-                // }, 1000);
-
                 api.move(rank, file);
+            },
+            isHighlightedSquare(rank, file){
+                if(this.gameStatus.lastMove && this.gameStatus.lastMove.rank == rank && this.gameStatus.lastMove.file == file)
+                    return true;
+                if(this.gameStatus.winLine){
+                    for(let move of this.gameStatus.winLine){
+                        if(move.rank == rank && move.file == file)
+                            return true; 
+                    }
+                }
+                return false;
             }
         }
 
@@ -51,6 +57,9 @@
         border-spacing: 0;
         border-collapse: collapse;
         
+    }
+    .highlighted-square {
+        border: 2px solid rgb(70, 12, 12) !important;
     }
     .square {
         margin: 0;

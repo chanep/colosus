@@ -51,6 +51,8 @@ class Match:
             if player_sets.type == PlayerType.COLOSUS:
                 self.players[i] = Player(PlayerConfig())
                 self.players[i].new_game(self.position.clone(), player_sets.iterations, player_sets.weights_filename)
+            else:
+                self.players[i] = None
         self.initialized = True
 
     def _initialize_done(self, future):
@@ -85,7 +87,7 @@ class Match:
 
     def is_human_turn(self):
         side = self.position.side_to_move
-        return self.players[side] is None
+        return self.players[side] is None and not self.position.is_end
 
     def is_end(self):
         return self.position.is_end

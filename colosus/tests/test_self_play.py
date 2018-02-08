@@ -66,7 +66,7 @@ class SelfPlayTestCase(unittest.TestCase):
         config = SelfPlayMpConfig()
         self_play = SelfPlayMp(config)
         # self_play.play(1000, 200, pos, colosus, "t2_1_1000_200.dat")
-        self_play.play(800, 1600, pos, "c_9_800_1600.dat", 16, "c_8_600_2000.h5")
+        self_play.play(800, 1200, pos, "c_10_800_1200.dat", 16, "c_9_800_1600.h5")
 
         print("fin. time: " + str(time.time() - start_time))
 
