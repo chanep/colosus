@@ -1,4 +1,5 @@
 import pickle
+import random
 from typing import List
 
 from colosus.game.rotator import Rotator
@@ -38,6 +39,9 @@ class TrainRecordSet:
             record_set = cls.load_from_file(filename)
             record_set.do_rotations()
             records.extend(record_set.records)
+        print("shuffling")
+        random.shuffle(records)
+        print("shuffled")
         merged = TrainRecordSet(records)
         merged.save_to_file(merged_filename)
 
