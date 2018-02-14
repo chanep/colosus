@@ -28,7 +28,7 @@ class SearcherTestCase(unittest.TestCase):
     def test_search(self):
         colosus = ColosusModel(ColosusConfig())
         colosus.build()
-        # colosus.model.load_weights("c_1_1600_30.h5")
+        colosus.load_weights("c_11_800_1600.h5")
 
         pos = Position()
         pos.put_piece(Side.BLACK, 7, 7)
@@ -42,7 +42,10 @@ class SearcherTestCase(unittest.TestCase):
         searcher = Searcher(config)
         state = State(pos, None, None, colosus, StateConfig())
 
+        start = time.time()
         policy, value, move, new_state = searcher.search(state, 256)
+        print("time: " + str(time.time() - start))
+
 
         state.print()
         new_state.print()

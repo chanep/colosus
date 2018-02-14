@@ -9,7 +9,7 @@ from colosus.match import Match, PlayerSettings
 from colosus.player_type import PlayerType
 
 _match = Match()
-_weights_filename = None
+_weights_filename = "./colosus/tests/c_12_800_1600.h5"
 
 
 class MatchController:

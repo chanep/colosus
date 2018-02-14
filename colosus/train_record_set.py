@@ -2,6 +2,8 @@ import pickle
 import random
 from typing import List
 
+import os
+
 from colosus.game.rotator import Rotator
 from colosus.train_record import TrainRecord
 
@@ -34,16 +36,18 @@ class TrainRecordSet:
     def merge_and_rotate(cls, merged_filename: str, file_count: int):
         merged_filename_parts = merged_filename.split(".")
         records = []
+        filenames = []
         for i in range(file_count):
             filename = merged_filename_parts[0] + "_" + str(i) + "." + merged_filename_parts[1]
+            filenames.append(filename)
             record_set = cls.load_from_file(filename)
             record_set.do_rotations()
             records.extend(record_set.records)
-        print("shuffling")
         random.shuffle(records)
-        print("shuffled")
         merged = TrainRecordSet(records)
         merged.save_to_file(merged_filename)
+        for f in filenames:
+            os.remove(f)
 
 
     @classmethod

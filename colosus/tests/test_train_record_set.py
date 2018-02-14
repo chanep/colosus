@@ -1,3 +1,4 @@
+import random
 import unittest
 
 import pickle
@@ -15,6 +16,31 @@ class TrainRecordSetTestCase(unittest.TestCase):
         for r in record_set.records:
             r.policy = r.policy / np.sum(r.policy)
         record_set.save_to_file("c_gtpn_4_310_300.dat")
+
+    def test_sample(self):
+        record_set = TrainRecordSet.load_from_file("c_12_800_1600.dat")
+        records_count = len(record_set.records)
+        sample_count = int(records_count / 4)
+        sample = record_set.records[0:sample_count]
+        sample_set = TrainRecordSet(sample)
+        sample_set.save_to_file("c_12_1_200_1600.dat")
+
+    def test_merge(self):
+        files = [
+            'c_15_600_1600.dat',
+            'c_15_2_100_1600.dat',
+            'c_15_3_100_1600.dat'
+        ]
+
+        recordset = TrainRecordSet()
+
+        for f in files:
+            r = TrainRecordSet.load_from_file(f)
+            recordset.extend(r.records)
+
+        random.shuffle(recordset.records)
+
+        recordset.save_to_file('c_15_800_1600.dat')
 
     def test_save_and_load(self):
         pos = Position()

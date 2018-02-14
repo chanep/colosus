@@ -49,7 +49,7 @@ class ColosusModel:
             x = BatchNormalization(axis=3, name="input_batchnorm")(x)
             x = Activation("relu", name="input_relu")(x)
 
-            for i in range(2):
+            for i in range(3):
                 x = self._build_residual_block(x, i + 1)
 
             res_out = x
@@ -77,7 +77,7 @@ class ColosusModel:
 
             self.model = Model(in_x, [policy_out, value_out], name="colosus_model")
 
-            opt = Adam(lr=0.0005, beta_1=0.9, beta_2=0.999, epsilon=1e-8)
+            opt = Adam(lr=self.config.lr, beta_1=0.9, beta_2=0.999, epsilon=1e-8)
             losses = ['categorical_crossentropy', 'mean_squared_error']  # avoid overfit for supervised
 
             self.model.compile(optimizer=opt, loss=losses, loss_weights=[1.25, 1.0])

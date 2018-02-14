@@ -1,6 +1,7 @@
 class ColosusConfig:
     def __init__(self):
         self.thread_safe = False
+        self.lr = 0.0005
 
 
 class StateConfig:
