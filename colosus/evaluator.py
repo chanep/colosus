@@ -7,6 +7,7 @@ from colosus.config import EvaluatorConfig, PlayerConfig
 from colosus.game.position import Position
 from colosus.player import Player
 from colosus.player2 import Player2
+from colosus.player_mp import PlayerMp
 from colosus.searcher import Searcher
 from colosus.searcher2 import Searcher2
 from colosus.state import State
@@ -33,7 +34,7 @@ class Evaluator:
 
         player_config = PlayerConfig()
         self.player = Player(player_config, colosus)
-        self.player2 = Player2(player_config, colosus2)
+        self.player2 = PlayerMp(player_config, colosus2)
 
         total_score_1 = 0.0
         total_score_2 = 0.0
@@ -86,7 +87,7 @@ class Evaluator:
             position = new_state.position()
             opponent: Player = self.get_player(game_num, move_num + 1)
             opponent.opponent_move(move)
-            # position.print()
+            position.print()
             # print('')
             end = position.is_end
             if end:

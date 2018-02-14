@@ -100,7 +100,7 @@ class ColosusModelTestCase(unittest.TestCase):
         colosus.build()
         # colosus.load_weights("c_1_500_1600.h5")
         # colosus.load_weights("c_4_600_1600.h5")
-        colosus.load_weights("c_9_800_1600.h5")
+        colosus.load_weights("c_12_800_1600.h5")
 
         pos.print()
 
@@ -115,7 +115,9 @@ class ColosusModelTestCase(unittest.TestCase):
         print('')
 
         searcher = Searcher(SearchConfig());
-        state = State(pos, None, None, colosus, StateConfig())
+        state_config = StateConfig()
+        state_config.cpuct = 1 * state_config.cpuct
+        state = State(pos, None, None, colosus, state_config)
         policy, value, move, new_state = searcher.search(state, 2048)
         print("value: " + str(value))
         print("moves prob")
