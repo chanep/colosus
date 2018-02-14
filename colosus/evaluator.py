@@ -3,8 +3,10 @@ import tensorflow as tf
 
 from colosus.colosus_model import ColosusModel
 from colosus.colosus_model2 import ColosusModel2
-from colosus.config import EvaluatorConfig
+from colosus.config import EvaluatorConfig, PlayerConfig
 from colosus.game.position import Position
+from colosus.player import Player
+from colosus.player2 import Player2
 from colosus.searcher import Searcher
 from colosus.searcher2 import Searcher2
 from colosus.state import State
@@ -14,25 +16,24 @@ from colosus.state2 import State2
 class Evaluator:
     def __init__(self, config: EvaluatorConfig):
         self.config = config
-        self.colosus = None
-        self.colosus2 = None
-        self.searcher = None
-        self.searcher2 = None
+        self.player = None
+        self.player2 = None
 
     def evaluate(self, games: int, iterations: int, position_ini: Position, weights_filename, weights_filename2):
 
-        self.colosus = ColosusModel(self.config.colosus_config)
-        self.colosus.build()
+        colosus = ColosusModel(self.config.colosus_config)
+        colosus.build()
         if weights_filename is not None:
-            self.colosus.load_weights(weights_filename)
+            colosus.load_weights(weights_filename)
 
-        self.colosus2 = ColosusModel2(self.config.colosus_config)
-        self.colosus2.build()
+        colosus2 = ColosusModel2(self.config.colosus_config)
+        colosus2.build()
         if weights_filename2 is not None:
-            self.colosus2.load_weights(weights_filename2)
+            colosus2.load_weights(weights_filename2)
 
-        self.searcher = Searcher(self.config.search_config)
-        self.searcher2 = Searcher2(self.config.search_config)
+        player_config = PlayerConfig()
+        self.player = Player(player_config, colosus)
+        self.player2 = Player2(player_config, colosus2)
 
         total_score_1 = 0.0
         total_score_2 = 0.0
@@ -67,27 +68,24 @@ class Evaluator:
     def is_two(self, game_num: int, move_num: int):
         return (game_num + move_num) % 2 != 0
 
-    def get_state(self, game_num: int, move_num: int, position: Position):
+    def get_player(self, game_num: int, move_num: int):
         if self.is_two(game_num, move_num):
-            return State2(position.clone(), None, None, self.colosus2, self.config.state_config)
+            return self.player2
         else:
-            return State(position.clone(), None, None, self.colosus, self.config.state_config)
-
-    def get_searcher(self, game_num: int, move_num: int):
-        if self.is_two(game_num, move_num):
-            return self.searcher2
-        else:
-            return self.searcher
+            return self.player
 
     def play_game(self, iterations: int, game_num: int, position_ini: Position):
         move_num = 0
         end = False
         position = position_ini
+        self.player.new_game(position.clone(), iterations)
+        self.player2.new_game(position.clone(), iterations)
         while not end:
-            state = self.get_state(game_num, move_num, position)
-            searcher = self.get_searcher(game_num, move_num)
-            policy, value, move, new_state = searcher.search(state, iterations)
+            player = self.get_player(game_num, move_num)
+            policy, value, move, old_state, new_state = player.move()
             position = new_state.position()
+            opponent: Player = self.get_player(game_num, move_num + 1)
+            opponent.opponent_move(move)
             # position.print()
             # print('')
             end = position.is_end

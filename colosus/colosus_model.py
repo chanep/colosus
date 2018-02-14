@@ -49,7 +49,7 @@ class ColosusModel:
             x = BatchNormalization(axis=3, name="input_batchnorm")(x)
             x = Activation("relu", name="input_relu")(x)
 
-            for i in range(3):
+            for i in range(2):
                 x = self._build_residual_block(x, i + 1)
 
             res_out = x
