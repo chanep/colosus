@@ -19,6 +19,8 @@ class Evaluator:
         self.config = config
         self.player = None
         self.player2 = None
+        self.var = 0.0
+        self.var2 = 0.0
 
     def evaluate(self, games: int, iterations: int, position_ini: Position, weights_filename, weights_filename2):
 
@@ -87,10 +89,17 @@ class Evaluator:
             position = new_state.position()
             opponent: Player = self.get_player(game_num, move_num + 1)
             opponent.opponent_move(move)
-            position.print()
+            # position.print()
             # print('')
             end = position.is_end
+            # if move_num >= 7:
+            #     return 0, 8
             if end:
+                if self.is_two(game_num, move_num):
+                    self.var2 += np.var(policy)
+                else:
+                    self.var += np.var(policy)
+                print(f"move: {move_num + 1}, var1: {self.var}, var2: {self.var2}")
                 position.print()
                 # win_line = position.win_line()
                 # print(win_line)

@@ -28,7 +28,7 @@ class SearcherMp:
 
     def _search(self, id: int, root_state: State, iterations: int, colosus):
         self._set_colosus(root_state, colosus)
-        self._set_cpuct(root_state, root_state.config.cpuct * self.config.cpuct_mp_factor * (id + 1))
+        root_state.config.cpuct = root_state.config.cpuct * (self.config.mp_cpuct0 + self.config.mp_cpuct_factor * id)
         for i in range(iterations):
             root_state.select()
         # policy, value, move, new_state = root_state.play(self._get_temperature(root_state))
@@ -100,7 +100,7 @@ class SearcherMp:
         return policy, value, move, new_state
 
     def _consolidate_results(self, results):
-        main_worker_root_state = results[0]
+        main_worker_root_state = results[self.config.mp_main_worker_id]
         children_N = [0] * len(main_worker_root_state.children())
         children_W = [0] * len(main_worker_root_state.children())
         for i in range(len(results)):
@@ -128,16 +128,9 @@ class SearcherMp:
                 if child is not None:
                     self._set_colosus(child, colosus)
 
-    def _set_cpuct(self, state: State, cpuct):
-        state.config.cpuct = cpuct
-        if state.children() is not None:
-            for child in state.children():
-                if child is not None:
-                    self._set_cpuct(child, cpuct)
-
     def _get_temperature(self, state: State):
         if state.position().move_count <= self.config.move_count_temp0:
-            return 1.0
+            return 1.0 * self.config.mp_temp_factor
         else:
             return 0.1
 
