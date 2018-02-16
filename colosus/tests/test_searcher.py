@@ -4,6 +4,7 @@ import cProfile, pstats, io
 import time
 
 from colosus.config import SearchConfig, StateConfig, ColosusConfig
+from colosus.searcher_mp import SearcherMp
 from colosus.state import State
 from colosus.searcher import Searcher
 from colosus.colosus_model import ColosusModel
@@ -28,7 +29,7 @@ class SearcherTestCase(unittest.TestCase):
     def test_search(self):
         colosus = ColosusModel(ColosusConfig())
         colosus.build()
-        colosus.load_weights("c_11_800_1600.h5")
+        colosus.load_weights("c_12_800_1600.h5")
 
         pos = Position()
         pos.put_piece(Side.BLACK, 7, 7)
@@ -44,8 +45,36 @@ class SearcherTestCase(unittest.TestCase):
 
         start = time.time()
         policy, value, move, new_state = searcher.search(state, 2048)
+
         print("time: " + str(time.time() - start))
 
+        state.print()
+        new_state.print()
+
+        print("value: " + str(value))
+
+
+    def test_search_mp(self):
+        colosus = ColosusModel(ColosusConfig())
+        colosus.build()
+        colosus.load_weights("c_12_800_1600.h5")
+
+        pos = Position()
+        pos.put_piece(Side.BLACK, 7, 7)
+        pos.put_piece(Side.WHITE, 8, 8)
+        pos.put_piece(Side.BLACK, 11, 11)
+        # pos.put_piece(Side.WHITE, 14, 9)
+        # pos.put_piece(Side.WHITE, 15, 10)
+        pos.switch_side()
+
+        config = SearchConfig()
+        config.workers = 2
+        searcher = SearcherMp(config)
+        state = State(pos, None, None, colosus, StateConfig())
+
+        start = time.time()
+        policy, value, move, new_state = searcher.search(state, 1024)
+        print("time: " + str(time.time() - start))
 
         state.print()
         new_state.print()

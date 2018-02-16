@@ -1,6 +1,7 @@
 from concurrent.futures import ThreadPoolExecutor
 
 from colosus.Illegal_move import IllegalMove
+from colosus.colosus_model import ColosusModel
 from colosus.config import PlayerConfig
 from colosus.game.position import Position
 from colosus.player import Player
@@ -49,7 +50,11 @@ class Match:
         for i in range(len(player_settings)):
             player_sets = player_settings[i]
             if player_sets.type == PlayerType.COLOSUS:
-                self.players[i] = Player(PlayerConfig())
+                colosus = ColosusModel(self.config.colosus_config)
+                colosus.build()
+                if player_sets.weights_filename is not None:
+                    colosus.load_weights(player_sets.weights_filename)
+                self.players[i] = Player(PlayerConfig(), colosus)
                 self.players[i].new_game(self.position.clone(), player_sets.iterations, player_sets.weights_filename)
             else:
                 self.players[i] = None
