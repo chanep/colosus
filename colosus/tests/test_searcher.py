@@ -36,14 +36,14 @@ class SearcherTestCase(unittest.TestCase):
         pos.put_piece(Side.BLACK, 11, 11)
         # pos.put_piece(Side.WHITE, 14, 9)
         # pos.put_piece(Side.WHITE, 15, 10)
-        # pos.switch_side()
+        pos.switch_side()
 
         config = SearchConfig()
         searcher = Searcher(config)
         state = State(pos, None, None, colosus, StateConfig())
 
         start = time.time()
-        policy, value, move, new_state = searcher.search(state, 256)
+        policy, value, move, new_state = searcher.search(state, 2048)
         print("time: " + str(time.time() - start))
 
 

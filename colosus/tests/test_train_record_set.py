@@ -42,6 +42,16 @@ class TrainRecordSetTestCase(unittest.TestCase):
 
         recordset.save_to_file('c_15_800_1600.dat')
 
+    def test_truncate(self):
+        input = 'c_16_800_1600.dat'
+        output = 'c_16_400_1600.dat'
+        percent = 50
+
+        recordset = TrainRecordSet.load_from_file(input)
+        count = int((len(recordset.records) * percent) / 100)
+        recordset.records = recordset.records[0:count]
+        recordset.save_to_file(output)
+
     def test_save_and_load(self):
         pos = Position()
         pos.put_piece(Side.WHITE, Piece.KING, 4, 3)

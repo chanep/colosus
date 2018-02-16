@@ -36,8 +36,8 @@ class ColosusModel:
         self.graph = tf.Graph()
         self.session = tf.Session(graph=self.graph)
         with self.graph.as_default():
-            self.reg = l2(2e-4)
-            # reg = None
+            self.reg = l2(1e-4)
+            # self.reg = None
             self.conv_size = 80
 
             in_x = x = Input((self.B_SIZE, self.B_SIZE, 2))
@@ -49,7 +49,7 @@ class ColosusModel:
             x = BatchNormalization(axis=3, name="input_batchnorm")(x)
             x = Activation("relu", name="input_relu")(x)
 
-            for i in range(3):
+            for i in range(2):
                 x = self._build_residual_block(x, i + 1)
 
             res_out = x
