@@ -39,14 +39,16 @@ class ColosusModel:
             self.reg = l2(1e-4)
             # self.reg = None
             self.conv_size = 80
+            data_format = "channel_last" if self.config.data_format_channel_last else "channel_first"
+            bn_axis = 3 if self.config.data_format_channel_last else 1
 
             in_x = x = Input((self.B_SIZE, self.B_SIZE, 2))
 
             # (batch, channels, height, width)
             x = Conv2D(filters=self.conv_size, kernel_size=4, padding="same",
-                       data_format="channels_last", use_bias=False, kernel_regularizer=self.reg,
+                       data_format=data_format, use_bias=False, kernel_regularizer=self.reg,
                        name="input_conv-ini")(x)
-            x = BatchNormalization(axis=3, name="input_batchnorm")(x)
+            x = BatchNormalization(axis=bn_axis, name="input_batchnorm")(x)
             x = Activation("relu", name="input_relu")(x)
 
             for i in range(2):
@@ -55,20 +57,20 @@ class ColosusModel:
             res_out = x
 
             # for policy output
-            x = Conv2D(filters=16, kernel_size=1, padding="same", data_format="channels_last", use_bias=False,
+            x = Conv2D(filters=16, kernel_size=1, padding="same", data_format=data_format, use_bias=False,
                        kernel_regularizer=self.reg,
                        name="policy_conv-1-2")(res_out)
-            x = BatchNormalization(axis=3, name="policy_batchnorm")(x)
+            x = BatchNormalization(axis=bn_axis, name="policy_batchnorm")(x)
             x = Activation("relu", name="policy_relu")(x)
             x = Flatten(name="policy_flatten")(x)
             policy_out = Dense(self.B_SIZE * self.B_SIZE, kernel_regularizer=self.reg, activation="softmax",
                                name="policy_out")(x)
 
             # for value output
-            x = Conv2D(filters=4, kernel_size=1, data_format="channels_last", use_bias=False,
+            x = Conv2D(filters=4, kernel_size=1, data_format=data_format, use_bias=False,
                        kernel_regularizer=self.reg,
                        name="value_conv-1-4")(res_out)
-            x = BatchNormalization(axis=3, name="value_batchnorm")(x)
+            x = BatchNormalization(axis=bn_axis, name="value_batchnorm")(x)
             x = Activation("relu", name="value_relu")(x)
             x = Flatten(name="value_flatten")(x)
             x = Dense(256, kernel_regularizer=self.reg, activation="relu", name="value_dense")(x)
@@ -86,15 +88,19 @@ class ColosusModel:
     def _build_residual_block(self, x, index):
         in_x = x
         res_name = "res" + str(index)
+
+        data_format = "channel_last" if self.config.data_format_channel_last else "channel_first"
+        bn_axis = 3 if self.config.data_format_channel_last else 1
+
         x = Conv2D(filters=self.conv_size, kernel_size=3, padding="same",
-                   data_format="channels_last", use_bias=False, kernel_regularizer=self.reg,
+                   data_format=data_format, use_bias=False, kernel_regularizer=self.reg,
                    name=res_name + "_conv1-3-256")(x)
-        x = BatchNormalization(axis=3, name=res_name + "_batchnorm1")(x)
+        x = BatchNormalization(axis=bn_axis, name=res_name + "_batchnorm1")(x)
         x = Activation("relu", name=res_name + "_relu1")(x)
         x = Conv2D(filters=self.conv_size, kernel_size=3, padding="same",
-                   data_format="channels_last", use_bias=False, kernel_regularizer=self.reg,
+                   data_format=data_format, use_bias=False, kernel_regularizer=self.reg,
                    name=res_name + "_conv2-3-256")(x)
-        x = BatchNormalization(axis=3, name="res" + str(index) + "_batchnorm2")(x)
+        x = BatchNormalization(axis=bn_axis, name="res" + str(index) + "_batchnorm2")(x)
         x = Add(name=res_name + "_add")([in_x, x])
         x = Activation("relu", name=res_name + "_relu2")(x)
         return x
@@ -161,8 +167,9 @@ class ColosusModel:
 
     def _positions_to_inputs(self, positions):
         if isinstance(positions, list):
-            boards = map(lambda p: np.transpose(p.board, [1, 2, 0]), positions)
-            boards = np.stack(boards)
+            if self.config.data_format_channel_last:
+                positions = map(lambda p: np.transpose(p.board, [1, 2, 0]), positions)
+            boards = np.stack(positions)
             return boards
         else:
             positions = [positions]

@@ -2,6 +2,8 @@ class ColosusConfig:
     def __init__(self):
         self.thread_safe = False
         self.lr = 0.0005
+        self.data_format_channel_last = True
+        # self.data_format = "channels_first"
 
 
 class StateConfig:
