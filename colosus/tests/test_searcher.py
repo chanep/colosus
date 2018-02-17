@@ -68,12 +68,12 @@ class SearcherTestCase(unittest.TestCase):
         pos.switch_side()
 
         config = SearchConfig()
-        config.workers = 2
+        config.workers = 8
         searcher = SearcherMp(config)
         state = State(pos, None, None, colosus, StateConfig())
 
         start = time.time()
-        policy, value, move, new_state = searcher.search(state, 1024)
+        policy, value, move, new_state = searcher.search(state, 800)
         print("time: " + str(time.time() - start))
 
         state.print()

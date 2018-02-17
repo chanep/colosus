@@ -3,7 +3,6 @@ class ColosusConfig:
         self.thread_safe = False
         self.lr = 0.0005
         self.data_format_channel_last = True
-        # self.data_format = "channels_first"
 
 
 class StateConfig:
@@ -16,7 +15,7 @@ class StateConfig:
 class SearchConfig:
     def __init__(self):
         self.move_count_temp0 = 16
-        self.workers = 4
+        self.workers = 8
         self.mp_cpuct_factor = 0.5
         self.mp_cpuct0 = 0.5
         self.mp_main_worker_id = 1
@@ -49,6 +48,8 @@ class EvaluatorConfig:
         self.search_config = SearchConfig()
         self.state_config.noise_factor = 0.0
         self.search_config.move_count_temp0 = 8
+        self.player2_is_mp = False
+        self.iterations_mp_factor = 0.4
 
 
 class PlayerConfig:

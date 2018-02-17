@@ -36,18 +36,32 @@ class ColosusModel:
         self.graph = tf.Graph()
         self.session = tf.Session(graph=self.graph)
         with self.graph.as_default():
-            self.reg = l2(3e-5)
+            self.reg = l2(1e-5)
             # self.reg = None
             self.conv_size = 80
-            data_format = "channel_last" if self.config.data_format_channel_last else "channel_first"
+            data_format = "channels_last" if self.config.data_format_channel_last else "channels_first"
             bn_axis = 3 if self.config.data_format_channel_last else 1
 
-            in_x = x = Input((self.B_SIZE, self.B_SIZE, 2))
+            if self.config.data_format_channel_last:
+                in_x = x = Input((self.B_SIZE, self.B_SIZE, 2))
+            else:
+                in_x = x = Input((2, self.B_SIZE, self.B_SIZE))
 
             # (batch, channels, height, width)
             x = Conv2D(filters=self.conv_size, kernel_size=4, padding="same",
                        data_format=data_format, use_bias=False, kernel_regularizer=self.reg,
                        name="input_conv-ini")(x)
+
+            # x2 = Conv2D(filters=self.conv_size, kernel_size=(4, 1), padding="same", data_format=data_format,
+            #             use_bias=False, kernel_regularizer=self.reg,
+            #             name="input_conv-ini2")(x)
+            #
+            # x3 = Conv2D(filters=self.conv_size, kernel_size=(1, 4), padding="same", data_format=data_format,
+            #             use_bias=False, kernel_regularizer=self.reg,
+            #             name="input_conv-ini3")(x)
+            #
+            # x = Add(name="in_conv_add")([x, x2, x3])
+
             x = BatchNormalization(axis=bn_axis, name="input_batchnorm")(x)
             x = Activation("relu", name="input_relu")(x)
 
@@ -89,7 +103,7 @@ class ColosusModel:
         in_x = x
         res_name = "res" + str(index)
 
-        data_format = "channel_last" if self.config.data_format_channel_last else "channel_first"
+        data_format = "channels_last" if self.config.data_format_channel_last else "channels_first"
         bn_axis = 3 if self.config.data_format_channel_last else 1
 
         x = Conv2D(filters=self.conv_size, kernel_size=3, padding="same",
@@ -158,7 +172,7 @@ class ColosusModel:
         with self.graph.as_default():
             with self.session.as_default():
                 self.model.fit(boards, [policies, values],
-                               batch_size=512,
+                               batch_size=256,
                                epochs=epochs,
                                shuffle=True,
                                validation_split=0.02,
@@ -169,6 +183,8 @@ class ColosusModel:
         if isinstance(positions, list):
             if self.config.data_format_channel_last:
                 positions = map(lambda p: np.transpose(p.board, [1, 2, 0]), positions)
+            else:
+                positions = map(lambda p: p.board, positions)
             boards = np.stack(positions)
             return boards
         else:

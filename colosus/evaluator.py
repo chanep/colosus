@@ -36,7 +36,10 @@ class Evaluator:
 
         player_config = PlayerConfig()
         self.player = Player(player_config, colosus)
-        self.player2 = PlayerMp(player_config, colosus2)
+        if self.config.player2_is_mp:
+            self.player2 = PlayerMp(player_config, colosus2)
+        else:
+            self.player2 = Player2(player_config, colosus2)
 
         total_score_1 = 0.0
         total_score_2 = 0.0
@@ -81,24 +84,25 @@ class Evaluator:
         move_num = 0
         end = False
         position = position_ini
+        iterations_player2 = iterations
+        if self.config.player2_is_mp:
+            iterations_player2 = int(iterations * self.config.iterations_mp_factor)
         self.player.new_game(position.clone(), iterations)
-        self.player2.new_game(position.clone(), iterations)
+        self.player2.new_game(position.clone(), iterations_player2)
         while not end:
             player = self.get_player(game_num, move_num)
             policy, value, move, old_state, new_state = player.move()
             position = new_state.position()
             opponent: Player = self.get_player(game_num, move_num + 1)
             opponent.opponent_move(move)
+            if self.is_two(game_num, move_num):
+                self.var2 += np.var(policy)
+            else:
+                self.var += np.var(policy)
             # position.print()
             # print('')
             end = position.is_end
-            # if move_num >= 7:
-            #     return 0, 8
             if end:
-                if self.is_two(game_num, move_num):
-                    self.var2 += np.var(policy)
-                else:
-                    self.var += np.var(policy)
                 print(f"move: {move_num + 1}, var1: {self.var}, var2: {self.var2}")
                 position.print()
                 # win_line = position.win_line()
