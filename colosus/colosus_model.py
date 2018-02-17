@@ -36,7 +36,7 @@ class ColosusModel:
         self.graph = tf.Graph()
         self.session = tf.Session(graph=self.graph)
         with self.graph.as_default():
-            self.reg = l2(1e-4)
+            self.reg = l2(3e-5)
             # self.reg = None
             self.conv_size = 80
 
@@ -152,7 +152,7 @@ class ColosusModel:
         with self.graph.as_default():
             with self.session.as_default():
                 self.model.fit(boards, [policies, values],
-                               batch_size=256,
+                               batch_size=512,
                                epochs=epochs,
                                shuffle=True,
                                validation_split=0.02,
