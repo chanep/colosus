@@ -22,7 +22,13 @@ class Evaluator:
         self.var = 0.0
         self.var2 = 0.0
 
-    def evaluate(self, games: int, iterations: int, position_ini: Position, weights_filename, weights_filename2):
+    def evaluate(self, games: int, iterations: int, position_ini: Position, weights_filename, weights_filename2, iterations2=None):
+
+        iterations_player2 = iterations
+        if iterations2 is not None:
+            iterations_player2 = iterations2
+        if self.config.player2_is_mp:
+            iterations_player2 = int(iterations * self.config.iterations_mp_factor)
 
         colosus = ColosusModel(self.config.colosus_config)
         colosus.build()
@@ -41,6 +47,8 @@ class Evaluator:
         else:
             self.player2 = Player2(player_config, colosus2)
 
+
+
         total_score_1 = 0.0
         total_score_2 = 0.0
 
@@ -52,7 +60,7 @@ class Evaluator:
         win_rate_2 = 0
 
         for game_num in range(games):
-            game_score_2, game_mc = self.play_game(iterations, game_num, position_ini)
+            game_score_2, game_mc = self.play_game(iterations, iterations_player2, game_num, position_ini)
             total_score_1 += 1 - game_score_2
             total_score_2 += game_score_2
             win_rate_2 = total_score_2 / (game_num + 1)
@@ -80,13 +88,10 @@ class Evaluator:
         else:
             return self.player
 
-    def play_game(self, iterations: int, game_num: int, position_ini: Position):
+    def play_game(self, iterations: int, iterations_player2: int, game_num: int, position_ini: Position):
         move_num = 0
         end = False
         position = position_ini
-        iterations_player2 = iterations
-        if self.config.player2_is_mp:
-            iterations_player2 = int(iterations * self.config.iterations_mp_factor)
         self.player.new_game(position.clone(), iterations)
         self.player2.new_game(position.clone(), iterations_player2)
         while not end:
@@ -101,6 +106,7 @@ class Evaluator:
                 self.var += np.var(policy)
             # position.print()
             # print('')
+
             end = position.is_end
             if end:
                 print(f"move: {move_num + 1}, var1: {self.var}, var2: {self.var2}")

@@ -89,18 +89,23 @@ class ColosusModelTestCase(unittest.TestCase):
         # pos.put_piece(Side.WHITE, 15, 10)
 
         # poner la 4ta en 3
+        # pos.put_piece(Side.BLACK, 7, 7)
+        # pos.put_piece(Side.WHITE, 7, 8)
+        # pos.put_piece(Side.BLACK, 11, 7)
+        # pos.put_piece(Side.WHITE, 8, 8)
+        # pos.put_piece(Side.BLACK, 6, 7)
+        # pos.put_piece(Side.WHITE, 9, 8)
+
+        # 2da
         pos.put_piece(Side.BLACK, 7, 7)
         pos.put_piece(Side.WHITE, 7, 8)
-        pos.put_piece(Side.BLACK, 11, 7)
-        pos.put_piece(Side.WHITE, 8, 8)
-        pos.put_piece(Side.BLACK, 6, 7)
-        pos.put_piece(Side.WHITE, 9, 8)
+
 
         colosus = ColosusModel(ColosusConfig())
         colosus.build()
         # colosus.load_weights("c_1_500_1600.h5")
         # colosus.load_weights("c_4_600_1600.h5")
-        colosus.load_weights("c_12_800_1600.h5")
+        colosus.load_weights("c_17_400_3200.h5")
 
         pos.print()
 

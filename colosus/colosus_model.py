@@ -36,7 +36,7 @@ class ColosusModel:
         self.graph = tf.Graph()
         self.session = tf.Session(graph=self.graph)
         with self.graph.as_default():
-            self.reg = l2(1e-5)
+            self.reg = l2(3e-5)
             # self.reg = None
             self.conv_size = 80
             data_format = "channels_last" if self.config.data_format_channel_last else "channels_first"
@@ -65,7 +65,7 @@ class ColosusModel:
             x = BatchNormalization(axis=bn_axis, name="input_batchnorm")(x)
             x = Activation("relu", name="input_relu")(x)
 
-            for i in range(2):
+            for i in range(3):
                 x = self._build_residual_block(x, i + 1)
 
             res_out = x
