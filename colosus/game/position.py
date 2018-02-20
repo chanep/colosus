@@ -129,8 +129,10 @@ class Position:
         if rank & (1 << f) != 0:
             return False
 
+        distance_move2 = 4
         if self.move_count == 2:
-            return (abs(r - mid) == 4 and abs(f - mid) <= 4) or (abs(r - mid) <= 4 and abs(f - mid) == 4)
+            return (abs(r - mid) == distance_move2 and abs(f - mid) <= distance_move2) or \
+                   (abs(r - mid) <= distance_move2 and abs(f - mid) == distance_move2)
 
         for i in range(max(0, r - 2), min(self.B_SIZE, r + 3)):
             rank = self.boards[self.RANKS_I][Side.WHITE, i] | self.boards[self.RANKS_I][Side.BLACK, i]

@@ -47,8 +47,6 @@ class Evaluator:
         else:
             self.player2 = Player2(player_config, colosus2)
 
-
-
         total_score_1 = 0.0
         total_score_2 = 0.0
 
@@ -58,6 +56,7 @@ class Evaluator:
         wins_1 = 0
         wins_2 = 0
         win_rate_2 = 0
+        black_score = 0
 
         for game_num in range(games):
             game_score_2, game_mc = self.play_game(iterations, iterations_player2, game_num, position_ini)
@@ -71,11 +70,17 @@ class Evaluator:
                 wins_1 += 1
                 mc_win_1 += game_mc
 
+            if game_num % 2 != 0:
+                black_score += game_score_2
+            else:
+                black_score += 1 - game_score_2
+
             mc_win_1_mean = 0 if wins_1 == 0 else mc_win_1 / wins_1
             mc_win_2_mean = 0 if wins_2 == 0 else mc_win_2 / wins_2
+            win_rate_black = black_score / (game_num + 1)
 
-            print("game: {}, {}-{}, wr2:{:.1%}, mc1: {:.3g}, mc2: {:.3g}".format(game_num + 1, total_score_1, total_score_2,
-                                                                             win_rate_2, mc_win_1_mean, mc_win_2_mean))
+            print("game: {}, {}-{}, wr2:{:.1%}, black:{:.1%}, mc1: {:.3g}, mc2: {:.3g}".format(game_num + 1, total_score_1, total_score_2,
+                                                                             win_rate_2, win_rate_black, mc_win_1_mean, mc_win_2_mean))
 
         return win_rate_2
 

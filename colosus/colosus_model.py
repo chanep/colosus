@@ -36,7 +36,7 @@ class ColosusModel:
         self.graph = tf.Graph()
         self.session = tf.Session(graph=self.graph)
         with self.graph.as_default():
-            self.reg = l2(3e-5)
+            self.reg = l2(2e-5)
             # self.reg = None
             self.conv_size = 80
             data_format = "channels_last" if self.config.data_format_channel_last else "channels_first"
@@ -65,7 +65,7 @@ class ColosusModel:
             x = BatchNormalization(axis=bn_axis, name="input_batchnorm")(x)
             x = Activation("relu", name="input_relu")(x)
 
-            for i in range(3):
+            for i in range(2):
                 x = self._build_residual_block(x, i + 1)
 
             res_out = x
@@ -94,9 +94,11 @@ class ColosusModel:
             self.model = Model(in_x, [policy_out, value_out], name="colosus_model")
 
             opt = Adam(lr=self.config.lr, beta_1=0.9, beta_2=0.999, epsilon=1e-8)
-            losses = ['categorical_crossentropy', 'mean_squared_error']  # avoid overfit for supervised
+            losses = ['categorical_crossentropy', 'mean_squared_error']
+            # metrics = ['categorical_accuracy', 'binary_accuracy']
+            metrics = ['accuracy', 'accuracy']
 
-            self.model.compile(optimizer=opt, loss=losses, loss_weights=[1.25, 1.0])
+            self.model.compile(optimizer=opt, loss=losses, metrics=metrics, loss_weights=[1.25, 1.0])
             self.model._make_predict_function()  # for multithread
 
     def _build_residual_block(self, x, index):
