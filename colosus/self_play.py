@@ -20,6 +20,8 @@ class SelfPlay:
     def play(self, games: int, iterations_per_move: int, initial_pos: Position, train_filename, weights_filename=None, update_stats=None, colosus: ColosusModel = None):
         train_record_set = TrainRecordSet()
 
+        value_se = 0
+
         if colosus is None:
             colosus = ColosusModel(self.config.colosus_config)
             colosus.build()
@@ -37,6 +39,8 @@ class SelfPlay:
             while not end:
                 # start_time = time.time()
                 policy, value, move, new_state = searcher.search(state, iterations_per_move)
+                print(f"value: {value}, newvalue: {new_state.Q}")
+                value_se += pow(value - new_state.Q, 2)
                 # print("time: " + str(time.time() - start_time))
                 train_record = TrainRecord(state.position().to_model_position(), policy, value)
                 game_records.append(train_record)
@@ -47,6 +51,7 @@ class SelfPlay:
                 # print("mc: {}".format(state.position().move_count))
 
             state.position().print()
+            print(f"value mse: {value_se/mc}")
 
             # z = - state.position().score
             # for j in reversed(range(len(game_records))):

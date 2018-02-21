@@ -41,7 +41,7 @@ class SelfPlayTestCase(unittest.TestCase):
 
         # self_play.play(200, 30, pos, "c_1_200_30.dat", None)
 
-        self_play.play(1, 256, pos, "x.dat", None, colosus=colosus)
+        self_play.play(1, 256, pos, "x.dat", "c_18_1000_1600.h5", colosus=colosus)
 
         print("fin. time: " + str(time.time() - start_time))
 
