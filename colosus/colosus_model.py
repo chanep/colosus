@@ -78,7 +78,7 @@ class ColosusModel:
             x = Activation("relu", name="policy_relu")(x)
             x = Flatten(name="policy_flatten")(x)
             policy_out = Dense(self.B_SIZE * self.B_SIZE, kernel_regularizer=self.reg, activation="softmax",
-                               name="policy_out")(x)
+                               name="policy")(x)
 
             # for value output
             x = Conv2D(filters=4, kernel_size=1, data_format=data_format, use_bias=False,
@@ -89,14 +89,14 @@ class ColosusModel:
             x = Flatten(name="value_flatten")(x)
             x = Dense(256, kernel_regularizer=self.reg, activation="relu", name="value_dense")(x)
 
-            value_out = Dense(1, kernel_regularizer=self.reg, activation="tanh", name="value_out")(x)
+            value_out = Dense(1, kernel_regularizer=self.reg, activation="tanh", name="value")(x)
 
             self.model = Model(in_x, [policy_out, value_out], name="colosus_model")
 
             opt = Adam(lr=self.config.lr, beta_1=0.9, beta_2=0.999, epsilon=1e-8)
             losses = ['categorical_crossentropy', 'mean_squared_error']
-            # metrics = ['categorical_accuracy', 'binary_accuracy']
-            metrics = ['accuracy', 'accuracy']
+            metrics = {"policy": 'acc'}
+            # metrics = ['accuracy']
 
             self.model.compile(optimizer=opt, loss=losses, metrics=metrics, loss_weights=[1.25, 1.0])
             self.model._make_predict_function()  # for multithread

@@ -19,15 +19,15 @@ class Person:
 class SelfPlayTestCase(unittest.TestCase):
     def test_train(self):
         train_filename = "c_18_1000_1600.dat"
-        weights_filename = "cnone_reg3-5_18_1000_1600.h5"
+        weights_filename = "x.h5"
         # weights_filename = "wpp_3_1600_800.h5"
-        prev_weights_filename = "cnone_reg3-5_18_1000_1600.h5"
+        prev_weights_filename = "c_18_1000_1600.h5"
         # prev_weights_filename = None
 
         trainer_config = TrainerConfig()
         trainer_config.colosus_config.lr = 0.0001
         trainer = Trainer(trainer_config)
-        trainer.train(train_filename, weights_filename, 2, prev_weights_filename)
+        trainer.train(train_filename, weights_filename, 15, prev_weights_filename)
 
     def test_save_rotated_records(self):
         input_filename = "c_1_200_30.dat"
