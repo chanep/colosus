@@ -16,6 +16,7 @@ class Position:
     B_SIZE = 15
     DIAGS = (B_SIZE - 5 + 1) * 2 - 1  # 21 diagonals
     DIAG_LEN = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5]
+    DISTANCE_MOVE2 = 4
 
     def __init__(self, initialize_boards=True):
         self.side_to_move = Side.BLACK
@@ -129,10 +130,9 @@ class Position:
         if rank & (1 << f) != 0:
             return False
 
-        distance_move2 = 4
         if self.move_count == 2:
-            return (abs(r - mid) == distance_move2 and abs(f - mid) <= distance_move2) or \
-                   (abs(r - mid) <= distance_move2 and abs(f - mid) == distance_move2)
+            return (abs(r - mid) == self.DISTANCE_MOVE2 and abs(f - mid) <= self.DISTANCE_MOVE2) or \
+                   (abs(r - mid) <= self.DISTANCE_MOVE2 and abs(f - mid) == self.DISTANCE_MOVE2)
 
         for i in range(max(0, r - 2), min(self.B_SIZE, r + 3)):
             rank = self.boards[self.RANKS_I][Side.WHITE, i] | self.boards[self.RANKS_I][Side.BLACK, i]
@@ -154,7 +154,7 @@ class Position:
             return False
 
         if self.move_count == 2:
-            return abs(r - mid) >= 4 or abs(f - mid) >= 4
+            return abs(r - mid) >= self.DISTANCE_MOVE2 or abs(f - mid) >= self.DISTANCE_MOVE2
 
         return True
 

@@ -60,17 +60,21 @@ class SelfPlayMp:
         np.random.seed(id)
 
         train_record_set = TrainRecordSet()
+        train_record_set_z = TrainRecordSet()
         searcher = Searcher(self.config.search_config)
         while not stats.should_continue():
             state = State(initial_pos, None, None, colosus, self.config.state_config)
             end = False
             game_records = []
+            game_records_z = []
             while not end:
                 policy, value, move, new_state = searcher.search(state, iterations_per_move)
                 if new_state is None:
                     new_state = State(state.position().move(move), None, None, colosus, self.config.state_config)
                 train_record = TrainRecord(state.position().to_model_position(), policy, value)
+                train_record_z = TrainRecord(state.position().to_model_position(), policy, value)
                 game_records.append(train_record)
+                game_records_z.append(train_record_z)
                 new_state.parent = None
                 end = new_state.position().is_end
                 state = new_state
@@ -80,18 +84,26 @@ class SelfPlayMp:
 
             state.position().print()
 
-            # z = - state.position().score
-            # for j in reversed(range(len(game_records))):
-            #     game_records[j].value = z
-            #     z = -z
+            z = - state.position().score
+            for j in reversed(range(len(game_records_z))):
+                game_records_z[j].value = z
+                z = -z
 
             train_record_set.extend(game_records)
+            train_record_set_z.extend(game_records_z)
 
             win = state.position().score != 0
             stats.update(win, mc)
 
         colosus.close()
         train_record_set.save_to_file(train_filename)
+        train_filename_z = "z" + train_filename
+        train_record_set_z.save_to_file(train_filename_z)
+
+        # for i in range(len(game_records)):
+        #     value = game_records[i].value
+        #     value_z = game_records_z[i].value
+        #     print(f"value / value_z: {value} / {value_z}")
 
     def play(self, games: int, iterations_per_move: int, initial_pos: Position, train_filename, workers: int, weights_filename=None):
         colosus_config = self.config.colosus_config

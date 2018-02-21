@@ -64,10 +64,10 @@ class SelfPlayTestCase(unittest.TestCase):
         start_time = time.time()
 
         config = SelfPlayMpConfig()
-        config.state_config.cpuct = 3 * 1.41
+        # config.state_config.cpuct = 3 * 1.41
         self_play = SelfPlayMp(config)
         # self_play.play(1000, 200, pos, colosus, "t2_1_1000_200.dat")
-        self_play.play(500, 1600, pos, "c_cpuct3_18_1_500_1600.dat", 16, "c_17_400_3200.h5")
+        self_play.play(1, 256, pos, "x.dat", 1, "c_18_1000_1600.h5")
 
         print("fin. time: " + str(time.time() - start_time))
 
