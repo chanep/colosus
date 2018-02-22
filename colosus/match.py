@@ -79,6 +79,7 @@ class Match:
     def _colosus_thinks_done(self, future):
         policy, value, move, old_state, new_state = future.result()
         print("colosus thinks done " + str(move))
+        value = new_state.Q
         self._do_move(move, value)
 
     def move(self, move):

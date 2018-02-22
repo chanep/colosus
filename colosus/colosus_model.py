@@ -22,8 +22,7 @@ class ColosusModel:
     def __init__(self, config: ColosusConfig):
         self.config = config
         self.model = None  # type: Model
-        self.reg = None
-        self.conv_size = 256
+        self.reg = l2(config.regularizer)
         self.graph = None
         self.session = None
         self.lock = Lock()
@@ -36,9 +35,6 @@ class ColosusModel:
         self.graph = tf.Graph()
         self.session = tf.Session(graph=self.graph)
         with self.graph.as_default():
-            self.reg = l2(2e-5)
-            # self.reg = None
-            self.conv_size = 80
             data_format = "channels_last" if self.config.data_format_channel_last else "channels_first"
             bn_axis = 3 if self.config.data_format_channel_last else 1
 
@@ -48,7 +44,7 @@ class ColosusModel:
                 in_x = x = Input((2, self.B_SIZE, self.B_SIZE))
 
             # (batch, channels, height, width)
-            x = Conv2D(filters=self.conv_size, kernel_size=4, padding="same",
+            x = Conv2D(filters=self.config.conv_size, kernel_size=4, padding="same",
                        data_format=data_format, use_bias=False, kernel_regularizer=self.reg,
                        name="input_conv-ini")(x)
 
@@ -65,7 +61,7 @@ class ColosusModel:
             x = BatchNormalization(axis=bn_axis, name="input_batchnorm")(x)
             x = Activation("relu", name="input_relu")(x)
 
-            for i in range(2):
+            for i in range(self.config.residual_blocks):
                 x = self._build_residual_block(x, i + 1)
 
             res_out = x
@@ -108,12 +104,12 @@ class ColosusModel:
         data_format = "channels_last" if self.config.data_format_channel_last else "channels_first"
         bn_axis = 3 if self.config.data_format_channel_last else 1
 
-        x = Conv2D(filters=self.conv_size, kernel_size=3, padding="same",
+        x = Conv2D(filters=self.config.conv_size, kernel_size=3, padding="same",
                    data_format=data_format, use_bias=False, kernel_regularizer=self.reg,
                    name=res_name + "_conv1-3-256")(x)
         x = BatchNormalization(axis=bn_axis, name=res_name + "_batchnorm1")(x)
         x = Activation("relu", name=res_name + "_relu1")(x)
-        x = Conv2D(filters=self.conv_size, kernel_size=3, padding="same",
+        x = Conv2D(filters=self.config.conv_size, kernel_size=3, padding="same",
                    data_format=data_format, use_bias=False, kernel_regularizer=self.reg,
                    name=res_name + "_conv2-3-256")(x)
         x = BatchNormalization(axis=bn_axis, name="res" + str(index) + "_batchnorm2")(x)
