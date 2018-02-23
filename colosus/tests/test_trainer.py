@@ -37,7 +37,7 @@ class SelfPlayTestCase(unittest.TestCase):
         recordset.save_to_file(rotated_filename)
 
     def test_merge_records(self):
-        merged_filename = "c_18_2_500_1600.dat"
+        merged_filename = "c_17_2_1000_1600.dat"
         TrainRecordSet.merge_and_rotate(merged_filename, 16)
 
     def test_generator(self):
