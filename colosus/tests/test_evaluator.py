@@ -17,7 +17,7 @@ class EvaluatorTestCase(unittest.TestCase):
         evaluator = Evaluator(config)
 
         # evaluator.evaluate(200, 512, pos, "c_18_1000_1600.h5", "c_17_400_3200.h5")
-        evaluator.evaluate(100, 256, pos, "c_18_1000_1600.h5", "c_18_1000_1600.h5")
+        evaluator.evaluate(500, 1, pos, "c_18_1000_1600.h5", "c_18_1000_1600.h5")
 
     def test_evaluate2(self):
         pos = Position()

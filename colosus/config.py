@@ -50,7 +50,7 @@ class EvaluatorConfig:
         self.state_config = StateConfig()
         self.search_config = SearchConfig()
         self.state_config.noise_factor = 0.0
-        self.search_config.move_count_temp0 = 8
+        self.search_config.move_count_temp0 = 10
         self.player2_is_mp = False
         self.iterations_mp_factor = 0.4
 
