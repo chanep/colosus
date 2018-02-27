@@ -3,7 +3,7 @@ class ColosusConfig:
         self.thread_safe = False
         self.lr = 0.0005
         self.conv_size = 80
-        self.residual_blocks = 2
+        self.residual_blocks = 3
         self.regularizer = 2e-5
         self.data_format_channel_last = True
 
@@ -47,17 +47,17 @@ class SelfPlayMpConfig:
 class EvaluatorConfig:
     def __init__(self):
         self.colosus_config = ColosusConfig()
-        self.state_config = StateConfig()
-        self.search_config = SearchConfig()
-        self.state_config.noise_factor = 0.0
-        self.search_config.move_count_temp0 = 8
+        self.colosus2_config = ColosusConfig()
+        self.player_config = PlayerConfig()
+        self.player2_config = PlayerConfig()
+        self.player_config.search_config.move_count_temp0 = 16
+        self.player2_config.search_config.move_count_temp0 = 16
         self.player2_is_mp = False
         self.iterations_mp_factor = 0.4
 
 
 class PlayerConfig:
     def __init__(self):
-        self.colosus_config = ColosusConfig()
         self.state_config = StateConfig()
         self.search_config = SearchConfig()
         self.state_config.noise_factor = 0.0

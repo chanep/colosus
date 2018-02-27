@@ -35,17 +35,16 @@ class Evaluator:
         if weights_filename is not None:
             colosus.load_weights(weights_filename)
 
-        colosus2 = ColosusModel2(self.config.colosus_config)
+        colosus2 = ColosusModel2(self.config.colosus2_config)
         colosus2.build()
         if weights_filename2 is not None:
             colosus2.load_weights(weights_filename2)
 
-        player_config = PlayerConfig()
-        self.player = Player(player_config, colosus)
+        self.player = Player(self.config.player_config, colosus)
         if self.config.player2_is_mp:
-            self.player2 = PlayerMp(player_config, colosus2)
+            self.player2 = PlayerMp(self.config.player2_config, colosus2)
         else:
-            self.player2 = Player2(player_config, colosus2)
+            self.player2 = Player2(self.config.player2_config, colosus2)
 
         total_score_1 = 0.0
         total_score_2 = 0.0
