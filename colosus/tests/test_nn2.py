@@ -21,7 +21,7 @@ def build_model():
     # opt = tf.keras.optimizers.SGD(lr=0.01, decay=0.0, momentum=0.0, nesterov=False)
     opt = tf.keras.optimizers.Adam(lr=0.1, beta_1=0.9, beta_2=0.999, epsilon=1e-8)
 
-    model.compile(loss=['mean_squared_error', None], optimizer=opt, metrics=['accuracyf'])
+    model.compile(loss=['mean_squared_error', None], optimizer=opt, metrics=['accuracy'])
 
     return model
 
@@ -39,7 +39,7 @@ def train(xs, ys, model, epochs):
               shuffle=True,
               validation_split=0.0,
               verbose=2,
-              callbacks=None)
+              callbacks=[tb_callback])
 
 
 def predict(x, model):
@@ -63,7 +63,7 @@ xs[5] = np.array([0, 0, 1, 1])
 ys = [1.0, 0.0, 0.0, 1.0, 0.0, 1.0]
 
 model = build_model()
-train(xs, ys, model, 10)
+train(xs, ys, model, 100)
 
 xs2 = reversed(xs)
 

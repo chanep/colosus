@@ -52,13 +52,13 @@ def build_model():
 
     in_x = x = Input((8, 8, 2))
 
-    x = Conv2D(filters=128, kernel_size=3, padding="same",
+    x = Conv2D(filters=30, kernel_size=3, padding="same",
                data_format="channels_last", use_bias=False, kernel_regularizer=reg,
                name="c1")(x)
     x = BatchNormalization(axis=3, name="bn1")(x)
     x = Activation("relu", name="relu1")(x)
 
-    x = Conv2D(filters=128, kernel_size=5, padding="same",
+    x = Conv2D(filters=30, kernel_size=5, padding="same",
                data_format="channels_last", use_bias=False, kernel_regularizer=reg,
                name="c2")(x)
     x = BatchNormalization(axis=3, name="bn2")(x)
@@ -82,7 +82,7 @@ def build_model():
 
     # opt = optimizers.SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
     # opt = tf.keras.optimizers.SGD(lr=0.1, decay=0.0, momentum=0.9, nesterov=False)
-    opt = tf.keras.optimizers.Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-8)
+    opt = tf.keras.optimizers.Adam(lr=0.005, beta_1=0.9, beta_2=0.999, epsilon=1e-8)
     # opt = tf.keras.optimizers.Adamax(lr=0.002)
     # opt = tf.keras.optimizers.Nadam(lr=0.0001)
     model.compile(loss='mean_squared_error', optimizer=opt, metrics=['accuracy'])
@@ -95,11 +95,13 @@ def train(xs, ys, model, epochs):
 
     ys = np.array(ys)
 
+    tb_callback = tf.keras.callbacks.TensorBoard(log_dir="./logs", histogram_freq=1, write_images=True)
+
     model.fit(xs, ys,
               batch_size=32,
               epochs=epochs,
               shuffle=True,
-              validation_split=0.0,
+              validation_split=0.02,
               verbose=2,
               callbacks=None)
 
@@ -124,14 +126,23 @@ xs, ys = build_dataset()
 #     print(xt[0] + xt[1])
 
 model = build_model()
+weights = model.get_layer("c1").get_weights()[0]
+weights = np.transpose(weights, [3, 2, 0, 1])
+print(weights.shape)
+print(weights)
+
 train(xs, ys, model, 10)
 
-out = predict(3, 3, 4, 4, model)
-print(out)
-out = predict(3, 3, 3, 4, model)
-print(out)
-out = predict(1, 6, 5, 6, model)
-print(out)
+weights = model.get_layer("c1").get_weights()[0]
+weights = np.transpose(weights, [3, 2, 0, 1])
+print(weights)
+
+# out = predict(3, 3, 4, 4, model)
+# print(out)
+# out = predict(3, 3, 3, 4, model)
+# print(out)
+# out = predict(1, 6, 5, 6, model)
+# print(out)
 
 
 

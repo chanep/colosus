@@ -21,6 +21,7 @@ class Evaluator:
         self.player2 = None
         self.var = 0.0
         self.var2 = 0.0
+        self.final_positions = {}
 
     def evaluate(self, games: int, iterations: int, position_ini: Position, weights_filename, weights_filename2, iterations2=None):
 
@@ -81,6 +82,8 @@ class Evaluator:
             print("game: {}, {}-{}, wr2:{:.1%}, black:{:.1%}, mc1: {:.3g}, mc2: {:.3g}".format(game_num + 1, total_score_1, total_score_2,
                                                                              win_rate_2, win_rate_black, mc_win_1_mean, mc_win_2_mean))
 
+        print(f"different final positions: {len(self.final_positions.keys())}")
+
         return win_rate_2
 
     def is_two(self, game_num: int, move_num: int):
@@ -119,12 +122,27 @@ class Evaluator:
                 # print(win_line)
                 print('')
                 score = (-position.score + 1) / 2
+
+                position_hash = self.hash_position(position)
+                if position_hash not in self.final_positions.keys():
+                    self.final_positions[position_hash] = position.clone()
+                # else:
+                #     print("same position")
+                #     position.print()
+                #     self.final_positions[position_hash].print()
+
                 if self.is_two(game_num, move_num):
                     return score, move_num
                 else:
                     return (1 - score), move_num
             else:
                 move_num += 1
+
+    def hash_position(self, position):
+        position_hash = 0
+        for b in position.boards:
+            position_hash ^= hash(str(b))
+        return str(position_hash)
 
 
 
