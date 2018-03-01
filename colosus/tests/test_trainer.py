@@ -20,16 +20,44 @@ class Person:
 
 class SelfPlayTestCase(unittest.TestCase):
     def test_train(self):
-        train_filename = "c_18_1000_1600.dat"
-        weights_filename = "cnone_18_1000_1600.h5"
+        train_filename = "ccpuct3_18_1000_1600.dat"
+        weights_filename = "ccpuct3_18_1000_1600.h5"
         # weights_filename = "wpp_3_1600_800.h5"
-        prev_weights_filename = "cnone_18_1000_1600.h5"
+        prev_weights_filename = "ccpuct3_18_1000_1600.h5"
         # prev_weights_filename = None
 
         trainer_config = TrainerConfig()
-        trainer_config.colosus_config.lr = 0.00003
+        trainer_config.colosus_config.lr = 0.00002
+        trainer = Trainer(trainer_config)
+        trainer.train(train_filename, weights_filename, 2, prev_weights_filename)
+
+    def test_train_multi(self):
+
+        print("training ccpuct5_18_1000_1600.h5...")
+        train_filename = "ccpuct5_18_1000_1600.dat"
+        weights_filename = "ccpuct5_18_1000_1600.h5"
+        prev_weights_filename = "c_17_1000_1600.h5"
+        trainer_config = TrainerConfig()
+        trainer_config.colosus_config.lr = 0.0001
         trainer = Trainer(trainer_config)
         trainer.train(train_filename, weights_filename, 6, prev_weights_filename)
+
+        train_filename = "ccpuct5_18_1000_1600.dat"
+        weights_filename = "ccpuct5_18_1000_1600.h5"
+        prev_weights_filename = "ccpuct5_18_1000_1600.h5"
+        trainer_config = TrainerConfig()
+        trainer_config.colosus_config.lr = 0.00005
+        trainer = Trainer(trainer_config)
+        trainer.train(train_filename, weights_filename, 6, prev_weights_filename)
+
+        train_filename = "ccpuct5_18_1000_1600.dat"
+        weights_filename = "ccpuct5_18_1000_1600.h5"
+        prev_weights_filename = "ccpuct5_18_1000_1600.h5"
+        trainer_config = TrainerConfig()
+        trainer_config.colosus_config.lr = 0.00002
+        trainer = Trainer(trainer_config)
+        trainer.train(train_filename, weights_filename, 10, prev_weights_filename)
+        print("ccpuct5_18_1000_1600.h5 done!\n")
 
     def test_train_all(self):
         train_filenames = [
@@ -74,58 +102,6 @@ class SelfPlayTestCase(unittest.TestCase):
             trainer.train(train_filename, weights_filename, 10, prev_weights_filename)
 
 
-    def test_train_multi(self):
-
-        print("training cnone_17_1000_1600.h5...")
-        train_filename = "c_17_1000_1600.dat"
-        weights_filename = "cnone_17_1000_1600.h5"
-        prev_weights_filename = None
-        trainer_config = TrainerConfig()
-        trainer_config.colosus_config.lr = 0.00005
-        trainer = Trainer(trainer_config)
-        trainer.train(train_filename, weights_filename, 50, prev_weights_filename)
-        print("cnone_17_1000_1600.h5 done!\n")
-
-        print("training zcnone_17_1000_1600.h5...")
-        train_filename = "zc_17_1000_1600.dat"
-        weights_filename = "zcnone_17_1000_1600.h5"
-        prev_weights_filename = None
-        trainer_config = TrainerConfig()
-        trainer_config.colosus_config.lr = 0.00005
-        trainer = Trainer(trainer_config)
-        trainer.train(train_filename, weights_filename, 50, prev_weights_filename)
-        print("cnone_17_1000_1600.h5 done!\n")
-
-        print("training c_17_1000_1600.h5...")
-        train_filename = "c_17_1000_1600.dat"
-        weights_filename = "c_17_1000_1600.h5"
-        prev_weights_filename = "c_16_800_1600.h5"
-        trainer_config = TrainerConfig()
-        trainer_config.colosus_config.lr = 0.00002
-        trainer = Trainer(trainer_config)
-        trainer.train(train_filename, weights_filename, 20, prev_weights_filename)
-        print("c_17_1000_1600.h5 done!\n")
-
-        print("training zc_17_1000_1600.h5...")
-        train_filename = "zc_17_1000_1600.dat"
-        weights_filename = "zc_17_1000_1600.h5"
-        prev_weights_filename = "c_16_800_1600.h5"
-        trainer_config = TrainerConfig()
-        trainer_config.colosus_config.lr = 0.00002
-        trainer = Trainer(trainer_config)
-        trainer.train(train_filename, weights_filename, 20, prev_weights_filename)
-        print("zc_17_1000_1600.h5 done!\n")
-
-        print("training cres3_17_1000_1600.h5...")
-        train_filename = "c_17_1000_1600.dat"
-        weights_filename = "cres3_17_1000_1600.h5"
-        prev_weights_filename = None
-        trainer_config = TrainerConfig()
-        trainer_config.colosus_config.lr = 0.00005
-        trainer_config.colosus_config.residual_blocks = 3
-        trainer = Trainer(trainer_config)
-        trainer.train(train_filename, weights_filename, 50, prev_weights_filename)
-        print("cres3_17_1000_1600.h5 done!\n")
 
 
     def test_save_rotated_records(self):
@@ -136,7 +112,7 @@ class SelfPlayTestCase(unittest.TestCase):
         recordset.save_to_file(rotated_filename)
 
     def test_merge_records(self):
-        merged_filename = "c_18_2_1000_1600.dat"
+        merged_filename = "cnoise03_18_2_1000_1600.dat"
         TrainRecordSet.merge_and_rotate(merged_filename, 16)
 
     def test_generator(self):
