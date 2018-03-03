@@ -20,16 +20,18 @@ class Person:
 
 class SelfPlayTestCase(unittest.TestCase):
     def test_train(self):
-        train_filename = "ccpuct3_18_1000_1600.dat"
-        weights_filename = "ccpuct3_18_1000_1600.h5"
+        train_filename = "c_19_1200_1600.dat"
+        weights_filename = "x.h5"
         # weights_filename = "wpp_3_1600_800.h5"
-        prev_weights_filename = "ccpuct3_18_1000_1600.h5"
-        # prev_weights_filename = None
+        # prev_weights_filename = "ccpuct3_18_1000_1600.h5"
+        prev_weights_filename = None
 
         trainer_config = TrainerConfig()
-        trainer_config.colosus_config.lr = 0.00002
+        trainer_config.colosus_config.lr = 0.0001
+        # trainer_config.colosus_config.conv_size = 100
+        trainer_config.colosus_config.residual_blocks = 4
         trainer = Trainer(trainer_config)
-        trainer.train(train_filename, weights_filename, 2, prev_weights_filename)
+        trainer.train(train_filename, weights_filename, 6, prev_weights_filename)
 
     def test_train_multi(self):
 

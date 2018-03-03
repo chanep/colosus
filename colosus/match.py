@@ -5,6 +5,7 @@ from colosus.colosus_model import ColosusModel
 from colosus.config import PlayerConfig, ColosusConfig
 from colosus.game.position import Position
 from colosus.player import Player
+from colosus.player_mp import PlayerMp
 from colosus.player_type import PlayerType
 
 

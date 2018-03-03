@@ -115,7 +115,7 @@ class State:
         self.N += 1
         self.Q = self.W / self.N
         if self.parent is not None:
-            self.parent.backup(-v)
+            self.parent.backup(-v * self.config.backup_factor)
 
     def children(self):
         if self._children is not None:

@@ -13,6 +13,7 @@ class StateConfig:
         self.cpuct = 1.41
         self.noise_alpha = 0.3
         self.noise_factor = 0.25
+        self.backup_factor = 0.99999
 
 
 class SearchConfig:

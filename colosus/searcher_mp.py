@@ -119,7 +119,7 @@ class SearcherMp:
         new_state = main_worker_root_state.children()[move]
         new_state.parent = None
 
-        return policy, value, move, new_state
+        return policy, value, int(move), new_state
 
     def _set_colosus(self, state: State, colosus):
         state.colosus = colosus
