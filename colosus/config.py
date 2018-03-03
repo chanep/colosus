@@ -11,13 +11,13 @@ class ColosusConfig:
 class StateConfig:
     def __init__(self):
         self.cpuct = 1.41
-        self.noise_alpha = 1000
+        self.noise_alpha = 0.3
         self.noise_factor = 0.25
 
 
 class SearchConfig:
     def __init__(self):
-        self.move_count_temp0 = 16
+        self.move_count_temp0 = 22
         self.workers = 8
         self.mp_cpuct_factor = 0.5
         self.mp_cpuct0 = 0.5
@@ -34,6 +34,7 @@ class SelfPlayConfig:
     def __init__(self):
         self.colosus_config = ColosusConfig()
         self.state_config = StateConfig()
+        self.state_config.cpuct = 1.41 * 3
         self.search_config = SearchConfig()
 
 
@@ -41,6 +42,7 @@ class SelfPlayMpConfig:
     def __init__(self):
         self.colosus_config = ColosusConfig()
         self.state_config = StateConfig()
+        self.state_config.cpuct = 1.41 * 3
         self.search_config = SearchConfig()
 
 

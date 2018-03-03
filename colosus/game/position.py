@@ -16,7 +16,7 @@ class Position:
     B_SIZE = 15
     DIAGS = (B_SIZE - 5 + 1) * 2 - 1  # 21 diagonals
     DIAG_LEN = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5]
-    DISTANCE_MOVE2 = 4
+    DISTANCE_MOVE2 = 5
 
     def __init__(self, initialize_boards=True):
         self.side_to_move = Side.BLACK
