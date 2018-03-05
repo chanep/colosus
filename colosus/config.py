@@ -64,5 +64,5 @@ class PlayerConfig:
         self.state_config = StateConfig()
         self.search_config = SearchConfig()
         self.state_config.noise_factor = 0.0
-        self.search_config.move_count_temp0 = 8
+        self.search_config.move_count_temp0 = 6
 
