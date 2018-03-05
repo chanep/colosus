@@ -66,8 +66,8 @@ class SelfPlayTestCase(unittest.TestCase):
 
         config = SelfPlayMpConfig()
         self_play = SelfPlayMp(config)
-        train_filename = "c_19_2_1000_1600.dat"
-        self_play.play(700, 1600, pos, train_filename, 16, "c_18_1000_1600.h5")
+        train_filename = "c_21_2_600_1600.dat"
+        self_play.play(600, 1600, pos, train_filename, 16, "c_20_1000_1600.h5")
         TrainRecordSet.merge_and_rotate(train_filename, 16)
 
         print("fin. time: " + str(time.time() - start_time))
