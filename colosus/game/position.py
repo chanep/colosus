@@ -204,12 +204,16 @@ class Position:
                         shifts = self.DIAG_LEN[l] - 5 + 1
                     for s in range(shifts):
                         shifted_mask = mask << s
-                        shifted_overline_mask = overline_mask << s
+                        shifted_overline_mask = shifted_overline_mask2 = overline_mask << s
+                        if s > 0:
+                            shifted_overline_mask2 = overline_mask << (s - 1)
                         if line & shifted_mask == shifted_mask and \
-                                line & shifted_overline_mask != shifted_overline_mask:
+                                line & shifted_overline_mask != shifted_overline_mask and \
+                                line & shifted_overline_mask2 != shifted_overline_mask2:
                             for j in range(5):
                                 rank, file = self._coord_to_rank_file(i, l, s + j)
                                 win_line.append((rank, file))
+                            return win_line
         return win_line
 
     def check_win(self, last_move):

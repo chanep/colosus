@@ -49,7 +49,7 @@ class State:
         new_root_state.parent = None
         self.noise = None
         value = -self.Q
-        return policy, value, int(move), new_root_state
+        return policy, value, move, new_root_state
 
     def play_static_policy(self, temperature) -> (int, float, int, 'State'):
         self.select()
@@ -58,6 +58,7 @@ class State:
         temp_policy = self.apply_temperature(policy, temperature)
         move = np.random.choice(len(temp_policy), 1, p=temp_policy)[0]
         new_root_state = self.__class__(self.position().move(move), policy[move], None, self.colosus, self.config)
+        new_root_state.Q = value
         self.noise = None
         return policy, value, move, new_root_state
 
@@ -102,6 +103,26 @@ class State:
                     self.legal_policy[m] = legal_policy[m]
 
         self.backup(-value)
+
+    def principal_variation(self):
+        pv = []
+        state = self
+        while not state.is_leaf:
+            best_move = None
+            best_N = 0
+            best_child = None
+            for m in range(len(state.children())):
+                child: State = state.children()[m]
+                if child is not None and child.N > best_N:
+                    best_N = child.N
+                    best_move = m
+                    best_child = child
+            if best_move is not None:
+                pv.append(best_move)
+                state = best_child
+            else:
+                break
+        return pv
 
     @staticmethod
     def _get_legal_policy(policy, legal_moves):

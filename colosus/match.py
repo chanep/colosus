@@ -2,7 +2,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 from colosus.Illegal_move import IllegalMove
 from colosus.colosus_model import ColosusModel
-from colosus.config import PlayerConfig, ColosusConfig
+from colosus.config import PlayerConfig, ColosusConfig, MatchConfig
 from colosus.game.position import Position
 from colosus.player import Player
 from colosus.player_mp import PlayerMp
@@ -17,7 +17,8 @@ class PlayerSettings:
 
 
 class Match:
-    def __init__(self):
+    def __init__(self, config: MatchConfig):
+        self.config = config
         self.position = None
         self.players = [None, None]
         self._move_callback = None
@@ -51,11 +52,12 @@ class Match:
         for i in range(len(player_settings)):
             player_sets = player_settings[i]
             if player_sets.type == PlayerType.COLOSUS:
-                colosus = ColosusModel(ColosusConfig())
+                colosus = ColosusModel(self.config.colosus_config)
                 colosus.build()
                 if player_sets.weights_filename is not None:
                     colosus.load_weights(player_sets.weights_filename)
-                self.players[i] = Player(PlayerConfig(), colosus)
+                self.players[i] = PlayerMp(self.config.player_config, colosus) if self.config.mp else \
+                    Player(self.config.player_config, colosus)
                 self.players[i].new_game(self.position.clone(), player_sets.iterations)
             else:
                 self.players[i] = None
@@ -75,13 +77,14 @@ class Match:
     def _colosus_thinks(self):
         c_player = self._current_player()
         policy, value, move, old_state, new_state = c_player.move()
-        return policy, value, move, old_state, new_state
+        return policy, value, int(move), old_state, new_state
 
     def _colosus_thinks_done(self, future):
         policy, value, move, old_state, new_state = future.result()
         print("colosus thinks done " + str(move))
         value = new_state.Q
-        self._do_move(move, value)
+        pv = old_state.principal_variation()
+        self._do_move(move, value, pv)
 
     def move(self, move):
         if not self.initialized or not self.is_human_turn():
@@ -91,7 +94,7 @@ class Match:
             if self.position.move_count == 0:
                 message = "First move must be on the center (8, 8)"
             elif self.position.move_count == 2:
-                message = "Second black move must be at least 4 squares away from the center. e.g. (9, 12)"
+                message = "Second black move must be at least 5 squares away from the center. e.g. (9, 13)"
             raise IllegalMove(message)
         self._do_move(move)
 
@@ -102,12 +105,12 @@ class Match:
     def is_end(self):
         return self.position.is_end
 
-    def _do_move(self, move, value=None):
+    def _do_move(self, move, value=None, pv=None):
         self.position = self.position.move(move)
         if self.position.is_end:
             self.in_progress = False
         if self._move_callback is not None:
-            self._move_callback(self, move=move, value=value)
+            self._move_callback(self, move=move, value=value, pv=pv)
         opponent = self.players[self.position.side_to_move]
         if opponent is not None:
             opponent.opponent_move(move)

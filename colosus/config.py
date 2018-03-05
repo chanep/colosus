@@ -66,3 +66,12 @@ class PlayerConfig:
         self.state_config.noise_factor = 0.0
         self.search_config.move_count_temp0 = 6
 
+
+class MatchConfig:
+    def __init__(self):
+        self.colosus_config = ColosusConfig()
+        self.player_config = PlayerConfig()
+        self.mp = False
+
+
+

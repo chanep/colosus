@@ -12,6 +12,9 @@
         <tr>
             <td class="eval" colspan="2">{{eval}}</td>
         </tr>
+        <tr v-if="depth != null">
+            <td class="eval" colspan="2">depth: {{depth}}</td>
+        </tr>
     </table>
 </template>
 
@@ -27,6 +30,7 @@
                 prevTick: 0,
                 running: false,
                 value: null,
+                depth: null,
                 timerId: null
                 }
             },
@@ -53,6 +57,8 @@
             'gameStatus.lastMove'(newLastMove, oldLastMove) {
                 if(!newLastMove){
                     this.time = 0;
+                    this.value = null;
+                    this.depth = null;
                 }
             },
             'gameStatus.sideToMove'(newSideToMove, oldSideToMove){
@@ -75,6 +81,7 @@
                 }
                 if(newSideToMove != this.side){
                     this.value = this.gameStatus.value
+                    this.depth = this.gameStatus.depth
                 }
             }
         }

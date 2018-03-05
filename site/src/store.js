@@ -4,6 +4,7 @@ let gameStatus = {
     lastMove: null,
     winner: null,
     value: null,
+    depth: null,
     error: null,
     sideToMove: null,
     inProgress: false,
@@ -38,6 +39,7 @@ let store = {
         this.gameStatus.lastMove = status.lastMove;
         this.gameStatus.winner = status.winner;
         this.gameStatus.value = status.value;
+        this.gameStatus.depth = status.depth;
         this.gameStatus.error = status.error;
         this.gameStatus.sideToMove = status.sideToMove;
         this.gameStatus.inProgress = status.inProgress;

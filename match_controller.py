@@ -2,13 +2,16 @@ from flask import request, jsonify
 import numpy as np
 
 from colosus.Illegal_move import IllegalMove
+from colosus.config import MatchConfig
 from colosus.game.position import Position
 from colosus.game.side import Side
 from colosus.game.square import Square
 from colosus.match import Match, PlayerSettings
 from colosus.player_type import PlayerType
 
-_match = Match()
+
+_match_config = MatchConfig()
+_match = Match(_match_config)
 _weights_filename = "./colosus/tests/c_21_1200_1600.h5"
 
 
@@ -36,24 +39,27 @@ class MatchController:
             status = self._create_match_status(_match, error=err.value)
             self._status_update_callback(status)
 
-    def _on_move(self, match: Match, move=None, value=None):
-        status = self._create_match_status(match, move, value)
+    def _on_move(self, match: Match, move=None, value=None, pv=None):
+        status = self._create_match_status(match, move, value, pv)
         self._status_update_callback(status)
 
     def _on_match_initialized(self, match: Match):
         status = self._create_match_status(match)
         self._status_update_callback(status)
 
-    def _create_match_status(self, match: Match, last_move=None, value=None, error: str=None):
+    def _create_match_status(self, match: Match, last_move=None, value=None, pv=None, error: str=None):
         winner = None
+        depth = None
         win_line = []
         if match.is_end():
             winner = match.position.side_to_move.change()
             for (rank, file) in match.position.win_line():
                 win_line.append({'rank': rank, 'file': file})
         if last_move is not None:
-            rank, file = Square.to_rank_file(last_move)
-            last_move = {'rank': rank, 'file': file}
+            last_move = self._move_to_dict(last_move)
+
+        if pv is not None:
+            depth = len(pv)
 
         return {
             'board': self._position_dto(match.position),
@@ -61,11 +67,16 @@ class MatchController:
             'lastMove': last_move,
             'winner': winner,
             'value': value,
+            'depth': depth,
             'error': error,
             'sideToMove': match.position.side_to_move,
             'inProgress': match.in_progress,
             'winLine': win_line
         }
+
+    def _move_to_dict(self, move: int):
+        rank, file = Square.to_rank_file(move)
+        return {'rank': rank, 'file': file}
 
     def _position_dto(self, position: Position):
         p_str = ['X', 'O']
