@@ -35,23 +35,42 @@ class SelfPlayTestCase(unittest.TestCase):
 
     def test_train_multi(self):
 
-        print("training c_21_1200_1600.h5...")
-        train_filename = "c_21_1200_1600.dat"
-        weights_filename = "c_21_1200_1600.h5"
-        prev_weights_filename = "c_20_1000_1600.h5"
-        trainer_config = TrainerConfig()
-        trainer_config.colosus_config.lr = 0.00005
-        trainer = Trainer(trainer_config)
-        trainer.train(train_filename, weights_filename, 12, prev_weights_filename)
+        # print("training c_22_1200_1600.h5...")
+        # train_filename = "c_22_1200_1600.dat"
+        # weights_filename = "c_22_1200_1600.h5"
+        # prev_weights_filename = "c_21_1200_1600.h5"
+        # trainer_config = TrainerConfig()
+        # trainer_config.colosus_config.lr = 0.00005
+        # trainer = Trainer(trainer_config)
+        # trainer.train(train_filename, weights_filename, 12, prev_weights_filename)
+        #
+        # train_filename = "c_22_1200_1600.dat"
+        # weights_filename = "c_22_1200_1600.h5"
+        # prev_weights_filename = "c_22_1200_1600.h5"
+        # trainer_config = TrainerConfig()
+        # trainer_config.colosus_config.lr = 0.00002
+        # trainer = Trainer(trainer_config)
+        # trainer.train(train_filename, weights_filename, 12, prev_weights_filename)
+        #
+        # train_filename = "c_22_1200_1600.dat"
+        # weights_filename = "x.h5"
+        # prev_weights_filename = None
+        # trainer_config = TrainerConfig()
+        # trainer_config.colosus_config.lr = 0.0001
+        # trainer = Trainer(trainer_config)
+        # trainer.train(train_filename, weights_filename, 8, prev_weights_filename)
 
-        train_filename = "c_21_1200_1600.dat"
-        weights_filename = "c_21_1200_1600.h5"
-        prev_weights_filename = "c_21_1200_1600.h5"
+        train_filename = "c_22_1200_1600.dat"
+        weights_filename = "xres4.h5"
+        prev_weights_filename = None
         trainer_config = TrainerConfig()
-        trainer_config.colosus_config.lr = 0.00002
+        trainer_config.colosus_config.residual_blocks = 4
+        trainer_config.colosus_config.lr = 0.0001
         trainer = Trainer(trainer_config)
-        trainer.train(train_filename, weights_filename, 12, prev_weights_filename)
-        print("c_21_1200_1600.h5 done!\n")
+        trainer.train(train_filename, weights_filename, 6, prev_weights_filename)
+
+
+        print("c_22_1200_1600.h5 done!\n")
 
     def test_train_all(self):
         train_filenames = [
