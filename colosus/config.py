@@ -19,6 +19,7 @@ class StateConfig:
 class SearchConfig:
     def __init__(self):
         self.move_count_temp0 = 22
+        self.temp0 = 1.0
         self.workers = 8
         self.mp_cpuct_factor = 0.5
         self.mp_cpuct0 = 0.5

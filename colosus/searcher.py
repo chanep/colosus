@@ -19,7 +19,7 @@ class Searcher:
 
     def _get_temperature(self, state: State):
         if state.position().move_count <= self.config.move_count_temp0:
-            return 1.0
+            return self.config.temp0
         else:
             return 0.1
 

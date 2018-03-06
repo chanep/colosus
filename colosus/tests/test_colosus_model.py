@@ -96,16 +96,27 @@ class ColosusModelTestCase(unittest.TestCase):
         # pos.put_piece(Side.BLACK, 6, 7)
         # pos.put_piece(Side.WHITE, 9, 8)
 
-        # 2da
+        #
         pos.put_piece(Side.BLACK, 7, 7)
-        pos.put_piece(Side.WHITE, 7, 8)
+        pos.put_piece(Side.WHITE, 8, 6)
+
+        pos.put_piece(Side.BLACK, 7, 2)
+        pos.put_piece(Side.WHITE, 8, 8)
+
+        pos.put_piece(Side.BLACK, 9, 7)
+        pos.put_piece(Side.WHITE, 8, 7)
+
+        # pos.put_piece(Side.BLACK, 7, 7)
+        # pos.put_piece(Side.WHITE, 7, 8)
+
+
 
 
         colosus = ColosusModel(ColosusConfig())
         colosus.build()
         # colosus.load_weights("c_1_500_1600.h5")
         # colosus.load_weights("c_4_600_1600.h5")
-        colosus.load_weights("c_17_400_3200.h5")
+        colosus.load_weights("c_22_1200_1600.h5")
 
         pos.print()
 
@@ -119,11 +130,12 @@ class ColosusModelTestCase(unittest.TestCase):
 
         print('')
 
-        searcher = Searcher(SearchConfig());
+        search_config = SearchConfig()
+        search_config.move_count_temp0 = 6
+        searcher = Searcher(search_config)
         state_config = StateConfig()
-        state_config.cpuct = 1 * state_config.cpuct
         state = State(pos, None, None, colosus, state_config)
-        policy, value, move, new_state = searcher.search(state, 2048)
+        policy, value, move, new_state = searcher.search(state, 256)
         print("value: " + str(value))
         print("moves prob")
         sorted_policy = self.sort_policy(policy)

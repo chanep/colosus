@@ -5,6 +5,7 @@ from colosus.colosus_model import ColosusModel
 from colosus.colosus_model2 import ColosusModel2
 from colosus.config import EvaluatorConfig, PlayerConfig
 from colosus.game.position import Position
+from colosus.game.square import Square
 from colosus.player import Player
 from colosus.player2 import Player2
 from colosus.player_mp import PlayerMp
@@ -79,7 +80,7 @@ class Evaluator:
             mc_win_2_mean = 0 if wins_2 == 0 else mc_win_2 / wins_2
             win_rate_black = black_score / (game_num + 1)
 
-            print("game: {}, {}-{}, wr2:{:.1%}, black:{:.1%}, mc1: {:.3g}, mc2: {:.3g}".format(game_num + 1, total_score_1, total_score_2,
+            print("game: {}, {}-{}, wr2:{:.1%}, black:{:.1%}, mc1: {:.3g}, mc2: {:.3g}\n".format(game_num + 1, total_score_1, total_score_2,
                                                                              win_rate_2, win_rate_black, mc_win_1_mean, mc_win_2_mean))
 
         print(f"different final positions: {len(self.final_positions.keys())}")
@@ -111,16 +112,18 @@ class Evaluator:
                 self.var2 += np.var(policy)
             else:
                 self.var += np.var(policy)
+
+            # self.print_children(old_state)
             # position.print()
             # print('')
 
             end = position.is_end
             if end:
-                print(f"move: {move_num + 1}, var1: {self.var}, var2: {self.var2}")
                 position.print()
+                print(f"move: {move_num + 1}, var1: {self.var}, var2: {self.var2}")
                 # win_line = position.win_line()
                 # print(win_line)
-                print('')
+
                 score = (-position.score + 1) / 2
 
                 position_hash = self.hash_position(position)
@@ -143,6 +146,12 @@ class Evaluator:
         for b in position.boards:
             position_hash ^= hash(str(b))
         return str(position_hash)
+
+    def print_children(self, state: State):
+        for m in range(len(state.children())):
+            c = state.children()[m]
+            if c is not None:
+                print("{} N: {}, W: {:.3g}, Q: {:.3g}, p:{:.3g}".format(Square.to_string(m), c.N, c.W, c.Q, c.P))
 
 
 

@@ -87,7 +87,7 @@ class SelfPlayMp:
             z = - state.position().score
             for j in reversed(range(len(game_records_z))):
                 game_records_z[j].value = z
-                z = -z
+                z = -z * state.config.backup_factor
 
             train_record_set.extend(game_records)
             train_record_set_z.extend(game_records_z)
