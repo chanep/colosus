@@ -6,6 +6,7 @@ class ColosusConfig:
         self.residual_blocks = 3
         self.regularizer = 2e-5
         self.data_format_channel_last = True
+        self.half_memory = False
 
 
 class StateConfig:
@@ -65,7 +66,8 @@ class PlayerConfig:
         self.state_config = StateConfig()
         self.search_config = SearchConfig()
         self.state_config.noise_factor = 0.0
-        self.search_config.move_count_temp0 = 6
+        self.search_config.move_count_temp0 = 18
+        self.search_config.temp0 = 0.5
 
 
 class MatchConfig:

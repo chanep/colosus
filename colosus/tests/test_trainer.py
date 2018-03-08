@@ -2,6 +2,7 @@ import unittest
 import numpy as np
 
 from colosus.config import TrainerConfig
+from colosus.tests.test_evaluator import EvaluatorTestCase
 from colosus.train_record_set import TrainRecordSet
 from colosus.trainer import Trainer
 from colosus.game.position import Position
@@ -35,42 +36,46 @@ class SelfPlayTestCase(unittest.TestCase):
 
     def test_train_multi(self):
 
-        # print("training c_22_1200_1600.h5...")
-        # train_filename = "c_22_1200_1600.dat"
-        # weights_filename = "c_22_1200_1600.h5"
-        # prev_weights_filename = "c_21_1200_1600.h5"
+        # print("training c_23_1000_1600.h5...")
+        # train_filename = "c_23_1000_1600.dat"
+        # weights_filename = "c_23_1000_1600.h5"
+        # prev_weights_filename = "c_22_1200_1600.h5"
         # trainer_config = TrainerConfig()
         # trainer_config.colosus_config.lr = 0.00005
         # trainer = Trainer(trainer_config)
         # trainer.train(train_filename, weights_filename, 12, prev_weights_filename)
         #
-        # train_filename = "c_22_1200_1600.dat"
-        # weights_filename = "c_22_1200_1600.h5"
-        # prev_weights_filename = "c_22_1200_1600.h5"
+        # train_filename = "c_23_1000_1600.dat"
+        # weights_filename = "c_23_1000_1600.h5"
+        # prev_weights_filename = "c_23_1000_1600.h5"
         # trainer_config = TrainerConfig()
         # trainer_config.colosus_config.lr = 0.00002
         # trainer = Trainer(trainer_config)
         # trainer.train(train_filename, weights_filename, 12, prev_weights_filename)
-        #
-        # train_filename = "c_22_1200_1600.dat"
-        # weights_filename = "x.h5"
-        # prev_weights_filename = None
-        # trainer_config = TrainerConfig()
-        # trainer_config.colosus_config.lr = 0.0001
-        # trainer = Trainer(trainer_config)
-        # trainer.train(train_filename, weights_filename, 8, prev_weights_filename)
+        # print("c_23_1000_1600.h5 done!\n")
 
-        train_filename = "c_22_1200_1600.dat"
-        weights_filename = "xres4.h5"
-        prev_weights_filename = None
+        test = EvaluatorTestCase()
+        test.test_evaluate()
+
+        print("training zc_23_1000_1600.h5...")
+        train_filename = "zc_23_1000_1600.dat"
+        weights_filename = "zc_23_1000_1600.h5"
+        prev_weights_filename = "c_22_1200_1600.h5"
         trainer_config = TrainerConfig()
-        trainer_config.colosus_config.residual_blocks = 4
-        trainer_config.colosus_config.lr = 0.0001
+        trainer_config.colosus_config.lr = 0.00005
         trainer = Trainer(trainer_config)
-        trainer.train(train_filename, weights_filename, 6, prev_weights_filename)
+        trainer.train(train_filename, weights_filename, 12, prev_weights_filename)
+
+        train_filename = "zc_23_1000_1600.dat"
+        weights_filename = "zc_23_1000_1600.h5"
+        prev_weights_filename = "zc_23_1000_1600.h5"
+        trainer_config = TrainerConfig()
+        trainer_config.colosus_config.lr = 0.00002
+        trainer = Trainer(trainer_config)
+        trainer.train(train_filename, weights_filename, 12, prev_weights_filename)
+        print("zc_23_1000_1600.h5 done!\n")
 
 
-        print("c_22_1200_1600.h5 done!\n")
 
     def test_train_all(self):
         train_filenames = [
@@ -125,7 +130,7 @@ class SelfPlayTestCase(unittest.TestCase):
         recordset.save_to_file(rotated_filename)
 
     def test_merge_records(self):
-        merged_filename = "cnoise03_18_2_1000_1600.dat"
+        merged_filename = "zc_23_2_400_1600.dat"
         TrainRecordSet.merge_and_rotate(merged_filename, 16)
 
     def test_generator(self):

@@ -1,5 +1,6 @@
 import numpy as np
 import tensorflow as tf
+import time
 
 from colosus.colosus_model import ColosusModel
 from colosus.colosus_model2 import ColosusModel2
@@ -22,6 +23,8 @@ class Evaluator:
         self.player2 = None
         self.var = 0.0
         self.var2 = 0.0
+        self.short_games = 0
+        self.mc_total = 0
         self.final_positions = {}
 
     def evaluate(self, games: int, iterations: int, position_ini: Position, weights_filename, weights_filename2, iterations2=None):
@@ -59,6 +62,8 @@ class Evaluator:
         win_rate_2 = 0
         black_score = 0
 
+        start_time = time.time()
+
         for game_num in range(games):
             game_score_2, game_mc = self.play_game(iterations, iterations_player2, game_num, position_ini)
             total_score_1 += 1 - game_score_2
@@ -84,6 +89,9 @@ class Evaluator:
                                                                              win_rate_2, win_rate_black, mc_win_1_mean, mc_win_2_mean))
 
         print(f"different final positions: {len(self.final_positions.keys())}")
+        print(f"short games: {self.short_games}")
+        print(f"time: {time.time() - start_time}")
+        print(f"mc_total: {self.mc_total}")
 
         return win_rate_2
 
@@ -103,6 +111,7 @@ class Evaluator:
         self.player.new_game(position.clone(), iterations)
         self.player2.new_game(position.clone(), iterations_player2)
         while not end:
+            self.mc_total += 1
             player = self.get_player(game_num, move_num)
             policy, value, move, old_state, new_state = player.move()
             position = new_state.position()
@@ -119,8 +128,11 @@ class Evaluator:
 
             end = position.is_end
             if end:
+                if move_num < 14:
+                    self.short_games += 1
+
                 position.print()
-                print(f"move: {move_num + 1}, var1: {self.var}, var2: {self.var2}")
+                # print(f"move: {move_num + 1}, var1: {self.var}, var2: {self.var2}")
                 # win_line = position.win_line()
                 # print(win_line)
 

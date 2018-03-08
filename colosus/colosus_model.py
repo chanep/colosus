@@ -33,7 +33,12 @@ class ColosusModel:
 
     def build(self):
         self.graph = tf.Graph()
-        self.session = tf.Session(graph=self.graph)
+        session_config = None
+        if self.config.half_memory:
+            session_config = tf.ConfigProto()
+            session_config.gpu_options.per_process_gpu_memory_fraction = 0.30
+        self.session = tf.Session(graph=self.graph, config=session_config)
+
         with self.graph.as_default():
             data_format = "channels_last" if self.config.data_format_channel_last else "channels_first"
             bn_axis = 3 if self.config.data_format_channel_last else 1
