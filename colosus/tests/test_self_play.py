@@ -66,7 +66,7 @@ class SelfPlayTestCase(unittest.TestCase):
 
         config = SelfPlayMpConfig()
         self_play = SelfPlayMp(config)
-        train_filename = "c_24_1_1000_1600.dat"
+        train_filename = "c_24_2_1000_1600.dat"
         self_play.play(500, 1600, pos, train_filename, 16, "c_23_1000_1600.h5")
         TrainRecordSet.merge_and_rotate(train_filename, 16)
 
