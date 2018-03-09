@@ -36,21 +36,32 @@ class SelfPlayTestCase(unittest.TestCase):
 
     def test_train_multi(self):
         print("training c_24_1000_1600.h5...")
-        # train_filename = "c_24_1000_1600.dat"
-        # weights_filename = "c_24_1000_1600.h5"
-        # prev_weights_filename = "c_23_1000_1600.h5"
-        # trainer_config = TrainerConfig()
-        # trainer_config.colosus_config.lr = 0.00005
-        # trainer = Trainer(trainer_config)
-        # trainer.train(train_filename, weights_filename, 12, prev_weights_filename)
+        train_filename = "c_24_1000_1600.dat"
+        weights_filename = "x.h5"
+        prev_weights_filename = None
+        trainer_config = TrainerConfig()
+        trainer_config.colosus_config.lr = 0.0001
+        trainer = Trainer(trainer_config)
+        trainer.train(train_filename, weights_filename, 10, prev_weights_filename)
 
         train_filename = "c_24_1000_1600.dat"
-        weights_filename = "c_24_1000_1600.h5"
-        prev_weights_filename = "c_24_1000_1600.h5"
+        weights_filename = "xres4.h5"
+        prev_weights_filename = None
         trainer_config = TrainerConfig()
-        trainer_config.colosus_config.lr = 0.00002
+        trainer_config.colosus_config.residual_blocks = 4
+        trainer_config.colosus_config.lr = 0.0001
         trainer = Trainer(trainer_config)
-        trainer.train(train_filename, weights_filename, 2, prev_weights_filename)
+        trainer.train(train_filename, weights_filename, 10, prev_weights_filename)
+
+        train_filename = "c_24_1000_1600.dat"
+        weights_filename = "x120.h5"
+        prev_weights_filename = None
+        trainer_config = TrainerConfig()
+        trainer_config.colosus_config.conv_size = 120
+        trainer_config.colosus_config.lr = 0.0001
+        trainer = Trainer(trainer_config)
+        trainer.train(train_filename, weights_filename, 10, prev_weights_filename)
+
         print("c_24_1000_1600.h5 done!\n")
 
 
