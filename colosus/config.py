@@ -55,10 +55,10 @@ class EvaluatorConfig:
         self.colosus2_config = ColosusConfig()
         self.player_config = PlayerConfig()
         self.player2_config = PlayerConfig()
-        self.player_config.search_config.move_count_temp0 = 16
-        self.player2_config.search_config.move_count_temp0 = 16
-        self.player_config.search_config.temp0 = 1.0
-        self.player2_config.search_config.temp0 = 1.0
+        self.player_config.search_config.move_count_temp0 = 24
+        self.player2_config.search_config.move_count_temp0 = 24
+        self.player_config.search_config.temp0 = 0.85
+        self.player2_config.search_config.temp0 = 0.85
         self.player2_is_mp = False
         self.iterations_mp_factor = 0.4
 
