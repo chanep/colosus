@@ -26,6 +26,7 @@ class Evaluator:
         self.short_games = 0
         self.mc_total = 0
         self.final_positions = {}
+        self.final_position_rotations = {}
 
     def evaluate(self, games: int, iterations: int, position_ini: Position, weights_filename, weights_filename2, iterations2=None):
 
@@ -89,7 +90,8 @@ class Evaluator:
                                                                              win_rate_2, win_rate_black, mc_win_1_mean, mc_win_2_mean))
 
         print(f"different final positions: {len(self.final_positions.keys())}")
-        print(f"short games: {self.short_games}")
+        print(f"different final positions with rotations: {(len(self.final_position_rotations.keys()) / 8):.1f}")
+        print(f"short games (<20): {self.short_games}")
         print(f"time: {time.time() - start_time}")
         print(f"mc_total: {self.mc_total}")
 
@@ -128,7 +130,7 @@ class Evaluator:
 
             end = position.is_end
             if end:
-                if move_num < 14:
+                if move_num < 20:
                     self.short_games += 1
 
                 position.print()
@@ -140,7 +142,13 @@ class Evaluator:
 
                 position_hash = self.hash_position(position)
                 if position_hash not in self.final_positions.keys():
-                    self.final_positions[position_hash] = position.clone()
+                    self.final_positions[position_hash] = 1
+
+                position_rotation_hashes = self.hash_position_rotations(position)
+                for h in position_rotation_hashes:
+                    if h not in self.final_position_rotations.keys():
+                        self.final_position_rotations[h] = 1
+
                 # else:
                 #     print("same position")
                 #     position.print()
@@ -154,10 +162,34 @@ class Evaluator:
                 move_num += 1
 
     def hash_position(self, position):
-        position_hash = 0
-        for b in position.boards:
-            position_hash ^= hash(str(b))
-        return str(position_hash)
+        return str(hash(str(position.to_model_position().board)))
+
+    def hash_position_rotations(self, position):
+        def hash_board(board):
+            return str(hash(str(board)))
+
+        def flip_board(board):
+            board_f = []
+            for s in range(2):
+                board_f.append(np.fliplr(board[s]))
+            return np.stack(board_f)
+
+        def rot90_board(board):
+            board_f = []
+            for s in range(2):
+                board_f.append(np.rot90(board[s]))
+            return np.stack(board_f)
+
+        board = position.to_model_position().board
+        hashes = []
+        for i in range(4):
+            hashes.append(hash_board(board))
+            board_f = flip_board(board)
+            hashes.append(hash_board(board_f))
+            if i < 3:
+                board = rot90_board(board)
+
+        return hashes
 
     def print_children(self, state: State):
         for m in range(len(state.children())):

@@ -2,7 +2,7 @@ class ColosusConfig:
     def __init__(self):
         self.thread_safe = False
         self.lr = 0.0005
-        self.conv_size = 80
+        self.conv_size = 120
         self.residual_blocks = 3
         self.regularizer = 2e-5
         self.data_format_channel_last = True
