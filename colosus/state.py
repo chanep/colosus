@@ -43,8 +43,11 @@ class State:
 
     def play(self, temperature) -> (int, float, int, 'State'):
         policy = self.get_policy()
-        temp_policy = self.apply_temperature(policy, temperature)
-        move = np.random.choice(len(temp_policy), 1, p=temp_policy)[0]
+        if temperature <= 0.1:
+            move = np.argmax(policy)
+        else:
+            temp_policy = self.apply_temperature(policy, temperature)
+            move = np.random.choice(len(temp_policy), 1, p=temp_policy)[0]
         new_root_state = self.children()[move]
         new_root_state.parent = None
         self.noise = None
@@ -55,8 +58,11 @@ class State:
         self.select()
         policy = np.nan_to_num(np.array(self.legal_policy, np.float), 0)
         value = - self.Q
-        temp_policy = self.apply_temperature(policy, temperature)
-        move = np.random.choice(len(temp_policy), 1, p=temp_policy)[0]
+        if temperature <= 0.1:
+            move = np.argmax(policy)
+        else:
+            temp_policy = self.apply_temperature(policy, temperature)
+            move = np.random.choice(len(temp_policy), 1, p=temp_policy)[0]
         new_root_state = self.__class__(self.position().move(move), policy[move], None, self.colosus, self.config)
         new_root_state.Q = value
         self.noise = None
