@@ -10,33 +10,31 @@ from colosus.match import Match, PlayerSettings
 from colosus.player_type import PlayerType
 
 
-_match_config = MatchConfig()
-_match = Match(_match_config)
-_weights_filename = "./colosus/tests/c_25_1000_1600.h5"
-
-
 class MatchController:
-    def __init__(self, status_update_callback):
+    def __init__(self, config: MatchConfig, status_update_callback):
+        self.config = config
         self._status_update_callback = status_update_callback
+        self._match = Match(config)
 
     def new_match(self, black_human, white_human, iterations=None):
         if black_human:
             black = PlayerSettings(PlayerType.HUMAN)
         else:
-            black = PlayerSettings(PlayerType.COLOSUS, iterations, _weights_filename)
+            black = PlayerSettings(PlayerType.COLOSUS, iterations, self.config.weights_filename)
         if white_human:
             white = PlayerSettings(PlayerType.HUMAN)
         else:
-            white = PlayerSettings(PlayerType.COLOSUS, iterations, _weights_filename)
+            white = PlayerSettings(PlayerType.COLOSUS, iterations, self.config.weights_filename)
 
-        _match.new_game(black, white, initial_pos=None, move_callback=self._on_move, match_initialized_callback=self._on_match_initialized)
+        self._match.new_game(black, white, initial_pos=None, move_callback=self._on_move,
+                             match_initialized_callback=self._on_match_initialized)
 
     def move(self, rank, file):
         move = Square.square(rank, file)
         try:
-            _match.move(move)
+            self._match.move(move)
         except IllegalMove as err:
-            status = self._create_match_status(_match, error=err.value)
+            status = self._create_match_status(self._match, error=err.value)
             self._status_update_callback(status)
 
     def _on_move(self, match: Match, move=None, value=None, pv=None):

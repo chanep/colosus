@@ -21,7 +21,7 @@ class Searcher:
         if state.position().move_count <= self.config.move_count_temp0:
             return self.config.temp0
         else:
-            return 0.1
+            return self.config.tempf
 
 # class Searcher:
 #     def __init__(self, config):

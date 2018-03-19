@@ -3,6 +3,8 @@ import logging
 import time
 from flask import Flask, request, jsonify
 from flask_socketio import SocketIO, send, emit
+
+from colosus.config import MatchConfig
 from match_controller import MatchController
 
 _client_sid = None
@@ -21,7 +23,7 @@ def on_status_update(status):
         socketio.emit('status_update', status, room=_client_sid)
 
 
-match_c = MatchController(on_status_update)
+match_c = MatchController(MatchConfig(), on_status_update)
 
 
 @socketio.on('connect')

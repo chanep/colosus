@@ -21,6 +21,7 @@ class SearchConfig:
     def __init__(self):
         self.move_count_temp0 = 22
         self.temp0 = 1.0
+        self.tempf = 0.1
         self.workers = 8
         self.mp_cpuct_factor = 0.5
         self.mp_cpuct0 = 0.5
@@ -69,14 +70,15 @@ class PlayerConfig:
         self.search_config = SearchConfig()
         self.state_config.noise_factor = 0.0
         self.search_config.move_count_temp0 = 18
-        self.search_config.temp0 = 0.5
+        self.search_config.temp0 = 0.4
+        self.search_config.tempf = 0.01
 
 
 class MatchConfig:
     def __init__(self):
+        self.weights_filename = "./colosus/tests/c_25_1000_1600.h5"
         self.colosus_config = ColosusConfig()
         self.player_config = PlayerConfig()
-        self.player_config.search_config.temp0 = 0.4
         self.mp = False
 
 
