@@ -43,7 +43,7 @@ class State:
 
     def play(self, temperature) -> (int, float, int, 'State'):
         policy = self.get_policy()
-        if temperature <= 0.1:
+        if temperature < 0.1:
             move = np.argmax(policy)
         else:
             temp_policy = self.apply_temperature(policy, temperature)
@@ -58,7 +58,7 @@ class State:
         self.select()
         policy = np.nan_to_num(np.array(self.legal_policy, np.float), 0)
         value = - self.Q
-        if temperature <= 0.1:
+        if temperature < 0.1:
             move = np.argmax(policy)
         else:
             temp_policy = self.apply_temperature(policy, temperature)

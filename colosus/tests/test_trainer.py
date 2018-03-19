@@ -21,36 +21,41 @@ class Person:
 
 class SelfPlayTestCase(unittest.TestCase):
     def test_train(self):
-        train_filename = "c_25_1000_1600.dat"
-        weights_filename = "c120_25_1000_1600.h5"
-        # weights_filename = "wpp_3_1600_800.h5"
-        prev_weights_filename = "xxc_25_1000_1600.h5"
+        train_filename = "c_26_1100_1600.dat"
+        weights_filename = "c_26_1100_1600.h5"
+        prev_weights_filename = "c_26_1100_1600.h5"
         # prev_weights_filename = None
 
         trainer_config = TrainerConfig()
         trainer_config.colosus_config.lr = 0.00002
-        trainer_config.colosus_config.conv_size = 120
         trainer = Trainer(trainer_config)
-        trainer.train(train_filename, weights_filename, 5, prev_weights_filename)
+        trainer.train(train_filename, weights_filename, 8, prev_weights_filename)
 
     def test_train_multi(self):
-        print("training  ct085_25_1000_1600.h5...")
-        # train_filename = "ct085_25_1000_1600.dat"
-        # weights_filename = "ct085_25_1000_1600.h5"
-        # prev_weights_filename = "c_24_1000_1600.h5"
-        # trainer_config = TrainerConfig()
-        # trainer_config.colosus_config.lr = 0.00005
-        # trainer = Trainer(trainer_config)
-        # trainer.train(train_filename, weights_filename, 10, prev_weights_filename)
+        print("training c_27_1100_1600.h5...")
+        train_filename = "c_27_1100_1600.dat"
+        weights_filename = "c_27_1100_1600.h5"
+        prev_weights_filename = "c_26_1100_1600.h5"
+        trainer_config = TrainerConfig()
+        trainer_config.colosus_config.lr = 0.00005
+        trainer = Trainer(trainer_config)
+        trainer.train(train_filename, weights_filename, 20, prev_weights_filename)
 
-        print("training cnn 120 c_25_1000_1600.h5...")
-        train_filename = "ct085_25_1000_1600.dat"
-        weights_filename = "ct085_25_1000_1600.h5"
-        prev_weights_filename = "ct085_25_1000_1600.h5"
+        train_filename = "c_27_1100_1600.dat"
+        weights_filename = "c_27_1100_1600.h5"
+        prev_weights_filename = "c_27_1100_1600.h5"
         trainer_config = TrainerConfig()
         trainer_config.colosus_config.lr = 0.00002
         trainer = Trainer(trainer_config)
-        trainer.train(train_filename, weights_filename, 5, prev_weights_filename)
+        trainer.train(train_filename, weights_filename, 20, prev_weights_filename)
+
+        train_filename = "c_27_1100_1600.dat"
+        weights_filename = "c_27_1100_1600.h5"
+        prev_weights_filename = "c_27_1100_1600.h5"
+        trainer_config = TrainerConfig()
+        trainer_config.colosus_config.lr = 0.00001
+        trainer = Trainer(trainer_config)
+        trainer.train(train_filename, weights_filename, 10, prev_weights_filename)
 
     def test_train_all(self):
         train_filenames = [
@@ -78,20 +83,22 @@ class SelfPlayTestCase(unittest.TestCase):
             "c_22_1200_1600.dat",
             "c_23_1000_1600.dat",
             "c_24_1000_1600.dat",
-            "c_25_1000_1600.dat"
+            "c_25_1000_1600.dat",
+            "c_26_1000_1600.dat",
+            "c_27_1000_1600.dat"
         ]
 
         for f in train_filenames:
             assert os.path.isfile(f)
 
         trainer_config = TrainerConfig()
-        trainer_config.colosus_config.conv_size = 120
+        trainer_config.colosus_config.residual_blocks = 4
         trainer = Trainer(trainer_config)
 
         def get_weights_fname(tf):
-            return "xx" + tf.split(".")[0] + ".h5"
+            return "x" + tf.split(".")[0] + ".h5"
 
-        for i in range(12, len(train_filenames)):
+        for i in range(len(train_filenames)):
             if i == 0:
                 prev_weights_filename = None
                 trainer_config.colosus_config.lr = 0.0003
@@ -100,15 +107,24 @@ class SelfPlayTestCase(unittest.TestCase):
                 prev_weights_filename = get_weights_fname(train_filenames[i - 1])
                 trainer_config.colosus_config.lr = 0.0001
                 epochs = 10
-            else:
+            elif i < 21:
                 prev_weights_filename = get_weights_fname(train_filenames[i - 1])
                 trainer_config.colosus_config.lr = 0.00005
                 epochs = 10
+            else:
+                prev_weights_filename = get_weights_fname(train_filenames[i - 1])
+                trainer_config.colosus_config.lr = 0.00005
+                epochs = 15
 
             train_filename = train_filenames[i]
             weights_filename = get_weights_fname(train_filename)
             print(f"training with {train_filename}...")
             trainer.train(train_filename, weights_filename, epochs, prev_weights_filename)
+
+        train_filename = train_filenames[-1]
+        weights_filename = get_weights_fname(train_filename)
+        trainer_config.colosus_config.lr = 0.00002
+        trainer.train(train_filename, weights_filename, 15, weights_filename)
 
     def test_save_rotated_records(self):
         input_filename = "c_1_200_30.dat"

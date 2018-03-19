@@ -19,8 +19,8 @@ class StateConfig:
 
 class SearchConfig:
     def __init__(self):
-        self.move_count_temp0 = 42
-        self.temp0 = 0.7
+        self.move_count_temp0 = 22
+        self.temp0 = 1.0
         self.workers = 8
         self.mp_cpuct_factor = 0.5
         self.mp_cpuct0 = 0.5
@@ -57,8 +57,8 @@ class EvaluatorConfig:
         self.player2_config = PlayerConfig()
         self.player_config.search_config.move_count_temp0 = 38
         self.player2_config.search_config.move_count_temp0 = 38
-        self.player_config.search_config.temp0 = 0.7
-        self.player2_config.search_config.temp0 = 0.7
+        self.player_config.search_config.temp0 = 0.75
+        self.player2_config.search_config.temp0 = 0.75
         self.player2_is_mp = False
         self.iterations_mp_factor = 0.4
 
@@ -76,6 +76,7 @@ class MatchConfig:
     def __init__(self):
         self.colosus_config = ColosusConfig()
         self.player_config = PlayerConfig()
+        self.player_config.search_config.temp0 = 0.4
         self.mp = False
 
 

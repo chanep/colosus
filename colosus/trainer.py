@@ -29,3 +29,5 @@ class Trainer:
         colosus.train(positions, policies, values, epochs)
         print("training finished!")
         colosus.save_weights(weights_filename)
+
+        del colosus
