@@ -31,7 +31,7 @@ class SearcherTestCase(unittest.TestCase):
         colosus_config.conv_size = 120
         colosus = ColosusModel(colosus_config)
         colosus.build()
-        colosus.load_weights("c120_25_1000_1600.h5")
+        colosus.load_weights("c_27_1100_1600.h5")
 
         pos = Position()
         pos.put_piece(Side.BLACK, 7, 7)

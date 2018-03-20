@@ -11,6 +11,8 @@ from colosus.self_play import SelfPlay
 from colosus.game.position import Position
 from colosus.game.side import Side
 from colosus.self_play_mp import SelfPlayMp
+from colosus.tests.test_train_record_set import TrainRecordSetTestCase
+from colosus.tests.test_trainer import TrainerTestCase
 from colosus.train_record_set import TrainRecordSet
 
 
@@ -66,11 +68,13 @@ class SelfPlayTestCase(unittest.TestCase):
 
         config = SelfPlayMpConfig()
         self_play = SelfPlayMp(config)
-        train_filename = "c_27_1_1100_1600.dat"
-        self_play.play(550, 1600, pos, train_filename, 16, "c_26_1100_1600.h5")
+        train_filename = "c_28_1_1100_1600.dat"
+        self_play.play(550, 1600, pos, train_filename, 16, "c_27_1100_1600.h5")
         TrainRecordSet.merge_and_rotate(train_filename, 16)
-
         print("fin. time: " + str(time.time() - start_time))
+
+        TrainRecordSetTestCase().test_merge()
+        TrainerTestCase().test_train_multi()
 
 
 if __name__ == '__main__':
