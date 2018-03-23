@@ -32,26 +32,26 @@ class TrainerTestCase(unittest.TestCase):
         trainer.train(train_filename, weights_filename, 5, prev_weights_filename)
 
     def test_train_multi(self):
-        print("training c_28_1100_1600.h5...")
-        train_filename = "c_28_1100_1600.dat"
-        weights_filename = "c_28_1100_1600.h5"
-        prev_weights_filename = "c_27_1100_1600.h5"
+        print("training c_30_1100_1600.h5...")
+        train_filename = "c_30_1100_1600.dat"
+        weights_filename = "c_30_1100_1600.h5"
+        prev_weights_filename = "c_29_1100_1600.h5"
         trainer_config = TrainerConfig()
         trainer_config.colosus_config.lr = 0.00005
         trainer = Trainer(trainer_config)
         trainer.train(train_filename, weights_filename, 20, prev_weights_filename)
 
-        train_filename = "c_28_1100_1600.dat"
-        weights_filename = "c_28_1100_1600.h5"
-        prev_weights_filename = "c_28_1100_1600.h5"
+        train_filename = "c_30_1100_1600.dat"
+        weights_filename = "c_30_1100_1600.h5"
+        prev_weights_filename = "c_30_1100_1600.h5"
         trainer_config = TrainerConfig()
         trainer_config.colosus_config.lr = 0.00002
         trainer = Trainer(trainer_config)
         trainer.train(train_filename, weights_filename, 20, prev_weights_filename)
 
-        train_filename = "c_28_1100_1600.dat"
-        weights_filename = "c_28_1100_1600.h5"
-        prev_weights_filename = "c_28_1100_1600.h5"
+        train_filename = "c_30_1100_1600.dat"
+        weights_filename = "c_30_1100_1600.h5"
+        prev_weights_filename = "c_30_1100_1600.h5"
         trainer_config = TrainerConfig()
         trainer_config.colosus_config.lr = 0.00001
         trainer = Trainer(trainer_config)

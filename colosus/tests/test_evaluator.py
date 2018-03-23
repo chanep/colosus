@@ -13,13 +13,13 @@ class EvaluatorTestCase(unittest.TestCase):
     def test_evaluate(self):
         pos = Position()
         config = EvaluatorConfig()
-        # config.player_config.search_config.move_count_temp0 = 18
-        # config.player2_config.search_config.move_count_temp0 = 18
-        # config.player_config.search_config.temp0 = 0.5
-        # config.player2_config.search_config.temp0 = 0.5
+        config.player_config.search_config.move_count_temp0 = 22
+        config.player2_config.search_config.move_count_temp0 = 22
+        config.player_config.search_config.temp0 = 0.6
+        config.player2_config.search_config.temp0 = 0.6
         evaluator = Evaluator(config)
 
-        evaluator.evaluate(1000, 1, pos, "x.h5", "x_leaky.h5")
+        evaluator.evaluate(400, 256, pos, "c_25_1000_1600.h5", "c_30_1100_1600.h5")
 
     def test_evaluate2(self):
         pos = Position()
