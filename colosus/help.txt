@@ -1,26 +1,88 @@
 Normal:
 
-Epoch 1/5
- - 240s - loss: 5.3632 - policy_loss: 4.0437 - value_loss: 0.2784 - policy_acc: 0.1055 - val_loss: 4.4068 - val_policy_loss: 3.3057 - val_value_loss: 0.2440 - val_policy_acc: 0.2315
-Epoch 2/5
- - 244s - loss: 3.6323 - policy_loss: 2.7132 - value_loss: 0.2094 - policy_acc: 0.3520 - val_loss: 3.2179 - val_policy_loss: 2.3974 - val_value_loss: 0.1892 - val_policy_acc: 0.4234
-Epoch 3/5
- - 243s - loss: 3.0158 - policy_loss: 2.2550 - value_loss: 0.1648 - policy_acc: 0.4611 - val_loss: 2.9668 - val_policy_loss: 2.2160 - val_value_loss: 0.1642 - val_policy_acc: 0.4820
-Epoch 4/5
- - 239s - loss: 2.8084 - policy_loss: 2.1147 - value_loss: 0.1321 - policy_acc: 0.5005 - val_loss: 2.8012 - val_policy_loss: 2.1168 - val_value_loss: 0.1220 - val_policy_acc: 0.4975
-Epoch 5/5
- - 239s - loss: 2.6777 - policy_loss: 2.0294 - value_loss: 0.1074 - policy_acc: 0.5270 - val_loss: 2.7109 - val_policy_loss: 2.0559 - val_value_loss: 0.1071 - val_policy_acc: 0.5197
+Epoch 1/6
+ - 243s - loss: 5.3960 - policy_loss: 4.0884 - value_loss: 0.2566 - policy_acc: 0.1002 - val_loss: 4.5807 - val_policy_loss: 3.4615 - val_value_loss: 0.2245 - val_policy_acc: 0.2035
+Epoch 2/6
+ - 245s - loss: 3.7849 - policy_loss: 2.8551 - value_loss: 0.1858 - policy_acc: 0.3269 - val_loss: 3.3541 - val_policy_loss: 2.5325 - val_value_loss: 0.1575 - val_policy_acc: 0.3936
+Epoch 3/6
+ - 244s - loss: 3.1185 - policy_loss: 2.3602 - value_loss: 0.1367 - policy_acc: 0.4403 - val_loss: 3.0212 - val_policy_loss: 2.2967 - val_value_loss: 0.1182 - val_policy_acc: 0.4561
+Epoch 4/6
+ - 245s - loss: 2.8840 - policy_loss: 2.1966 - value_loss: 0.1056 - policy_acc: 0.4860 - val_loss: 2.8755 - val_policy_loss: 2.1961 - val_value_loss: 0.0974 - val_policy_acc: 0.4787
+Epoch 5/6
+ - 245s - loss: 2.7380 - policy_loss: 2.0955 - value_loss: 0.0852 - policy_acc: 0.5184 - val_loss: 2.7680 - val_policy_loss: 2.1219 - val_value_loss: 0.0817 - val_policy_acc: 0.5049
+Epoch 6/6
+ - 243s - loss: 2.6274 - policy_loss: 2.0178 - value_loss: 0.0709 - policy_acc: 0.5442 - val_loss: 2.6818 - val_policy_loss: 2.0614 - val_value_loss: 0.0705 - val_policy_acc: 0.5242
 
-CNN bias True:
+ cnn140:
 
-Epoch 1/5
- - 279s - loss: 5.4345 - policy_loss: 4.1067 - value_loss: 0.2712 - policy_acc: 0.0946 - val_loss: 4.5734 - val_policy_loss: 3.4606 - val_value_loss: 0.2176 - val_policy_acc: 0.2040
-Epoch 2/5
- - 258s - loss: 3.7578 - policy_loss: 2.8285 - value_loss: 0.1912 - policy_acc: 0.3322 - val_loss: 3.2753 - val_policy_loss: 2.4615 - val_value_loss: 0.1668 - val_policy_acc: 0.4148
-Epoch 3/5
- - 253s - loss: 3.0555 - policy_loss: 2.2995 - value_loss: 0.1488 - policy_acc: 0.4516 - val_loss: 2.9465 - val_policy_loss: 2.2193 - val_value_loss: 0.1397 - val_policy_acc: 0.4686
-Epoch 4/5
- - 251s - loss: 2.8194 - policy_loss: 2.1354 - value_loss: 0.1170 - policy_acc: 0.4948 - val_loss: 2.8213 - val_policy_loss: 2.1419 - val_value_loss: 0.1104 - val_policy_acc: 0.4955
-Epoch 5/5
- - 256s - loss: 2.6793 - policy_loss: 2.0402 - value_loss: 0.0950 - policy_acc: 0.5232 - val_loss: 2.7079 - val_policy_loss: 2.0615 - val_value_loss: 0.0966 - val_policy_acc: 0.5197
+ Epoch 1/6
+ - 367s - loss: 5.3199 - policy_loss: 4.0362 - value_loss: 0.2438 - policy_acc: 0.1127 - val_loss: 4.2655 - val_policy_loss: 3.2298 - val_value_loss: 0.1970 - val_policy_acc: 0.2589
+Epoch 2/6
+ - 362s - loss: 3.5633 - policy_loss: 2.6872 - value_loss: 0.1720 - policy_acc: 0.3661 - val_loss: 3.1971 - val_policy_loss: 2.4148 - val_value_loss: 0.1457 - val_policy_acc: 0.4233
+Epoch 3/6
+ - 362s - loss: 3.0112 - policy_loss: 2.2783 - value_loss: 0.1299 - policy_acc: 0.4623 - val_loss: 2.9478 - val_policy_loss: 2.2396 - val_value_loss: 0.1145 - val_policy_acc: 0.4654
+Epoch 4/6
+ - 363s - loss: 2.8044 - policy_loss: 2.1340 - value_loss: 0.1025 - policy_acc: 0.5042 - val_loss: 2.8151 - val_policy_loss: 2.1462 - val_value_loss: 0.0975 - val_policy_acc: 0.4969
+Epoch 5/6
+ - 368s - loss: 2.6658 - policy_loss: 2.0380 - value_loss: 0.0830 - policy_acc: 0.5340 - val_loss: 2.7129 - val_policy_loss: 2.0763 - val_value_loss: 0.0818 - val_policy_acc: 0.5182
+Epoch 6/6
+ - 365s - loss: 2.5586 - policy_loss: 1.9627 - value_loss: 0.0690 - policy_acc: 0.5603 - val_loss: 2.6360 - val_policy_loss: 2.0251 - val_value_loss: 0.0680 - val_policy_acc: 0.5372
 
+res 4:
+
+Epoch 1/6
+ - 316s - loss: 5.3679 - policy_loss: 4.0770 - value_loss: 0.2360 - policy_acc: 0.1040 - val_loss: 4.5240 - val_policy_loss: 3.4344 - val_value_loss: 0.1946 - val_policy_acc: 0.2123
+Epoch 2/6
+ - 314s - loss: 3.6101 - policy_loss: 2.7271 - value_loss: 0.1641 - policy_acc: 0.3591 - val_loss: 3.2151 - val_policy_loss: 2.4232 - val_value_loss: 0.1484 - val_policy_acc: 0.4269
+Epoch 3/6
+ - 311s - loss: 2.9988 - policy_loss: 2.2696 - value_loss: 0.1237 - policy_acc: 0.4651 - val_loss: 2.9441 - val_policy_loss: 2.2322 - val_value_loss: 0.1154 - val_policy_acc: 0.4726
+Epoch 4/6
+ - 312s - loss: 2.7893 - policy_loss: 2.1216 - value_loss: 0.0985 - policy_acc: 0.5093 - val_loss: 2.8007 - val_policy_loss: 2.1350 - val_value_loss: 0.0926 - val_policy_acc: 0.5000
+Epoch 5/6
+ - 312s - loss: 2.6506 - policy_loss: 2.0243 - value_loss: 0.0806 - policy_acc: 0.5394 - val_loss: 2.6746 - val_policy_loss: 2.0456 - val_value_loss: 0.0775 - val_policy_acc: 0.5286
+Epoch 6/6
+ - 313s - loss: 2.5423 - policy_loss: 1.9466 - value_loss: 0.0686 - policy_acc: 0.5661 - val_loss: 2.6199 - val_policy_loss: 2.0068 - val_value_loss: 0.0706 - val_policy_acc: 0.5369
+
+
+pol 32
+
+Epoch 1/6
+ - 250s - loss: 5.1029 - policy_loss: 3.8676 - value_loss: 0.2364 - policy_acc: 0.1432 - val_loss: 3.9395 - val_policy_loss: 2.9676 - val_value_loss: 0.1969 - val_policy_acc: 0.3099
+Epoch 2/6
+ - 248s - loss: 3.4182 - policy_loss: 2.5795 - value_loss: 0.1598 - policy_acc: 0.3890 - val_loss: 3.1758 - val_policy_loss: 2.3989 - val_value_loss: 0.1425 - val_policy_acc: 0.4337
+Epoch 3/6
+ - 249s - loss: 2.9444 - policy_loss: 2.2288 - value_loss: 0.1230 - policy_acc: 0.4788 - val_loss: 2.9028 - val_policy_loss: 2.2041 - val_value_loss: 0.1119 - val_policy_acc: 0.4855
+Epoch 4/6
+ - 249s - loss: 2.7297 - policy_loss: 2.0753 - value_loss: 0.0993 - policy_acc: 0.5281 - val_loss: 2.7549 - val_policy_loss: 2.1007 - val_value_loss: 0.0921 - val_policy_acc: 0.5190
+Epoch 5/6
+ - 249s - loss: 2.5762 - policy_loss: 1.9650 - value_loss: 0.0826 - policy_acc: 0.5682 - val_loss: 2.6571 - val_policy_loss: 2.0281 - val_value_loss: 0.0841 - val_policy_acc: 0.5423
+Epoch 6/6
+ - 250s - loss: 2.4579 - policy_loss: 1.8793 - value_loss: 0.0705 - policy_acc: 0.6010 - val_loss: 2.5900 - val_policy_loss: 1.9733 - val_value_loss: 0.0848 - val_policy_acc: 0.5638
+
+ pol 64
+ Epoch 1/6
+ - 261s - loss: 4.8907 - policy_loss: 3.6922 - value_loss: 0.2422 - policy_acc: 0.1713 - val_loss: 3.6709 - val_policy_loss: 2.7541 - val_value_loss: 0.1931 - val_policy_acc: 0.3467
+Epoch 2/6
+ - 259s - loss: 3.2039 - policy_loss: 2.3999 - value_loss: 0.1677 - policy_acc: 0.4307 - val_loss: 2.9981 - val_policy_loss: 2.2526 - val_value_loss: 0.1451 - val_policy_acc: 0.4605
+Epoch 3/6
+ - 258s - loss: 2.7726 - policy_loss: 2.0871 - value_loss: 0.1256 - policy_acc: 0.5242 - val_loss: 2.7758 - val_policy_loss: 2.0986 - val_value_loss: 0.1138 - val_policy_acc: 0.5117
+Epoch 4/6
+ - 259s - loss: 2.5380 - policy_loss: 1.9188 - value_loss: 0.0998 - policy_acc: 0.5860 - val_loss: 2.6018 - val_policy_loss: 1.9702 - val_value_loss: 0.0987 - val_policy_acc: 0.5614
+Epoch 5/6
+ - 260s - loss: 2.3701 - policy_loss: 1.7976 - value_loss: 0.0820 - policy_acc: 0.6360 - val_loss: 2.4797 - val_policy_loss: 1.8847 - val_value_loss: 0.0821 - val_policy_acc: 0.5923
+Epoch 6/6
+ - 259s - loss: 2.2436 - policy_loss: 1.7057 - value_loss: 0.0693 - policy_acc: 0.6760 - val_loss: 2.4057 - val_policy_loss: 1.8279 - val_value_loss: 0.0780 - val_policy_acc: 0.6174
+
+ pol 128
+ Epoch 1/6
+ - 288s - loss: 4.5336 - policy_loss: 3.4156 - value_loss: 0.2275 - policy_acc: 0.2266 - val_loss: 3.3285 - val_policy_loss: 2.4931 - val_value_loss: 0.1727 - val_policy_acc: 0.4037
+Epoch 2/6
+ - 303s - loss: 2.9711 - policy_loss: 2.2230 - value_loss: 0.1516 - policy_acc: 0.4813 - val_loss: 2.8203 - val_policy_loss: 2.1133 - val_value_loss: 0.1365 - val_policy_acc: 0.5130
+Epoch 3/6
+ - 304s - loss: 2.5709 - policy_loss: 1.9297 - value_loss: 0.1154 - policy_acc: 0.5826 - val_loss: 2.5848 - val_policy_loss: 1.9440 - val_value_loss: 0.1104 - val_policy_acc: 0.5726
+Epoch 4/6
+ - 304s - loss: 2.3319 - policy_loss: 1.7559 - value_loss: 0.0916 - policy_acc: 0.6542 - val_loss: 2.4425 - val_policy_loss: 1.8371 - val_value_loss: 0.0998 - val_policy_acc: 0.6133
+Epoch 5/6
+ - 304s - loss: 2.1706 - policy_loss: 1.6379 - value_loss: 0.0762 - policy_acc: 0.7062 - val_loss: 2.2882 - val_policy_loss: 1.7299 - val_value_loss: 0.0780 - val_policy_acc: 0.6574
+Epoch 6/6
+ - 304s - loss: 2.0566 - policy_loss: 1.5542 - value_loss: 0.0653 - policy_acc: 0.7429 - val_loss: 2.1865 - val_policy_loss: 1.6544 - val_value_loss: 0.0694 - val_policy_acc: 0.6943

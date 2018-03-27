@@ -72,7 +72,7 @@ class ColosusModel:
             res_out = x
 
             # for policy output
-            x = Conv2D(filters=16, kernel_size=1, padding="same", data_format=data_format, use_bias=False,
+            x = Conv2D(filters=self.config.policy_conv_size, kernel_size=1, padding="same", data_format=data_format, use_bias=False,
                        kernel_regularizer=self.reg,
                        name="policy_conv-1-2")(res_out)
             x = BatchNormalization(axis=bn_axis, name="policy_batchnorm")(x)

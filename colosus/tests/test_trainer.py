@@ -21,15 +21,16 @@ class Person:
 
 class TrainerTestCase(unittest.TestCase):
     def test_train(self):
-        train_filename = "c_27_1100_1600.dat"
-        weights_filename = "x_leaky.h5"
-        # prev_weights_filename = "c_26_1100_1600.h5"
-        prev_weights_filename = None
+        train_filename = "c_30_1100_1600.dat"
+        weights_filename = "xxc_30_1100_1600.h5"
+        prev_weights_filename = "xxc_30_1100_1600.h5"
+        # prev_weights_filename = None
 
         trainer_config = TrainerConfig()
-        trainer_config.colosus_config.lr = 0.0001
+        trainer_config.colosus_config.lr = 0.00001
+        trainer_config.colosus_config.residual_blocks = 4
         trainer = Trainer(trainer_config)
-        trainer.train(train_filename, weights_filename, 5, prev_weights_filename)
+        trainer.train(train_filename, weights_filename, 6, prev_weights_filename)
 
     def test_train_multi(self):
         print("training c_30_1100_1600.h5...")
@@ -84,21 +85,26 @@ class TrainerTestCase(unittest.TestCase):
             "c_23_1000_1600.dat",
             "c_24_1000_1600.dat",
             "c_25_1000_1600.dat",
-            "c_26_1000_1600.dat",
-            "c_27_1000_1600.dat"
+            "c_26_1100_1600.dat",
+            "c_27_1100_1600.dat",
+            "c_28_1100_1600.dat",
+            "c_29_1100_1600.dat",
+            "c_30_1100_1600.dat"
         ]
 
         for f in train_filenames:
-            assert os.path.isfile(f)
+            if not os.path.isfile(f):
+                print(f"file {f} not exists")
+                raise Exception()
 
         trainer_config = TrainerConfig()
         trainer_config.colosus_config.residual_blocks = 4
         trainer = Trainer(trainer_config)
 
         def get_weights_fname(tf):
-            return "x" + tf.split(".")[0] + ".h5"
+            return "xx" + tf.split(".")[0] + ".h5"
 
-        for i in range(len(train_filenames)):
+        for i in range(0, len(train_filenames)):
             if i == 0:
                 prev_weights_filename = None
                 trainer_config.colosus_config.lr = 0.0003

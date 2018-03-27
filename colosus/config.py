@@ -3,7 +3,8 @@ class ColosusConfig:
         self.thread_safe = False
         self.lr = 0.0005
         self.conv_size = 120
-        self.residual_blocks = 3
+        self.policy_conv_size = 32
+        self.residual_blocks = 4
         self.regularizer = 2e-5
         self.data_format_channel_last = True
         self.half_memory = False
@@ -19,7 +20,7 @@ class StateConfig:
 
 class SearchConfig:
     def __init__(self):
-        self.move_count_temp0 = 22
+        self.move_count_temp0 = 34
         self.temp0 = 1.0
         self.tempf = 0.1
         self.workers = 8
@@ -76,7 +77,7 @@ class PlayerConfig:
 
 class MatchConfig:
     def __init__(self):
-        self.weights_filename = "./colosus/tests/c_27_1100_1600.h5"
+        self.weights_filename = "./colosus/tests/xxc_30_1100_1600.h5"
         self.colosus_config = ColosusConfig()
         self.player_config = PlayerConfig()
         self.mp = False
