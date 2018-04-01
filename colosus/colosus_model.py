@@ -175,7 +175,7 @@ class ColosusModel:
         with self.graph.as_default():
             with self.session.as_default():
                 self.model.fit(boards, [policies, values],
-                               batch_size=256,
+                               batch_size=384,
                                epochs=epochs,
                                shuffle=True,
                                validation_split=0.02,
