@@ -57,11 +57,11 @@ class SelfPlayTestCase(unittest.TestCase):
         self_play = SelfPlay(config)
         # self_play.play(1000, 200, pos, colosus, "t2_1_1000_200.dat")
         # self_play.play_parallel(500, 300, pos, "c_7_500_300.dat", 4, "c_6_400_400.h5")
-        self_play.play_parallel(600, 400, pos, "c_1_600_1600.dat", 8, "c_1_500_1600.h5")
+        self_play.play_parallel(200, 400, pos, "c_1_600_1600.dat", 8, "c_1_500_1600.h5")
 
         print("fin. time: " + str(time.time() - start_time))
 
-    def test_play_mp(self):
+    def test_plokay_mp(self):
         # TrainerTestCase().test_train_multi()
 
         pos = Position()
@@ -69,14 +69,16 @@ class SelfPlayTestCase(unittest.TestCase):
         start_time = time.time()
 
         config = SelfPlayMpConfig()
+        config.search_config.temp0 = 1.25
+        config.search_config.tempf = 0.2
         self_play = SelfPlayMp(config)
-        train_filename = "c_34_4_1400_1600.dat"
-        self_play.play(300, 1600, pos, train_filename, 16, "c_33_1400_1600.h5")
-        TrainRecordSet.merge_and_rotate(train_filename, 16)
+        train_filename = "c_39_1_2800_1600.dat"
+        self_play.play(900, 1600, pos, train_filename, 18, "c_38_3900_1600.h5")
+        TrainRecordSet.merge_and_rotate(train_filename, 18)
         print("fin. time: " + str(time.time() - start_time))
 
-        TrainRecordSetTestCase().test_merge()
-        TrainerTestCase().test_train_multi()
+        # TrainRecordSetTestCase().test_merge()
+        # TrainerTestCase().test_train_multi()
 
 
 if __name__ == '__main__':
