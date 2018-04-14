@@ -19,7 +19,7 @@ class EvaluatorTestCase(unittest.TestCase):
         config.player2_config.search_config.temp0 = 0.5
         evaluator = Evaluator(config)
 
-        evaluator.evaluate(200, 256, pos, "xxc_27_1100_1600.h5", "c_38_3900_1600.h5")
+        evaluator.evaluate(200, 256, pos, "c_39_2800_1600.h5", "c_39_3000_1600.h5")
 
     def test_evaluate2(self):
         pos = Position()
