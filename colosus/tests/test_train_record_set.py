@@ -27,11 +27,13 @@ class TrainRecordSetTestCase(unittest.TestCase):
 
     def test_merge(self):
         files = [
-            'c_39_1_2800_1600.dat',
-            'c_39_2_2800_1600.dat',
-            'c_39_3_2800_1600.dat',
-            'c_39_4_2800_1600.dat',
-            'c_39_8_2800_1600.dat'
+            'c_45_0_10100_800.dat',
+            'c_45_1_10100_800.dat',
+            'c_45_2_10100_800.dat',
+            'c_45_3_10100_800.dat',
+            'c_45_4_10100_800.dat',
+            'c_45_5_10100_800.dat',
+            'c_45_6_10100_800.dat'
         ]
 
         recordset = TrainRecordSet()
@@ -42,7 +44,7 @@ class TrainRecordSetTestCase(unittest.TestCase):
 
         random.shuffle(recordset.records)
 
-        recordset.save_to_file('c_39_3000_1600.dat')
+        recordset.save_to_file('c_45_10100_800.dat')
 
     def test_truncate(self):
         input = 'c_16_800_1600.dat'

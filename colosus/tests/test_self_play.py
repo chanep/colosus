@@ -65,15 +65,13 @@ class SelfPlayTestCase(unittest.TestCase):
         # TrainerTestCase().test_train_multi()
 
         pos = Position()
-
         start_time = time.time()
-
         config = SelfPlayMpConfig()
-        config.search_config.temp0 = 0.8
-        config.search_config.tempf = 0.2
+        config.search_config.temp0 = 0.6
+        config.search_config.tempf = 0.3
         self_play = SelfPlayMp(config)
-        train_filename = "c_39_8_2800_1600.dat"
-        self_play.play(200, 1600, pos, train_filename, 18, "c_38_3900_1600.h5")
+        train_filename = "c_45_6_10100_800.dat"
+        self_play.play(600, 800, pos, train_filename, 18, "c_44_10100_800.h5")
         TrainRecordSet.merge_and_rotate(train_filename, 18)
         print("fin. time: " + str(time.time() - start_time))
 

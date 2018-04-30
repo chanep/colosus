@@ -77,7 +77,7 @@ class PlayerConfig:
 
 class MatchConfig:
     def __init__(self):
-        self.weights_filename = "./colosus/tests/c_39_3000_1600.h5"
+        self.weights_filename = "./colosus/tests/c_45_10100_800.h5"
         self.colosus_config = ColosusConfig()
         self.player_config = PlayerConfig()
         self.mp = False

@@ -148,3 +148,245 @@ Epoch 6/6
 training finished!
 Epoch 8/8
  - 176s - loss: 1.6469 - policy_loss: 1.2552 - value_loss: 0.0100 - policy_acc: 0.8936 - val_loss: 2.0812 - val_policy_loss: 1.5847 - val_value_loss: 0.0323 - val_policy_acc: 0.6940
+
+
+
+vs c39
+ game: 200, 64.5-135.5, wr2:67.8%, black:30.2%, mc1: 42.3, mc2: 39.5
+
+vs xxc27
+ game: 200, 70.0-130.0, wr2:65.0%, black:23.0%, mc1: 32.8, mc2: 34.8
+
+
+c_40_1_3200_1600
+----------------
+Train on 152158 samples, validate on 3106 samples
+Epoch 1/5
+ - 131s - loss: 1.9153 - policy_loss: 1.4289 - value_loss: 0.0644 - policy_acc: 0.6932 - val_loss: 1.8897 - val_policy_loss: 1.4165 - val_value_loss: 0.0558 - val_policy_acc: 0.6996
+Epoch 2/5
+ - 127s - loss: 1.8054 - policy_loss: 1.3544 - value_loss: 0.0495 - policy_acc: 0.7312 - val_loss: 1.8858 - val_policy_loss: 1.4105 - val_value_loss: 0.0599 - val_policy_acc: 0.7025
+Epoch 3/5
+ - 127s - loss: 1.7386 - policy_loss: 1.3082 - value_loss: 0.0405 - policy_acc: 0.7570 - val_loss: 1.8679 - val_policy_loss: 1.4049 - val_value_loss: 0.0489 - val_policy_acc: 0.7057
+Epoch 4/5
+ - 127s - loss: 1.6872 - policy_loss: 1.2722 - value_loss: 0.0341 - policy_acc: 0.7796 - val_loss: 1.8688 - val_policy_loss: 1.4037 - val_value_loss: 0.0512 - val_policy_acc: 0.7106
+Epoch 5/5
+ - 127s - loss: 1.6459 - policy_loss: 1.2435 - value_loss: 0.0283 - policy_acc: 0.7978 - val_loss: 1.8840 - val_policy_loss: 1.4152 - val_value_loss: 0.0519 - val_policy_acc: 0.7019
+training finished!
+2018-04-16 10:18:55.292333: I C:\tf_jenkins\workspace\rel-win\M\windows-gpu\PY\36\tensorflow\core\common_runtime\gpu\gpu_device.cc:1312] Adding visible gpu devices: 0
+2018-04-16 10:18:55.292755: I C:\tf_jenkins\workspace\rel-win\M\windows-gpu\PY\36\tensorflow\core\common_runtime\gpu\gpu_device.cc:993] Creating TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 137 MB memory) -> physical GPU (device: 0, name: GeForce GTX 1050 Ti, pci bus id: 0000:09:00.0, compute capability: 6.1)
+training...
+Train on 152158 samples, validate on 3106 samples
+Epoch 1/5
+ - 128s - loss: 1.6023 - policy_loss: 1.2128 - value_loss: 0.0235 - policy_acc: 0.8193 - val_loss: 1.8713 - val_policy_loss: 1.4111 - val_value_loss: 0.0447 - val_policy_acc: 0.7151
+Epoch 2/5
+ - 127s - loss: 1.5840 - policy_loss: 1.2002 - value_loss: 0.0211 - policy_acc: 0.8283 - val_loss: 1.8743 - val_policy_loss: 1.4133 - val_value_loss: 0.0449 - val_policy_acc: 0.7083
+Epoch 3/5
+ - 127s - loss: 1.5704 - policy_loss: 1.1906 - value_loss: 0.0194 - policy_acc: 0.8350 - val_loss: 1.8815 - val_policy_loss: 1.4189 - val_value_loss: 0.0451 - val_policy_acc: 0.7077
+Epoch 4/5
+ - 127s - loss: 1.5596 - policy_loss: 1.1831 - value_loss: 0.0179 - policy_acc: 0.8412 - val_loss: 1.8837 - val_policy_loss: 1.4207 - val_value_loss: 0.0451 - val_policy_acc: 0.7070
+Epoch 5/5
+ - 127s - loss: 1.5499 - policy_loss: 1.1765 - value_loss: 0.0165 - policy_acc: 0.8460 - val_loss: 1.8867 - val_policy_loss: 1.4236 - val_value_loss: 0.0445 - val_policy_acc: 0.7115
+training finished!
+
+
+c_40_2_3200_1600
+----------------
+Train on 187760 samples, validate on 3832 samples
+Epoch 1/5
+ - 159s - loss: 1.9907 - policy_loss: 1.4789 - value_loss: 0.0769 - policy_acc: 0.6774 - val_loss: 1.9463 - val_policy_loss: 1.4546 - val_value_loss: 0.0641 - val_policy_acc: 0.6944
+Epoch 2/5
+ - 157s - loss: 1.8697 - policy_loss: 1.3997 - value_loss: 0.0562 - policy_acc: 0.7163 - val_loss: 1.9139 - val_policy_loss: 1.4335 - val_value_loss: 0.0582 - val_policy_acc: 0.6921
+Epoch 3/5
+ - 157s - loss: 1.7975 - policy_loss: 1.3499 - value_loss: 0.0461 - policy_acc: 0.7435 - val_loss: 1.9102 - val_policy_loss: 1.4327 - val_value_loss: 0.0550 - val_policy_acc: 0.6965
+Epoch 4/5
+ - 157s - loss: 1.7407 - policy_loss: 1.3093 - value_loss: 0.0395 - policy_acc: 0.7684 - val_loss: 1.8945 - val_policy_loss: 1.4235 - val_value_loss: 0.0503 - val_policy_acc: 0.6970
+Epoch 5/5
+ - 157s - loss: 1.6933 - policy_loss: 1.2755 - value_loss: 0.0339 - policy_acc: 0.7900 - val_loss: 1.9216 - val_policy_loss: 1.4400 - val_value_loss: 0.0562 - val_policy_acc: 0.6996
+training finished!
+2018-04-16 10:48:50.642348: I C:\tf_jenkins\workspace\rel-win\M\windows-gpu\PY\36\tensorflow\core\common_runtime\gpu\gpu_device.cc:1312] Adding visible gpu devices: 0
+2018-04-16 10:48:50.642680: I C:\tf_jenkins\workspace\rel-win\M\windows-gpu\PY\36\tensorflow\core\common_runtime\gpu\gpu_device.cc:993] Creating TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 137 MB memory) -> physical GPU (device: 0, name: GeForce GTX 1050 Ti, pci bus id: 0000:09:00.0, compute capability: 6.1)
+training...
+Train on 187760 samples, validate on 3832 samples
+Epoch 1/5
+ - 158s - loss: 1.6416 - policy_loss: 1.2391 - value_loss: 0.0278 - policy_acc: 0.8132 - val_loss: 1.9147 - val_policy_loss: 1.4415 - val_value_loss: 0.0478 - val_policy_acc: 0.7002
+Epoch 2/5
+ - 157s - loss: 1.6197 - policy_loss: 1.2237 - value_loss: 0.0250 - policy_acc: 0.8245 - val_loss: 1.9101 - val_policy_loss: 1.4381 - val_value_loss: 0.0474 - val_policy_acc: 0.7098
+Epoch 3/5
+ - 157s - loss: 1.6043 - policy_loss: 1.2128 - value_loss: 0.0231 - policy_acc: 0.8318 - val_loss: 1.9149 - val_policy_loss: 1.4424 - val_value_loss: 0.0467 - val_policy_acc: 0.7067
+Epoch 4/5
+ - 156s - loss: 1.5909 - policy_loss: 1.2035 - value_loss: 0.0213 - policy_acc: 0.8389 - val_loss: 1.9197 - val_policy_loss: 1.4474 - val_value_loss: 0.0451 - val_policy_acc: 0.7106
+Epoch 5/5
+ - 157s - loss: 1.5797 - policy_loss: 1.1957 - value_loss: 0.0199 - policy_acc: 0.8444 - val_loss: 1.9205 - val_policy_loss: 1.4483 - val_value_loss: 0.0448 - val_policy_acc: 0.7067
+training finished!
+
+
+
+c_40_3_3200_1600
+----------------
+
+Train on 240813 samples, validate on 4915 samples
+Epoch 1/5
+ - 203s - loss: 2.1545 - policy_loss: 1.6040 - value_loss: 0.0843 - policy_acc: 0.6477 - val_loss: 2.0960 - val_policy_loss: 1.5652 - val_value_loss: 0.0752 - val_policy_acc: 0.6629
+Epoch 2/5
+ - 201s - loss: 2.0289 - policy_loss: 1.5216 - value_loss: 0.0626 - policy_acc: 0.6890 - val_loss: 2.0782 - val_policy_loss: 1.5528 - val_value_loss: 0.0726 - val_policy_acc: 0.6730
+Epoch 3/5
+ - 201s - loss: 1.9526 - policy_loss: 1.4694 - value_loss: 0.0508 - policy_acc: 0.7179 - val_loss: 2.0591 - val_policy_loss: 1.5451 - val_value_loss: 0.0622 - val_policy_acc: 0.6741
+Epoch 4/5
+ - 201s - loss: 1.8923 - policy_loss: 1.4264 - value_loss: 0.0435 - policy_acc: 0.7452 - val_loss: 2.0547 - val_policy_loss: 1.5425 - val_value_loss: 0.0602 - val_policy_acc: 0.6779
+Epoch 5/5
+ - 200s - loss: 1.8423 - policy_loss: 1.3912 - value_loss: 0.0367 - policy_acc: 0.7673 - val_loss: 2.0645 - val_policy_loss: 1.5528 - val_value_loss: 0.0565 - val_policy_acc: 0.6783
+training finished!
+2018-04-16 11:20:01.488369: I C:\tf_jenkins\workspace\rel-win\M\windows-gpu\PY\36\tensorflow\core\common_runtime\gpu\gpu_device.cc:1312] Adding visible gpu devices: 0
+2018-04-16 11:20:01.488655: I C:\tf_jenkins\workspace\rel-win\M\windows-gpu\PY\36\tensorflow\core\common_runtime\gpu\gpu_device.cc:993] Creating TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 137 MB memory) -> physical GPU (device: 0, name: GeForce GTX 1050 Ti, pci bus id: 0000:09:00.0, compute capability: 6.1)
+training...
+Train on 240813 samples, validate on 4915 samples
+Epoch 1/5
+ - 203s - loss: 1.7842 - policy_loss: 1.3503 - value_loss: 0.0296 - policy_acc: 0.7970 - val_loss: 2.0600 - val_policy_loss: 1.5455 - val_value_loss: 0.0612 - val_policy_acc: 0.6891
+Epoch 2/5
+ - 201s - loss: 1.7611 - policy_loss: 1.3342 - value_loss: 0.0264 - policy_acc: 0.8085 - val_loss: 2.0566 - val_policy_loss: 1.5497 - val_value_loss: 0.0524 - val_policy_acc: 0.6840
+Epoch 3/5
+ - 201s - loss: 1.7441 - policy_loss: 1.3222 - value_loss: 0.0242 - policy_acc: 0.8171 - val_loss: 2.0630 - val_policy_loss: 1.5546 - val_value_loss: 0.0525 - val_policy_acc: 0.6838
+Epoch 4/5
+ - 201s - loss: 1.7294 - policy_loss: 1.3118 - value_loss: 0.0224 - policy_acc: 0.8245 - val_loss: 2.0712 - val_policy_loss: 1.5607 - val_value_loss: 0.0530 - val_policy_acc: 0.6836
+Epoch 5/5
+ - 201s - loss: 1.7173 - policy_loss: 1.3029 - value_loss: 0.0212 - policy_acc: 0.8318 - val_loss: 2.0705 - val_policy_loss: 1.5613 - val_value_loss: 0.0514 - val_policy_acc: 0.6852
+training finished!
+
+c_40_4_3200_1600
+----------------
+
+Train on 292557 samples, validate on 5971 samples
+Epoch 1/5
+ - 247s - loss: 2.1727 - policy_loss: 1.6192 - value_loss: 0.0833 - policy_acc: 0.6470 - val_loss: 2.1452 - val_policy_loss: 1.6066 - val_value_loss: 0.0723 - val_policy_acc: 0.6496
+Epoch 2/5
+ - 244s - loss: 2.0409 - policy_loss: 1.5314 - value_loss: 0.0617 - policy_acc: 0.6877 - val_loss: 2.1124 - val_policy_loss: 1.5870 - val_value_loss: 0.0633 - val_policy_acc: 0.6578
+Epoch 3/5
+ - 244s - loss: 1.9605 - policy_loss: 1.4750 - value_loss: 0.0509 - policy_acc: 0.7181 - val_loss: 2.0996 - val_policy_loss: 1.5809 - val_value_loss: 0.0569 - val_policy_acc: 0.6619
+Epoch 4/5
+ - 244s - loss: 1.8953 - policy_loss: 1.4281 - value_loss: 0.0431 - policy_acc: 0.7470 - val_loss: 2.0959 - val_policy_loss: 1.5809 - val_value_loss: 0.0522 - val_policy_acc: 0.6627
+Epoch 5/5
+ - 244s - loss: 1.8428 - policy_loss: 1.3899 - value_loss: 0.0373 - policy_acc: 0.7692 - val_loss: 2.0979 - val_policy_loss: 1.5833 - val_value_loss: 0.0504 - val_policy_acc: 0.6707
+training finished!
+2018-04-16 12:05:22.764974: I C:\tf_jenkins\workspace\rel-win\M\windows-gpu\PY\36\tensorflow\core\common_runtime\gpu\gpu_device.cc:1312] Adding visible gpu devices: 0
+2018-04-16 12:05:22.765396: I C:\tf_jenkins\workspace\rel-win\M\windows-gpu\PY\36\tensorflow\core\common_runtime\gpu\gpu_device.cc:993] Creating TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 137 MB memory) -> physical GPU (device: 0, name: GeForce GTX 1050 Ti, pci bus id: 0000:09:00.0, compute capability: 6.1)
+training...
+Train on 292557 samples, validate on 5971 samples
+Epoch 1/5
+ - 245s - loss: 1.7806 - policy_loss: 1.3455 - value_loss: 0.0304 - policy_acc: 0.7993 - val_loss: 2.0945 - val_policy_loss: 1.5816 - val_value_loss: 0.0490 - val_policy_acc: 0.6726
+Epoch 2/5
+ - 244s - loss: 1.7560 - policy_loss: 1.3280 - value_loss: 0.0275 - policy_acc: 0.8119 - val_loss: 2.1090 - val_policy_loss: 1.5932 - val_value_loss: 0.0489 - val_policy_acc: 0.6741
+Epoch 3/5
+ - 243s - loss: 1.7378 - policy_loss: 1.3149 - value_loss: 0.0255 - policy_acc: 0.8214 - val_loss: 2.1151 - val_policy_loss: 1.6001 - val_value_loss: 0.0461 - val_policy_acc: 0.6662
+Epoch 4/5
+ - 243s - loss: 1.7222 - policy_loss: 1.3037 - value_loss: 0.0236 - policy_acc: 0.8291 - val_loss: 2.1115 - val_policy_loss: 1.5991 - val_value_loss: 0.0436 - val_policy_acc: 0.6716
+Epoch 5/5
+ - 243s - loss: 1.7085 - policy_loss: 1.2939 - value_loss: 0.0220 - policy_acc: 0.8359 - val_loss: 2.1142 - val_policy_loss: 1.6013 - val_value_loss: 0.0433 - val_policy_acc: 0.6674
+training finished!
+
+
+4000
+50%
+
+3405
+game: 100, 43.5-56.5, wr2:56.5%, black:26.5%, mc1: 42.3, mc2: 43.6
+
+3406
+game: 200, 102.0-98.0, wr2:49.0%, black:24.5%, mc1: 40.5, mc2: 48.6
+
+3407
+game: 51, 25.5-25.5, wr2:50.0%, black:20.6%, mc1: 43.5, mc2: 45.3
+
+
+
+
+c39 vs c40
+ game: 200, 64.5-135.5, wr2:67.8%, black:30.2%, mc1: 42.3, mc2: 39.5
+
+xxc27 vs c40
+ game: 200, 70.0-130.0, wr2:65.0%, black:23.0%, mc1: 32.8, mc2: 34.8
+
+
+40 vs 41
+game: 108, 24.0-84.0, wr2:77.8%, black:37.0%, mc1: 50.3, mc2: 39.4
+
+xxc27 vs 41
+game: 143, 43.0-100.0, wr2:69.9%, black:29.4%, mc1: 32, mc2: 40.9
+
+
+41 vs 42
+game: 120, 42.5-77.5, wr2:64.6%, black:27.1%, mc1: 43, mc2: 44.3
+
+xxc27 vs 42
+game: 135, 45.0-90.0, wr2:66.7%, black:26.7%, mc1: 30.1, mc2: 41.1
+
+c_43_5400_800
+-------------
+ - 1042s - loss: 1.7439 - policy_loss: 1.3280 - value_loss: 0.0254 - policy_acc: 0.8077 - val_loss: 1.8256 - val_policy_loss: 1.3850 - val_value_loss: 0.0358 - val_policy_acc: 0.7747
+
+ xxc27 vs 43
+ game: 148, 39.0-109.0, wr2:73.6%, black:31.8%, mc1: 28, mc2: 42
+
+ delphi vs 43
+ 2 - 4
+
+ 42 vs 43
+game: 126, 39.5-86.5, wr2:68.7%, black:32.9%, mc1: 48.2, mc2: 42.8
+
+
+c_44_7300_800
+-------------
+xxc27 vs c_44_7300_800
+game: 153, 37.5-115.5, wr2:75.5%, black:44.1%, mc1: 39.2, mc2: 41.3
+
+Delphi vs c_44_7300_800
+2 - 4
+
+c43 vs c_44_7300_800
+game: 58, 12.5-45.5, wr2:78.4%, black:42.2%, mc1: 60.7, mc2: 42.2
+
+
+c_44_7300_800_0
+---------------
+
+xxc27 vs c_44_7300_800_0
+game: 161, 30.0-131.0, wr2:81.4%, black:34.8%, mc1: 30.4, mc2: 39.5
+
+c_44_7300_800 vs c_44_7300_800_0
+game: 122, 69.5-52.5, wr2:43.0%, black:25.8%, mc1: 40.1, mc2: 41.7
+
+
+c_44_7300_800_6
+---------------
+
+xxc27 vs c_44_7300_800_6
+game: 200, 38.0-162.0, wr2:81.0%, black:32.0%, mc1: 29.7, mc2: 44
+
+c_44_7300_800 vs c_44_7300_800_6
+game: 131, 65.0-66.0, wr2:50.4%, black:18.3%, mc1: 42.8, mc2: 39.7
+
+
+c_44_7300_800_60
+----------------
+
+xxc27 vs c_44_7300_800_60
+game: 153, 26.0-127.0, wr2:83.0%, black:37.3%, mc1: 31.4, mc2: 38
+
+c_44_7300_800 vs c_44_7300_800_60
+game: 112, 48.5-63.5, wr2:56.7%, black:29.0%, mc1: 38.9, mc2: 35.1
+
+delphi vs c_44_7300_800_60
+3 - 3
+
+
+c_45_10100_800
+--------------
+
+xxc27 vs c_45_10100_800
+game: 168, 37.0-131.0, wr2:78.0%, black:36.3%, mc1: 37.1, mc2: 40
+
+c_44 vs c_45_10100_800
+game: 64, 26.0-38.0, wr2:59.4%, black:29.7%, mc1: 50.4, mc2: 38.2
+
+Delphi vs c_45_10100_800
+
+

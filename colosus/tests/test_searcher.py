@@ -44,6 +44,8 @@ class SearcherTestCase(unittest.TestCase):
         searcher = Searcher(config)
         state = State(pos, None, None, colosus, StateConfig())
 
+        searcher.search(state, 10)
+
         start = time.time()
         policy, value, move, new_state = searcher.search(state, 256)
 
