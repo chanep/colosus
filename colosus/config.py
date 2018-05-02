@@ -16,6 +16,7 @@ class StateConfig:
         self.noise_alpha = 0.3
         self.noise_factor = 0.25
         self.backup_factor = 0.9999
+        self.policy_offset = -0.6
 
 
 class SearchConfig:

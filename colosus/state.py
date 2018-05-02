@@ -38,7 +38,7 @@ class State:
         for i in range(policy_len):
             child = self.children()[i]
             if child is not None:
-                policy[i] = child.N / self.N
+                policy[i] = abs(child.N + self.config.policy_offset) / self.N
         return policy
 
     def play(self, temperature) -> (int, float, int, 'State'):
