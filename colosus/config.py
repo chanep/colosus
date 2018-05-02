@@ -20,8 +20,8 @@ class StateConfig:
 
 class SearchConfig:
     def __init__(self):
-        self.move_count_temp0 = 40
-        self.temp0 = 1.0
+        self.move_count_temp0 = 45
+        self.temp0 = [[1.0], [1.0]]
         self.tempf = 0.1
         self.workers = 8
         self.mp_cpuct_factor = 0.5
@@ -59,8 +59,8 @@ class EvaluatorConfig:
         self.player2_config = PlayerConfig()
         self.player_config.search_config.move_count_temp0 = 38
         self.player2_config.search_config.move_count_temp0 = 38
-        self.player_config.search_config.temp0 = 0.75
-        self.player2_config.search_config.temp0 = 0.75
+        self.player_config.search_config.temp0 = [[1.0], [0.75]]
+        self.player2_config.search_config.temp0 = [[1.0], [0.75]]
         self.player2_is_mp = False
         self.iterations_mp_factor = 0.4
 
@@ -71,7 +71,7 @@ class PlayerConfig:
         self.search_config = SearchConfig()
         self.state_config.noise_factor = 0.0
         self.search_config.move_count_temp0 = 20
-        self.search_config.temp0 = 0.5
+        self.search_config.temp0 = [[1.0], [0.5]]
         self.search_config.tempf = 0.01
 
 

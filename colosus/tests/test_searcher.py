@@ -56,6 +56,17 @@ class SearcherTestCase(unittest.TestCase):
 
         print("value: " + str(value))
 
+    def test_get_temperature(self):
+        config = SearchConfig()
+        searcher = Searcher(config)
+        temp = searcher._get_temperature(10)
+        self.assertEqual(1.0, temp)
+
+        config.temp0 = [[0.3, 0.7], [1.4, 1]]
+        for i in range(10):
+            temp = searcher._get_temperature(10)
+            print(f'temp: {temp}')
+
 
     def test_search_mp(self):
         colosus = ColosusModel(ColosusConfig())
