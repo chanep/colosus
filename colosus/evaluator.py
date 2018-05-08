@@ -19,6 +19,9 @@ from colosus.state2 import State2
 class Evaluator:
     def __init__(self, config: EvaluatorConfig):
         self.config = config
+        self._initialize()
+
+    def _initialize(self):
         self.player = None
         self.player2 = None
         self.var = 0.0
@@ -29,6 +32,7 @@ class Evaluator:
         self.final_position_rotations = {}
 
     def evaluate(self, games: int, iterations: int, position_ini: Position, weights_filename, weights_filename2, iterations2=None):
+        self._initialize()
 
         iterations_player2 = iterations
         if iterations2 is not None:
