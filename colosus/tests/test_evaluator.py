@@ -15,6 +15,7 @@ class EvaluatorTestCase(unittest.TestCase):
         config = EvaluatorConfig()
         config.player_config.search_config.move_count_temp0 = 22
         config.player2_config.search_config.move_count_temp0 = 22
+
         config.player_config.search_config.temp0 = 0.75
         config.player2_config.search_config.temp0 = 0.75
         config.player_config.state_config.policy_offset = -0.75

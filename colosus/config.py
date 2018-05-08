@@ -50,6 +50,7 @@ class SelfPlayMpConfig:
         self.state_config = StateConfig()
         self.state_config.cpuct = 1.41 * 3
         self.search_config = SearchConfig()
+        self.search_config.temp0 = [[0.08, 0.42, 0.5], [1.45, 1.0, 0.8]]
 
 
 class EvaluatorConfig:

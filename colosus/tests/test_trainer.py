@@ -42,6 +42,7 @@ class TrainerTestCase(unittest.TestCase):
         print("training cpon_46_5000_800.h5...")
         train_filename = "cpon_46_5000_800.dat"
         weights_filename = "cpon_46_5000_800.h5"
+
         prev_weights_filename = "c_45_10100_800.h5"
         trainer_config = TrainerConfig()
         trainer_config.colosus_config.lr = 0.0001
@@ -51,10 +52,11 @@ class TrainerTestCase(unittest.TestCase):
         train_filename = "cpon_46_5000_800.dat"
         weights_filename = "cpon_46_5000_800.h5"
         prev_weights_filename = "cpon_46_5000_800.h5"
+
         trainer_config = TrainerConfig()
         trainer_config.colosus_config.lr = 0.00005
         trainer = Trainer(trainer_config)
-        trainer.train(train_filename, weights_filename, 2, prev_weights_filename)
+        trainer.train(train_filename, weights_filename, 1, prev_weights_filename)
 
         train_filename = "cpon_46_5000_800.dat"
         weights_filename = "cpon_46_5000_800.h5"
@@ -71,6 +73,7 @@ class TrainerTestCase(unittest.TestCase):
         trainer_config.colosus_config.lr = 0.00001
         trainer = Trainer(trainer_config)
         trainer.train(train_filename, weights_filename, 3, prev_weights_filename)
+
 
     def test_train_all(self):
         train_filenames = [
