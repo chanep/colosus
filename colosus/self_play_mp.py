@@ -68,7 +68,7 @@ class SelfPlayMp:
             game_records = []
             # game_records_z = []
             while not end:
-                policy, value, move, new_state = searcher.search(state, iterations_per_move)
+                policy, temp_policy, value, move, new_state = searcher.search(state, iterations_per_move)
                 if new_state is None:
                     new_state = State(state.position().move(move), None, None, colosus, self.config.state_config)
                 train_record = TrainRecord(state.position().to_model_position(), policy, value)

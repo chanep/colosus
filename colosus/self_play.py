@@ -38,7 +38,7 @@ class SelfPlay:
             game_records = []
             while not end:
                 # start_time = time.time()
-                policy, value, move, new_state = searcher.search(state, iterations_per_move)
+                policy, temp_policy, value, move, new_state = searcher.search(state, iterations_per_move)
                 print(f"value: {value}, newvalue: {new_state.Q}")
                 value_se += pow(value - new_state.Q, 2)
                 # print("time: " + str(time.time() - start_time))

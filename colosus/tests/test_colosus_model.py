@@ -116,7 +116,7 @@ class ColosusModelTestCase(unittest.TestCase):
         colosus.build()
         # colosus.load_weights("c_1_500_1600.h5")
         # colosus.load_weights("c_4_600_1600.h5")
-        colosus.load_weights("c_45_10100_800.h5")
+        colosus.load_weights("c_30_1100_1600.h5")
 
         pos.print()
 
@@ -131,16 +131,17 @@ class ColosusModelTestCase(unittest.TestCase):
         print('')
 
         search_config = SearchConfig()
+        search_config.temp0 = 1.45
         searcher = Searcher(search_config)
         state_config = StateConfig()
         state_config.noise_factor = 0
-        state_config.policy_offset = -0.75
+        state_config.policy_offset = -0
         state = State(pos, None, None, colosus, state_config)
-        policy, value, move, new_state = searcher.search(state, 800)
+        policy, temp_policy, value, move, new_state = searcher.search(state, 800)
         print("value: " + str(value))
         print("moves prob")
         sorted_policy = self.sort_policy(policy)
-        for i in range(10):
+        for i in range(15):
             m = sorted_policy[i]
             print("{} - {}".format(m[0], m[1]))
 
@@ -148,6 +149,14 @@ class ColosusModelTestCase(unittest.TestCase):
             c = state.children()[m]
             if c is not None:
                 print("{} N: {}, W: {:.3g}, Q: {:.3g}, p:{:.3g}".format(Square.to_string(m), c.N, c.W, c.Q, c.P))
+
+        print("temp_policy")
+        sorted_temp_policy = self.sort_policy(temp_policy)
+        for i in range(15):
+            m = sorted_temp_policy[i]
+            print("{} - {}".format(m[0], m[1]))
+
+        print("sum temp_policy: " + str(np.sum(temp_policy)))
 
     def test_predict_on_batch(self):
         pos = Position()

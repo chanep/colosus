@@ -19,7 +19,7 @@ class Player:
         self.searcher = Searcher(self.config.search_config)
 
     def move(self):
-        policy, value, move, new_state = self.searcher.search(self.state, self.iterations)
+        policy, policy_temp, value, move, new_state = self.searcher.search(self.state, self.iterations)
         old_state = self.state
         self.state = new_state
         return policy, value, move, old_state, new_state
