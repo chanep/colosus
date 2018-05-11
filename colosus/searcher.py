@@ -24,7 +24,7 @@ class Searcher:
                 index = np.random.choice(len(temp_prob), 1, p=temp_prob)[0]
                 return self.config.temp0[1][index]
             else:
-                self.config.temp0
+                return self.config.temp0
         else:
             return self.config.tempf
 

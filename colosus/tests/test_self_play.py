@@ -68,12 +68,13 @@ class SelfPlayTestCase(unittest.TestCase):
         start_time = time.time()
         config = SelfPlayMpConfig()
 
-        config.search_config.temp0 = [[0.08, 0.42, 0.5], [1.45, 1.0, 0.8]]
+        config.search_config.temp0 = [[0.07, 0.07, 0.40, 0.46], [1.45, 1.22, 1.0, 0.8]]
         config.search_config.tempf = 0.2
+        config.state_config.policy_offset = -0.75
         self_play = SelfPlayMp(config)
-        train_filename = "c_46_4_5000_800.dat"
+        train_filename = "ctapo_46_4_5000_800.dat"
 
-        self_play.play(1000, 800, pos, train_filename, 18, "c_45_10100_800.h5")
+        self_play.play(800, 800, pos, train_filename, 18, "c_45_10100_800.h5")
         TrainRecordSet.merge_and_rotate(train_filename, 18)
         print("fin. time: " + str(time.time() - start_time))
 

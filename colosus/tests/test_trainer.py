@@ -39,40 +39,38 @@ class TrainerTestCase(unittest.TestCase):
         # trainer.train(train_filename, weights_filename, 2, prev_weights_filename)
 
     def test_train_multi(self):
-        print("training cpon_46_5000_800.h5...")
-        train_filename = "cpon_46_5000_800.dat"
-        weights_filename = "cpon_46_5000_800.h5"
-
+        print("training ctapo_46_5000_800.h5...")
+        train_filename = "ctapo_46_5000_800.dat"
+        weights_filename = "ctapo_46_5000_800.h5"
         prev_weights_filename = "c_45_10100_800.h5"
         trainer_config = TrainerConfig()
         trainer_config.colosus_config.lr = 0.0001
         trainer = Trainer(trainer_config)
         trainer.train(train_filename, weights_filename, 1, prev_weights_filename)
 
-        train_filename = "cpon_46_5000_800.dat"
-        weights_filename = "cpon_46_5000_800.h5"
-        prev_weights_filename = "cpon_46_5000_800.h5"
-
+        train_filename = "ctapo_46_5000_800.dat"
+        weights_filename = "ctapo_46_5000_800.h5"
+        prev_weights_filename = "ctapo_46_5000_800.h5"
         trainer_config = TrainerConfig()
         trainer_config.colosus_config.lr = 0.00005
         trainer = Trainer(trainer_config)
         trainer.train(train_filename, weights_filename, 1, prev_weights_filename)
 
-        train_filename = "cpon_46_5000_800.dat"
-        weights_filename = "cpon_46_5000_800.h5"
-        prev_weights_filename = "cpon_46_5000_800.h5"
+        train_filename = "ctapo_46_5000_800.dat"
+        weights_filename = "ctapo_46_5000_800.h5"
+        prev_weights_filename = "ctapo_46_5000_800.h5"
         trainer_config = TrainerConfig()
         trainer_config.colosus_config.lr = 0.00002
         trainer = Trainer(trainer_config)
         trainer.train(train_filename, weights_filename, 2, prev_weights_filename)
 
-        train_filename = "cpon_46_5000_800.dat"
-        weights_filename = "cpon_46_5000_800.h5"
-        prev_weights_filename = "cpon_46_5000_800.h5"
+        train_filename = "ctapo_46_5000_800.dat"
+        weights_filename = "ctapo_46_5000_800.h5"
+        prev_weights_filename = "ctapo_46_5000_800.h5"
         trainer_config = TrainerConfig()
         trainer_config.colosus_config.lr = 0.00001
         trainer = Trainer(trainer_config)
-        trainer.train(train_filename, weights_filename, 3, prev_weights_filename)
+        trainer.train(train_filename, weights_filename, 2, prev_weights_filename)
 
 
     def test_train_all(self):
