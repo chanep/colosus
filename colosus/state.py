@@ -4,6 +4,7 @@ import types
 import numpy as np
 
 from colosus.config import StateConfig
+from colosus.game.square import Square
 from .game.position import Position
 from .colosus_model import ColosusModel
 
@@ -48,7 +49,7 @@ class State:
             temp_policy = np.zeros_like(policy)
             temp_policy[move] = 1.0
         else:
-            play_policy = np.clip(policy + (self.config.policy_offset / self.N), 0.0, None)
+            play_policy = np.clip(policy + self.config.policy_offset, 0.0, None)
             play_policy = play_policy / np.sum(play_policy)
 
             temp_policy = self.apply_temperature(play_policy, temperature)
@@ -182,3 +183,14 @@ class State:
 
     def is_root(self):
         return self.parent is None
+
+    @staticmethod
+    def print_policy(policy, limit):
+        move_policy = []
+        for m in range(len(policy)):
+            m_str = Square.to_string(m)
+            move_policy.append((m_str, policy[m]))
+        sorted_policy = sorted(move_policy, key=lambda t: t[1], reverse=True)
+        for i in range(limit):
+            m = sorted_policy[i]
+            print("{} - {}".format(m[0], m[1]))

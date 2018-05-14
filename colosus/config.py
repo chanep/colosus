@@ -16,7 +16,7 @@ class StateConfig:
         self.noise_alpha = 0.3
         self.noise_factor = 0.1
         self.backup_factor = 0.9999
-        self.policy_offset = -0.75
+        self.policy_offset = 0
 
 
 class SearchConfig:
@@ -50,7 +50,6 @@ class SelfPlayMpConfig:
         self.state_config = StateConfig()
         self.state_config.cpuct = 1.41 * 3
         self.search_config = SearchConfig()
-        self.search_config.temp0 = [[0.08, 0.42, 0.5], [1.45, 1.0, 0.8]]
 
 
 class EvaluatorConfig:
@@ -79,7 +78,7 @@ class PlayerConfig:
 
 class MatchConfig:
     def __init__(self):
-        self.weights_filename = "./colosus/tests/cpo_46_5000_800.h5"
+        self.weights_filename = "./colosus/tests/cpo99_46_5000_800.h5"
         self.colosus_config = ColosusConfig()
         self.player_config = PlayerConfig()
         self.mp = False

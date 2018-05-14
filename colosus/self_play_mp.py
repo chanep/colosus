@@ -73,6 +73,7 @@ class SelfPlayMp:
                     new_state = State(state.position().move(move), None, None, colosus, self.config.state_config)
                 train_record = TrainRecord(state.position().to_model_position(), policy, value)
                 # train_record_z = TrainRecord(state.position().to_model_position(), policy, value)
+                # print(f"child.N: {state.children()[move].N}, N: {state.N}")
                 game_records.append(train_record)
                 # game_records_z.append(train_record_z)
                 new_state.parent = None
@@ -80,6 +81,11 @@ class SelfPlayMp:
                 state = new_state
                 mc = state.position().move_count
                 # state.position().print()
+
+                # print("temp policy")
+                # State.print_policy(temp_policy, 10)
+                # print("policy")
+                # State.print_policy(policy, 10)
                 # print("mc: {}".format(state.position().move_count))
 
             state.position().print()
