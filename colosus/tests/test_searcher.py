@@ -47,7 +47,7 @@ class SearcherTestCase(unittest.TestCase):
         searcher.search(state, 10)
 
         start = time.time()
-        policy, value, move, new_state = searcher.search(state, 256)
+        policy, temp_policy, value, move, new_state = searcher.search(state, 256)
 
         print("time: " + str(time.time() - start))
 

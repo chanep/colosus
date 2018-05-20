@@ -4,6 +4,7 @@ import types
 import numpy as np
 
 from colosus.config import StateConfig
+from colosus.game.square import Square
 from .game.position import Position
 from .colosus_model import ColosusModel
 
@@ -38,22 +39,26 @@ class State:
         for i in range(policy_len):
             child = self.children()[i]
             if child is not None:
-                policy[i] = abs(child.N + self.config.policy_offset) / self.N
-        policy = policy / np.sum(policy)
+                policy[i] = child.N / self.N
         return policy
 
     def play(self, temperature) -> (int, float, int, 'State'):
         policy = self.get_policy()
         if temperature < 0.1:
             move = np.argmax(policy)
+            temp_policy = np.zeros_like(policy)
+            temp_policy[move] = 1.0
         else:
-            temp_policy = self.apply_temperature(policy, temperature)
+            play_policy = np.clip(policy + self.config.policy_offset, 0.0, None)
+            play_policy = play_policy / np.sum(play_policy)
+
+            temp_policy = self.apply_temperature(play_policy, temperature)
             move = np.random.choice(len(temp_policy), 1, p=temp_policy)[0]
         new_root_state = self.children()[move]
         new_root_state.parent = None
         self.noise = None
         value = -self.Q
-        return policy, value, move, new_root_state
+        return policy, temp_policy, value, move, new_root_state
 
     def play_static_policy(self, temperature) -> (int, float, int, 'State'):
         self.select()
@@ -178,3 +183,14 @@ class State:
 
     def is_root(self):
         return self.parent is None
+
+    @staticmethod
+    def print_policy(policy, limit):
+        move_policy = []
+        for m in range(len(policy)):
+            m_str = Square.to_string(m)
+            move_policy.append((m_str, policy[m]))
+        sorted_policy = sorted(move_policy, key=lambda t: t[1], reverse=True)
+        for i in range(limit):
+            m = sorted_policy[i]
+            print("{} - {}".format(m[0], m[1]))
