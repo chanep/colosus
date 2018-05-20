@@ -66,13 +66,15 @@ class State:
         value = - self.Q
         if temperature < 0.1:
             move = np.argmax(policy)
+            temp_policy = np.zeros_like(policy)
+            temp_policy[move] = 1.0
         else:
             temp_policy = self.apply_temperature(policy, temperature)
             move = np.random.choice(len(temp_policy), 1, p=temp_policy)[0]
         new_root_state = self.__class__(self.position().move(move), policy[move], None, self.colosus, self.config)
         new_root_state.Q = value
         self.noise = None
-        return policy, value, move, new_root_state
+        return policy, temp_policy, value, move, new_root_state
 
     def select(self):
         if self.is_leaf:
