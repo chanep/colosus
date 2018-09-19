@@ -27,6 +27,7 @@ class State:
         self._move = None
         self.noise = None
         self.legal_policy = None
+        self.policy = None
 
     @staticmethod
     def apply_temperature(policy, temperature):
@@ -105,16 +106,9 @@ class State:
         if self.position().is_end:
             value = self.position().score
         else:
-            legal_moves = self.position().legal_moves()
-            if len(legal_moves) == 0:
-                raise Exception('No legal moves but position is not end')
-            else:
-                self.is_leaf = False
-                policy, value = self.colosus.predict(self.position().to_model_position())
-                legal_policy = self._get_legal_policy(policy, legal_moves)
-                self.legal_policy = [None] * len(policy)
-                for m in legal_moves:
-                    self.legal_policy[m] = legal_policy[m]
+            policy, value = self.colosus.predict(self.position().to_model_position())
+            self.policy = policy
+            self.is_leaf = False
 
         self.backup(-value)
 
@@ -155,8 +149,17 @@ class State:
     def children(self):
         if self._children is not None:
             return self._children
-        if self.legal_policy is None:
+        if self.policy is None:
             return None
+
+        legal_moves = self.position().legal_moves()
+        if len(legal_moves) == 0:
+            raise Exception('No legal moves but position is not end')
+        else:
+            legal_policy = self._get_legal_policy(self.policy, legal_moves)
+            self.legal_policy = [None] * len(self.policy)
+            for m in legal_moves:
+                self.legal_policy[m] = legal_policy[m]
 
         self._children = [None] * len(self.legal_policy)
         for move in range(len(self.legal_policy)):

@@ -46,10 +46,20 @@ class SearcherTestCase(unittest.TestCase):
 
         searcher.search(state, 10)
 
+        # pr = cProfile.Profile()
+        # pr.enable()
+
         start = time.time()
         policy, temp_policy, value, move, new_state = searcher.search(state, 256)
 
         print("time: " + str(time.time() - start))
+
+        # pr.disable()
+        # s = io.StringIO()
+        # sortby = 'cumulative'
+        # ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+        # ps.print_stats()
+        # print(s.getvalue())
 
         state.print()
         new_state.print()
