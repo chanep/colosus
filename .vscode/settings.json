@@ -1,0 +1,5 @@
+{
+    "python.pythonPath": "${workspaceFolder}\\venv2\\Scripts\\python.exe",
+    "git.ignoreLimitWarning": true,
+    "eslint.enable": true
+}

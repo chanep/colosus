@@ -1,21 +1,20 @@
 import socketio from 'socket.io-client';
-import store from "./store"
-import { log } from 'util';
+import store from './store';
 
 let socket = socketio('http://localhost:5003', {transports: [/*'websockets',*/ 'polling']});
 
 socket.on('connect', () => {
-    console.log("conectado!!");
-})
+    console.log('conectado!!');
+});
 
 socket.on('status_update', (status) => {
-    console.log(status)
+    console.log(status);
     store.updateStatus(status);
-})
+});
 
 socket.on('disconnect', () => {
-    console.log("disconnected!!")
-  });
+    console.log('disconnected!!');
+});
 
 export default {
     newGame(blackHuman, whiteHuman, iterations){
