@@ -238,6 +238,36 @@ class Position:
                 #         return True
         return False
 
+    def hash(self):
+        return str(hash(str(self.to_model_position().board)))
+
+    def hash_rotations(self):
+        def hash_board(board):
+            return str(hash(str(board)))
+
+        def flip_board(board):
+            board_f = []
+            for s in range(2):
+                board_f.append(np.fliplr(board[s]))
+            return np.stack(board_f)
+
+        def rot90_board(board):
+            board_f = []
+            for s in range(2):
+                board_f.append(np.rot90(board[s]))
+            return np.stack(board_f)
+
+        board = self.to_model_position().board
+        hashes = []
+        for i in range(4):
+            hashes.append(hash_board(board))
+            board_f = flip_board(board)
+            hashes.append(hash_board(board_f))
+            if i < 3:
+                board = rot90_board(board)
+
+        return hashes
+
     def print(self):
         p_str = ['X', 'O']
         for r in reversed(range(self.B_SIZE)):

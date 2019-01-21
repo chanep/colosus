@@ -9,6 +9,8 @@ from colosus.train_record import TrainRecord
 
 
 class TrainRecordSet:
+    records: List[TrainRecord]
+
     def __init__(self, records: List[TrainRecord] = None):
         if records is not None:
             self.records = records
@@ -49,6 +51,21 @@ class TrainRecordSet:
         for f in filenames:
             os.remove(f)
 
+    @classmethod
+    def duplications(cls, filename: str) -> (int, int, int):
+        recordset = cls.load_from_file(filename)
+        final_positions = {}
+        total_positions = 0
+        for r in recordset.records:
+            if abs(r.value) == 1 or r.value == 0:
+                total_positions += 1
+                h = r.position.hash()
+                if h not in final_positions.keys():
+                    final_positions[h] = 1
+        total = total_positions / 8
+        different = (len(final_positions.keys()) / 8)
+        duplicated = total - different
+        return total, different, duplicated
 
     @classmethod
     def load_from_file(cls, filename) -> 'TrainRecordSet':

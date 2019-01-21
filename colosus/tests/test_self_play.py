@@ -80,8 +80,12 @@ class SelfPlayTestCase(unittest.TestCase):
         TrainRecordSet.merge_and_rotate(train_filename, 18)
         print("fin. time: " + str(time.time() - start_time))
 
-        TrainRecordSetTestCase().test_merge()
-        TrainerTestCase().test_train_multi()
+        total, different, duplicated = TrainRecordSet.duplications(train_filename)
+        print("final positions:")
+        print("total: {}, different: {}, duplicated: {}".format(total, different, duplicated))
+
+        # TrainRecordSetTestCase().test_merge()
+        # TrainerTestCase().test_train_multi()
 
 
 if __name__ == '__main__':
