@@ -170,18 +170,21 @@ class ColosusModelTestCase(unittest.TestCase):
         pos.put_piece(Side.WHITE, 12, 7)
         pos.put_piece(Side.WHITE, 13, 8)
 
-        colosus = ColosusModel(ColosusConfig())
+        colosusConfig = ColosusConfig()
+        colosusConfig.residual_blocks = 4
+        colosusConfig.conv_size = 120
+        colosus = ColosusModel(colosusConfig)
         colosus.build()
 
         positions = []
         position = pos
-        for m in range(8):
+        for m in range(32):
             positions.append(position.to_model_position())
-            position = position.move(m)
+            # position = position.move(m)
 
         policies, values = colosus.predict_on_batch(positions)
 
-        cant = 1000
+        cant = 100
         start = time.time()
         for i in range(cant):
             policies, values = colosus.predict_on_batch(positions)
