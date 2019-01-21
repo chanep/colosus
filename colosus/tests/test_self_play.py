@@ -74,9 +74,9 @@ class SelfPlayTestCase(unittest.TestCase):
         config.state_config.policy_offset = -0.99 / 800
 
         self_play = SelfPlayMp(config)
-        train_filename = "d_1_3000_800.dat"
+        train_filename = "d_1_2000_800.dat"
 
-        self_play.play(3000, 800, pos, train_filename, 18, None)
+        self_play.play(2000, 800, pos, train_filename, 18, None)
         TrainRecordSet.merge_and_rotate(train_filename, 18)
         print("fin. time: " + str(time.time() - start_time))
 
