@@ -63,7 +63,8 @@ class State:
 
     def play_static_policy(self, temperature) -> (int, float, int, 'State'):
         self.select()
-        policy = np.nan_to_num(np.array(self.legal_policy, np.float), 0)
+        legal_moves = self.position().legal_moves()
+        policy = self._get_legal_policy(self.policy, legal_moves)
         value = - self.Q
         if temperature < 0.1:
             move = np.argmax(policy)
@@ -139,6 +140,7 @@ class State:
             legal_policy[m] = policy[m]
         return legal_policy / np.sum(legal_policy)
 
+
     def backup(self, v):
         self.W += v
         self.N += 1
@@ -172,7 +174,7 @@ class State:
         self.legal_policy = None
         return self._children
 
-    def position(self):
+    def position(self) -> Position:
         if self._position is not None:
             return self._position
         if self._prev_position is None:
