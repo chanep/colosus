@@ -74,10 +74,10 @@ class SelfPlayTestCase(unittest.TestCase):
         config.state_config.policy_offset = -0.99 / 800
 
         self_play = SelfPlayMp(config)
-        train_filename = "d_2_2000_800.dat"
+        train_filename = "d_3_2000_800.dat"
 
-        self_play.play(2000, 800, pos, train_filename, 18, "d_1_2000_800.h5")
-        TrainRecordSet.merge_and_rotate(train_filename, 18)
+        self_play.play(2000, 800, pos, train_filename, 32, "d_2_2000_800.h5")
+        TrainRecordSet.merge_and_rotate(train_filename, 32)
         print("fin. time: " + str(time.time() - start_time))
 
         total, different, duplicated = TrainRecordSet.duplications(train_filename)
