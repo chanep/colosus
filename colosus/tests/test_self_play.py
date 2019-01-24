@@ -69,23 +69,24 @@ class SelfPlayTestCase(unittest.TestCase):
         config = SelfPlayMpConfig()
 
         config.search_config.move_count_temp0 = 20
-        config.search_config.temp0 = 1.2
+        config.search_config.temp0 = 1.1
         config.search_config.tempf = 0
         config.state_config.policy_offset = -0.99 / 800
 
         self_play = SelfPlayMp(config)
-        train_filename = "d_4_2500_800.dat"
+        train_filename = "d_5b_4000_800.dat"
 
-        self_play.play(2500, 800, pos, train_filename, 32, "d_3_2000_800.h5")
-        TrainRecordSet.merge_and_rotate(train_filename, 32)
+        self_play.play(2000, 800, pos, train_filename, 30, "d_4_2500_800.h5")
+        TrainRecordSet.merge_and_rotate(train_filename, 30)
         print("fin. time: " + str(time.time() - start_time))
 
         total, different, duplicated = TrainRecordSet.duplications(train_filename, 0.9)
         print("final positions:")
         print("total: {}, different: {}, duplicated: {}".format(total, different, duplicated))
 
-        # TrainRecordSetTestCase().test_merge()
-        # TrainerTestCase().test_train_multi()
+        TrainRecordSetTestCase().test_merge()
+        TrainerTestCase().test_train_multi()
+        print("Revisar duplicados!!!")
 
 
 if __name__ == '__main__':
