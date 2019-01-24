@@ -52,12 +52,12 @@ class TrainRecordSet:
             os.remove(f)
 
     @classmethod
-    def duplications(cls, filename: str) -> (int, int, int):
+    def duplications(cls, filename: str, value: float) -> (int, int, int):
         recordset = cls.load_from_file(filename)
         final_positions = {}
         total_positions = 0
         for r in recordset.records:
-            if abs(r.value) == 1 or r.value == 0:
+            if abs(r.value) > value:
                 total_positions += 1
                 h = r.position.hash()
                 if h not in final_positions.keys():
