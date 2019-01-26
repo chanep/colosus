@@ -48,23 +48,23 @@ class TrainerTestCase(unittest.TestCase):
         # trainer.train(train_filename, weights_filename, 2, prev_weights_filename)
 
     def test_train_multi(self):
-        print("training d_5_4000_800.h5...")
-        train_filename = "d_5_4000_800.dat"
-        weights_filename = "d_5_4000_800.h5"
-        prev_weights_filename = "d_4_2500_800.h5"
+        print("training d_7_4000_800.h5...")
+        train_filename = "d_7_4000_800.dat"
+        weights_filename = "d_7_4000_800.h5"
+        prev_weights_filename = "d_6_4000_800.h5"
         trainer_config = TrainerConfig()
         trainer_config.colosus_config.lr = 0.003
         trainer = Trainer(trainer_config)
-        trainer.train(train_filename, weights_filename, 2, prev_weights_filename)
+        trainer.train(train_filename, weights_filename, 3, prev_weights_filename)
 
-        print("training d_5_4000_800_sinprev.h5...")
-        train_filename = "d_5_4000_800.dat"
-        weights_filename = "d_5_4000_800_sinprev.h5"
+        print("training d_6_4000_800_sinprev.h5...")
+        train_filename = "d_7_4000_800.dat"
+        weights_filename = "d_7_4000_800_sinprev.h5"
         prev_weights_filename = None
         trainer_config = TrainerConfig()
         trainer_config.colosus_config.lr = 0.003
         trainer = Trainer(trainer_config)
-        trainer.train(train_filename, weights_filename, 2, prev_weights_filename)
+        trainer.train(train_filename, weights_filename, 3, prev_weights_filename)
 
         # EvaluatorTestCase().test_evaluate()
 
