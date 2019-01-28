@@ -56,8 +56,13 @@ class SelfPlayMp:
     def __init__(self, config: SelfPlayMpConfig):
         self.config = config
 
+    def _get_seed(self, id: int):
+        return hash(str(datetime.now()) + str(id)) % (2 ** 32 - 1)
+
     def _play(self, id: int, iterations_per_move: int, initial_pos: Position, train_filename, colosus, stats):
-        np.random.seed(id)
+        seed = self._get_seed(id)
+        # print("worker: {}, seed: {}".format(id, seed))
+        np.random.seed(seed)
 
         # train_record_set = TrainRecordSet()
         train_record_set_z = TrainRecordSet()
