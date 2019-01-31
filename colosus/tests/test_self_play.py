@@ -3,6 +3,7 @@ import cProfile, pstats, io
 
 import numpy as np
 import time
+import random
 
 from colosus.colosus_model import ColosusModel
 from colosus.config import SelfPlayConfig, ColosusConfig, SelfPlayMpConfig
@@ -72,17 +73,37 @@ class SelfPlayTestCase(unittest.TestCase):
         config.search_config.temp0 = 1.1
         config.search_config.tempf = 0
         config.state_config.policy_offset = -0.99 / 800
-
         self_play = SelfPlayMp(config)
-        train_filename = "d_12_2000_800.dat"
 
-        self_play.play(2000, 800, pos, train_filename, 24, "d_11_2000_800.h5")
-        TrainRecordSet.merge_and_rotate(train_filename, 24)
+        train_filename = "d_12_2000_800.dat"
+        train_filename_a = "d_12a_2000_800.dat"
+        train_filename_b = "d_12b_2000_800.dat"
+        weights_filename = "d_11_2000_800.h5"
+
+        self_play.play(1000, 800, pos, train_filename_a, 24, weights_filename)
+        TrainRecordSet.merge_and_rotate(train_filename_a, 24)
+
+        self_play.play(1000, 800, pos, train_filename_b, 24, weights_filename)
+        TrainRecordSet.merge_and_rotate(train_filename_b, 24)
+
+        recordset = TrainRecordSet()
+
+        r = TrainRecordSet.load_from_file(train_filename_a)
+        recordset.extend(r.records)
+        r = TrainRecordSet.load_from_file(train_filename_b)
+        recordset.extend(r.records)
+        random.shuffle(recordset.records)
+
+        recordset.save_to_file(train_filename)
+
         print("fin. time: " + str(time.time() - start_time))
 
         total, different, duplicated = TrainRecordSet.duplications(train_filename, 0.9)
         print("final positions:")
         print("total: {}, different: {}, duplicated: {}".format(total, different, duplicated))
+
+        TrainerTestCase().test_train()
+
 
         # TrainRecordSetTestCase().test_merge()
         #
