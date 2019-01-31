@@ -68,16 +68,16 @@ class SelfPlayTestCase(unittest.TestCase):
         start_time = time.time()
         config = SelfPlayMpConfig()
 
-        config.search_config.move_count_temp0 = 20
+        config.search_config.move_count_temp0 = 24
         config.search_config.temp0 = 1.1
         config.search_config.tempf = 0
         config.state_config.policy_offset = -0.99 / 800
 
         self_play = SelfPlayMp(config)
-        train_filename = "d_9a_4000_800.dat"
+        train_filename = "d_12_2000_800.dat"
 
-        self_play.play(2000, 800, pos, train_filename, 30, "d_8_4000_800.h5")
-        TrainRecordSet.merge_and_rotate(train_filename, 30)
+        self_play.play(2000, 800, pos, train_filename, 24, "d_11_2000_800.h5")
+        TrainRecordSet.merge_and_rotate(train_filename, 24)
         print("fin. time: " + str(time.time() - start_time))
 
         total, different, duplicated = TrainRecordSet.duplications(train_filename, 0.9)

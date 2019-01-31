@@ -21,31 +21,14 @@ class Person:
 
 class TrainerTestCase(unittest.TestCase):
     def test_train(self):
-        print("training d_4_2500_800...")
-        train_filename = "d_4_2500_800.dat"
-        weights_filename = "d_4_2500_800.h5"
-        prev_weights_filename = None # "d_2_2000_800.h5"
+        print("training d_11_2000_800...")
+        train_filename = "d_11_2000_800.dat"
+        weights_filename = "d_11_2000_800.h5"
+        prev_weights_filename = "d_10_2000_800.h5"
         trainer_config = TrainerConfig()
         trainer_config.colosus_config.lr = 0.003
         trainer = Trainer(trainer_config)
-        trainer.train(train_filename, weights_filename, 2, prev_weights_filename)
-
-        print("training d_4_2500_800 prev 01...")
-        train_filename = "d_4_2500_800.dat"
-        weights_filename = "d_4_2500_800_prev01.h5"
-        prev_weights_filename = "d_2_2000_800.h5"
-        trainer_config = TrainerConfig()
-        trainer_config.colosus_config.lr = 0.003
-        trainer = Trainer(trainer_config)
-        trainer.train(train_filename, weights_filename, 2, prev_weights_filename)
-
-        # train_filename = "c_40_4000_1600.dat"
-        # weights_filename = "c_40_4000_1600.h5"
-        # prev_weights_filename = "c_40_4000_1600.h5"
-        # trainer_config = TrainerConfig()
-        # trainer_config.colosus_config.lr = 0.00003
-        # trainer = Trainer(trainer_config)
-        # trainer.train(train_filename, weights_filename, 2, prev_weights_filename)
+        trainer.train(train_filename, weights_filename, 3, prev_weights_filename)
 
     def test_train_multi(self):
         print("training d_9_4000_800.h5...")

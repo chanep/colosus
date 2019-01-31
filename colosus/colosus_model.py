@@ -37,6 +37,7 @@ class ColosusModel:
         if self.config.half_memory:
             session_config = tf.ConfigProto()
             session_config.gpu_options.per_process_gpu_memory_fraction = 0.30
+        # session_config = tf.ConfigProto(log_device_placement=True)
         self.session = tf.Session(graph=self.graph, config=session_config)
 
         with self.graph.as_default():
@@ -171,6 +172,16 @@ class ColosusModel:
         boards = self._positions_to_inputs(positions)
         policies = np.stack(policies)
         values = np.array(values)
+
+        # print("antes cast")
+        #
+        # boards = boards.astype(np.float32)
+        # policies = policies.astype(np.float32)
+        # values = values.astype(np.float32)
+        #
+        # print(boards.shape, boards.dtype)
+        # print(policies.shape, policies.dtype)
+        # print(values.shape, values.dtype)
 
         with self.graph.as_default():
             with self.session.as_default():

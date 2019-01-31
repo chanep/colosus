@@ -39,7 +39,7 @@ class TrainRecordSetTestCase(unittest.TestCase):
 
         random.shuffle(recordset.records)
 
-        recordset.save_to_file('d_9_4000_800.dat')
+        recordset.save_to_file('d_9ab_4000_800.dat')
 
 
     def test_truncate(self):
