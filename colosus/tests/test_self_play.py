@@ -75,10 +75,10 @@ class SelfPlayTestCase(unittest.TestCase):
         config.state_config.policy_offset = -0.99 / 800
         self_play = SelfPlayMp(config)
 
-        train_filename = "d_12_2000_800.dat"
-        train_filename_a = "d_12a_2000_800.dat"
-        train_filename_b = "d_12b_2000_800.dat"
-        weights_filename = "d_11_2000_800.h5"
+        train_filename = "d_15_2000_800.dat"
+        train_filename_a = "d_15a_2000_800.dat"
+        train_filename_b = "d_15b_2000_800.dat"
+        weights_filename = "d_14_2000_800.h5"
 
         self_play.play(1000, 800, pos, train_filename_a, 24, weights_filename)
         TrainRecordSet.merge_and_rotate(train_filename_a, 24)

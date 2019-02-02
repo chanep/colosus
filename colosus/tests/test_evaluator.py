@@ -21,7 +21,7 @@ class EvaluatorTestCase(unittest.TestCase):
         config.player_config.state_config.policy_offset = 0
         config.player2_config.state_config.policy_offset = 0
         evaluator = Evaluator(config)
-        evaluator.evaluate(400, 1, pos, "d_10_2000_800.h5", "d_11_2000_800.h5")
+        evaluator.evaluate(400, 1, pos, "d_14_2000_800.h5", "d_10_2000_800.h5")
         # evaluator.evaluate(200, 256, pos, "cpo99_46_5000_800.h5", "cpo99345_47_5000_800.h5")
 
     def test_evaluate2(self):
