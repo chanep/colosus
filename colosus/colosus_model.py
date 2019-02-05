@@ -1,8 +1,11 @@
+import math
 from typing import List
 
 import numpy as np
 import tensorflow as tf
 from threading import Lock
+
+from keras.utils import Sequence
 from tensorflow.python.keras import Input
 from tensorflow.python.keras.optimizers import Adam
 from tensorflow.python.keras.models import Model
@@ -14,6 +17,30 @@ from colosus.config import ColosusConfig
 from colosus.game import model_position
 from colosus.game.model_position import ModelPosition
 from colosus.game.position import Position
+
+
+class PositionSequence(Sequence):
+
+    def __init__(self, boards, policies, values, batch_size):
+        self.boards = boards
+        self.policies = policies
+        self.values = values
+        self.batch_size = batch_size
+
+    def __len__(self):
+        return math.ceil(len(self.boards) / self.batch_size)
+
+    def __getitem__(self, idx):
+        print("idx: " + str(idx))
+        batch_boards = self.boards[idx * self.batch_size: (idx + 1) * self.batch_size]
+        batch_policies = self.policies[idx * self.batch_size: (idx + 1) * self.batch_size]
+        batch_values = self.values[idx * self.batch_size: (idx + 1) * self.batch_size]
+
+        return batch_boards, [batch_policies, batch_values]
+
+    def on_epoch_end(self):
+        print("on_epoch_end")
+        pass
 
 
 class ColosusModel:
@@ -73,7 +100,8 @@ class ColosusModel:
             res_out = x
 
             # for policy output
-            x = Conv2D(filters=self.config.policy_conv_size, kernel_size=1, padding="same", data_format=data_format, use_bias=False,
+            x = Conv2D(filters=self.config.policy_conv_size, kernel_size=1, padding="same", data_format=data_format,
+                       use_bias=False,
                        kernel_regularizer=self.reg,
                        name="policy_conv-1-2")(res_out)
             x = BatchNormalization(axis=bn_axis, name="policy_batchnorm")(x)
@@ -192,6 +220,37 @@ class ColosusModel:
                                validation_split=0.02,
                                verbose=2,
                                callbacks=None)
+
+    def train_generator(self, positions, policies, values, epochs):
+        batch_size = 384
+        validation_split = 0.02
+
+        boards = self._positions_to_inputs(positions)
+        policies = np.stack(policies)
+        values = np.array(values)
+
+        data_last = len(boards) - 1
+        train_last = math.ceil(len(boards) * (1 - validation_split) - 1)
+        boards_train = boards[0: train_last]
+        policies_train = policies[0: train_last]
+        values_train = values[0: train_last]
+
+        boards_val = boards[train_last + 1: data_last]
+        policies_val = policies[train_last + 1: data_last]
+        values_val = values[train_last + 1: data_last]
+
+        seq = PositionSequence(boards_train, policies_train, values_train, batch_size)
+
+        with self.graph.as_default():
+            with self.session.as_default():
+                self.model.fit_generator(seq,
+                                         epochs=epochs,
+                                         shuffle=True,
+                                         validation_data=(boards_val, [policies_val, values_val]),
+                                         workers=8,
+                                         use_multiprocessing=True,
+                                         verbose=2,
+                                         callbacks=None)
 
     def _positions_to_inputs(self, positions):
         if isinstance(positions, list):
