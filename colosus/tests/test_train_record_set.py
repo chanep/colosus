@@ -43,8 +43,8 @@ class TrainRecordSetTestCase(unittest.TestCase):
 
 
     def test_truncate(self):
-        input = 'd_15_2000_800.dat'
-        output = 'd_15_200_800.dat'
+        input = 'd_15_200_800.dat'
+        output = 'd_15_20_800.dat'
         percent = 10
 
         recordset = TrainRecordSet.load_from_file(input)

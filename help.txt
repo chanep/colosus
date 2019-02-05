@@ -25,3 +25,19 @@ Train on 64558 samples, validate on 1318 samples
 Epoch 1/1
  - 50s - loss: 2.3348 - policy_loss: 1.6922 - value_loss: 0.1029 - policy_acc: 0.6712 - val_loss: 2.3466 - val_policy_loss: 1.6984 - val_value_loss: 0.1054 - val_policy_acc: 0.6760
 training finished!
+
+
+training...
+Train on 6455 samples, validate on 132 samples
+Epoch 1/2
+ - 230s - loss: 6.9618 - policy_loss: 5.1849 - value_loss: 0.4413 - policy_acc: 0.0166 - val_loss: 6.4358 - val_policy_loss: 4.8117 - val_value_loss: 0.3795 - val_policy_acc: 0.0152
+Epoch 2/2
+ - 208s - loss: 6.3356 - policy_loss: 4.7124 - value_loss: 0.4024 - policy_acc: 0.0308 - val_loss: 6.1153 - val_policy_loss: 4.5541 - val_value_loss: 0.3793 - val_policy_acc: 0.0455
+training finished!
+
+training...
+Epoch 1/2
+ - 198s - loss: 6.8784 - policy_loss: 5.1287 - value_loss: 0.4286 - policy_acc: 0.0187 - val_loss: 6.4866 - val_policy_loss: 4.8530 - val_value_loss: 0.3793 - val_policy_acc: 0.0308
+Epoch 2/2
+ - 189s - loss: 6.3523 - policy_loss: 4.7266 - value_loss: 0.4025 - policy_acc: 0.0338 - val_loss: 6.0623 - val_policy_loss: 4.5128 - val_value_loss: 0.3794 - val_policy_acc: 0.0615
+training finished!

@@ -5,7 +5,7 @@ import numpy as np
 import tensorflow as tf
 from threading import Lock
 
-from keras.utils import Sequence
+from tensorflow.python.keras.utils import Sequence
 from tensorflow.python.keras import Input
 from tensorflow.python.keras.optimizers import Adam
 from tensorflow.python.keras.models import Model
@@ -31,7 +31,7 @@ class PositionSequence(Sequence):
         return math.ceil(len(self.boards) / self.batch_size)
 
     def __getitem__(self, idx):
-        print("idx: " + str(idx))
+        # print("idx: " + str(idx))
         batch_boards = self.boards[idx * self.batch_size: (idx + 1) * self.batch_size]
         batch_policies = self.policies[idx * self.batch_size: (idx + 1) * self.batch_size]
         batch_values = self.values[idx * self.batch_size: (idx + 1) * self.batch_size]
@@ -39,7 +39,7 @@ class PositionSequence(Sequence):
         return batch_boards, [batch_policies, batch_values]
 
     def on_epoch_end(self):
-        print("on_epoch_end")
+        # print("on_epoch_end")
         pass
 
 
@@ -240,13 +240,14 @@ class ColosusModel:
         values_val = values[train_last + 1: data_last]
 
         seq = PositionSequence(boards_train, policies_train, values_train, batch_size)
+        seq_val = PositionSequence(boards_val, policies_val, values_val, batch_size)
 
         with self.graph.as_default():
             with self.session.as_default():
                 self.model.fit_generator(seq,
                                          epochs=epochs,
                                          shuffle=True,
-                                         validation_data=(boards_val, [policies_val, values_val]),
+                                         validation_data=seq_val,  # (boards_val, [policies_val, values_val]),
                                          workers=8,
                                          use_multiprocessing=True,
                                          verbose=2,

@@ -31,14 +31,24 @@ class TrainerTestCase(unittest.TestCase):
         trainer.train(train_filename, weights_filename, 3, prev_weights_filename)
 
     def test_train2(self):
-        print("training d_15_200_800...")
-        train_filename = "d_15_200_800.dat"
+        print("training d_15_20_800...")
+        train_filename = "d_15_20_800.dat"
         weights_filename = "x.h5"
-        prev_weights_filename = "d_15_2000_800.h5"
+        prev_weights_filename = None
         trainer_config = TrainerConfig()
         trainer_config.colosus_config.lr = 0.003
         trainer = Trainer(trainer_config)
-        trainer.train(train_filename, weights_filename, 1, prev_weights_filename)
+        trainer.train(train_filename, weights_filename, 2, prev_weights_filename)
+
+    def test_train_generator(self):
+        print("training d_15_20_800...")
+        train_filename = "d_15_20_800.dat"
+        weights_filename = "xg.h5"
+        prev_weights_filename = None
+        trainer_config = TrainerConfig()
+        trainer_config.colosus_config.lr = 0.003
+        trainer = Trainer(trainer_config)
+        trainer.train_generator(train_filename, weights_filename, 2, prev_weights_filename)
 
     def test_train_multi(self):
         print("training d_9_4000_800.h5...")
