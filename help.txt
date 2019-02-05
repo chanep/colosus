@@ -4,3 +4,24 @@ d13 vs d12: 258.0-142.0
 d13 vs cpo: 136.5-263.5
 d14 vs d13: 244.0-156.0
 d14 vs cpo: 79.5-320.5
+d15 vs d14: 252.5-147.5
+d15 vs cpo: 79.5-320.5
+d16 vs d15: 218.5-181.5
+d16 vs cpo: 83.0-317.0
+
+lr 0.001
+--------
+d17 vs d16: 272.0-128.0
+d17 vs cpo: 118.0-282.0
+d18 vs d17: 258.0-142.0
+d18 vs cpo: 134.0-266.0
+
+
+
+predict_on_batch time: 1.5312302112579346
+predict time: 11.67262315750122 0.18238473683595657
+
+Train on 64558 samples, validate on 1318 samples
+Epoch 1/1
+ - 50s - loss: 2.3348 - policy_loss: 1.6922 - value_loss: 0.1029 - policy_acc: 0.6712 - val_loss: 2.3466 - val_policy_loss: 1.6984 - val_value_loss: 0.1054 - val_policy_acc: 0.6760
+training finished!

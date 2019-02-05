@@ -178,7 +178,8 @@ class ColosusModelTestCase(unittest.TestCase):
 
         positions = []
         position = pos
-        for m in range(32):
+        minibatch = 64
+        for m in range(minibatch):
             positions.append(position.to_model_position())
             # position = position.move(m)
 
@@ -194,7 +195,7 @@ class ColosusModelTestCase(unittest.TestCase):
         for i in range(cant):
             for p in positions:
                 policy, value = colosus.predict(p)
-        print("predict time: " + str(time.time() - start))
+        print("predict time: " + str(time.time() - start) + " " + str((time.time() - start)/minibatch))
 
     def sort_policy(self, policy):
         move_policy = []

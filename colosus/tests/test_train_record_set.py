@@ -43,9 +43,9 @@ class TrainRecordSetTestCase(unittest.TestCase):
 
 
     def test_truncate(self):
-        input = 'c_16_800_1600.dat'
-        output = 'c_16_400_1600.dat'
-        percent = 50
+        input = 'd_15_2000_800.dat'
+        output = 'd_15_200_800.dat'
+        percent = 10
 
         recordset = TrainRecordSet.load_from_file(input)
         count = int((len(recordset.records) * percent) / 100)

@@ -70,15 +70,15 @@ class SelfPlayTestCase(unittest.TestCase):
         config = SelfPlayMpConfig()
 
         config.search_config.move_count_temp0 = 24
-        config.search_config.temp0 = 1.1
+        config.search_config.temp0 = 1.18
         config.search_config.tempf = 0
         config.state_config.policy_offset = -0.99 / 800
         self_play = SelfPlayMp(config)
 
-        train_filename = "d_15_2000_800.dat"
-        train_filename_a = "d_15a_2000_800.dat"
-        train_filename_b = "d_15b_2000_800.dat"
-        weights_filename = "d_14_2000_800.h5"
+        train_filename = "d_19_2000_800.dat"
+        train_filename_a = "d_19a_2000_800.dat"
+        train_filename_b = "d_19b_2000_800.dat"
+        weights_filename = "d_18_2000_800.h5"
 
         self_play.play(1000, 800, pos, train_filename_a, 24, weights_filename)
         TrainRecordSet.merge_and_rotate(train_filename_a, 24)
