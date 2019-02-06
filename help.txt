@@ -15,6 +15,8 @@ d17 vs d16: 272.0-128.0
 d17 vs cpo: 118.0-282.0
 d18 vs d17: 258.0-142.0
 d18 vs cpo: 134.0-266.0
+d19 vs d18: 235.5-164.5
+d19 vs cpo: 104.5-295.5
 
 
 
@@ -35,9 +37,22 @@ Epoch 2/2
  - 208s - loss: 6.3356 - policy_loss: 4.7124 - value_loss: 0.4024 - policy_acc: 0.0308 - val_loss: 6.1153 - val_policy_loss: 4.5541 - val_value_loss: 0.3793 - val_policy_acc: 0.0455
 training finished!
 
-training...
+training generator...
 Epoch 1/2
  - 198s - loss: 6.8784 - policy_loss: 5.1287 - value_loss: 0.4286 - policy_acc: 0.0187 - val_loss: 6.4866 - val_policy_loss: 4.8530 - val_value_loss: 0.3793 - val_policy_acc: 0.0308
 Epoch 2/2
  - 189s - loss: 6.3523 - policy_loss: 4.7266 - value_loss: 0.4025 - policy_acc: 0.0338 - val_loss: 6.0623 - val_policy_loss: 4.5128 - val_value_loss: 0.3794 - val_policy_acc: 0.0615
 training finished!
+
+training...
+Train on 64558 samples, validate on 1318 samples
+ - 50s - loss: 2.4371 - policy_loss: 1.7520 - value_loss: 0.1335 - policy_acc: 0.6392 - val_loss: 2.4081 - val_policy_loss: 1.7471 - val_value_loss: 0.1102 - val_policy_acc: 0.6646
+
+training generator 8 M...
+ - 98s - loss: 2.4376 - policy_loss: 1.7497 - value_loss: 0.1368 - policy_acc: 0.6402 - val_loss: 2.4181 - val_policy_loss: 1.7471 - val_value_loss: 0.1202 - val_policy_acc: 0.6520
+
+training generator 8 S...
+ - 50s - loss: 2.4388 - policy_loss: 1.7510 - value_loss: 0.1365 - policy_acc: 0.6401 - val_loss: 2.4050 - val_policy_loss: 1.7435 - val_value_loss: 0.1118 - val_policy_acc: 0.6558
+
+training generator 4 S...
+ - 50s - loss: 2.4405 - policy_loss: 1.7503 - value_loss: 0.1392 - policy_acc: 0.6400 - val_loss: 2.3766 - val_policy_loss: 1.7246 - val_value_loss: 0.1064 - val_policy_acc: 0.6543

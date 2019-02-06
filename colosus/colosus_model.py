@@ -222,7 +222,7 @@ class ColosusModel:
                                callbacks=None)
 
     def train_generator(self, positions, policies, values, epochs):
-        batch_size = 384
+        batch_size = 512
         validation_split = 0.02
 
         boards = self._positions_to_inputs(positions)
@@ -248,7 +248,7 @@ class ColosusModel:
                                          epochs=epochs,
                                          shuffle=True,
                                          validation_data=seq_val,  # (boards_val, [policies_val, values_val]),
-                                         workers=8,
+                                         workers=4,
                                          use_multiprocessing=True,
                                          verbose=2,
                                          callbacks=None)
