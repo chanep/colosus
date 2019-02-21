@@ -21,22 +21,22 @@ class Person:
 
 class TrainerTestCase(unittest.TestCase):
     def test_train(self):
-        print("training d_20_2000_800...")
-        train_filename = "d_20_2000_800.dat"
-        weights_filename = "d_20_2000_800.h5"
-        prev_weights_filename = "d_19_2000_800.h5"
+        print("training d_40_2000_800...")
+        train_filename = "d_40_2000_800.dat"
+        weights_filename = "d_40_2000_800.h5"
+        prev_weights_filename = "d_39_2000_800.h5"
         trainer_config = TrainerConfig()
-        trainer_config.colosus_config.lr = 0.001
+        trainer_config.colosus_config.lr = 0.00003
         trainer = Trainer(trainer_config)
         trainer.train(train_filename, weights_filename, 3, prev_weights_filename)
 
     def test_train2(self):
-        print("training d_15_200_800...")
-        train_filename = "d_15_200_800.dat"
-        weights_filename = "x.h5"
-        prev_weights_filename = "d_14_2000_800.h5"
+        print("training d_3837_2000_800...")
+        train_filename = "d_3837_2000_800.dat"
+        weights_filename = "d_3837_2000_800.h5"
+        prev_weights_filename = "d_37_2000_800.h5"
         trainer_config = TrainerConfig()
-        trainer_config.colosus_config.lr = 0.003
+        trainer_config.colosus_config.lr = 0.00003
         trainer = Trainer(trainer_config)
         trainer.train(train_filename, weights_filename, 2, prev_weights_filename)
 

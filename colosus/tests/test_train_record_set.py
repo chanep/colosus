@@ -27,8 +27,8 @@ class TrainRecordSetTestCase(unittest.TestCase):
 
     def test_merge(self):
         files = [
-            'd_9a_4000_800.dat',
-            'd_9b_4000_800.dat'
+            'd_38_2000_800.dat',
+            'x1.dat'
         ]
 
         recordset = TrainRecordSet()
@@ -39,13 +39,13 @@ class TrainRecordSetTestCase(unittest.TestCase):
 
         random.shuffle(recordset.records)
 
-        recordset.save_to_file('d_9ab_4000_800.dat')
+        recordset.save_to_file('d_3837_2000_800.dat')
 
 
     def test_truncate(self):
-        input = 'd_15_200_800.dat'
-        output = 'd_15_20_800.dat'
-        percent = 10
+        input = 'd_37_2000_800.dat'
+        output = 'x1.dat'
+        percent = 50
 
         recordset = TrainRecordSet.load_from_file(input)
         count = int((len(recordset.records) * percent) / 100)
@@ -68,6 +68,12 @@ class TrainRecordSetTestCase(unittest.TestCase):
                 print(pickle.load(f))
             except EOFError:
                 ...
+
+    def test_duplications(self):
+        train_filename = "d_32b_2000_800.dat"
+        total, different, duplicated = TrainRecordSet.duplications(train_filename, 0.9)
+        print("final positions:")
+        print("total: {}, different: {}, duplicated: {}".format(total, different, duplicated))
 
 
 if __name__ == '__main__':

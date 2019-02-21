@@ -69,22 +69,36 @@ class SelfPlayTestCase(unittest.TestCase):
         start_time = time.time()
         config = SelfPlayMpConfig()
 
-        config.search_config.move_count_temp0 = 24
-        config.search_config.temp0 = 1.15
-        config.search_config.tempf = 0
+        config.search_config.tempf = 0.35
         config.state_config.policy_offset = -0.99 / 800
         self_play = SelfPlayMp(config)
 
-        train_filename = "d_20_2000_800.dat"
-        train_filename_a = "d_20a_2000_800.dat"
-        train_filename_b = "d_20b_2000_800.dat"
-        weights_filename = "d_19_2000_800.h5"
+        train_filename = "d_40_2000_800.dat"
+        train_filename_a = "d_40a_2000_800.dat"
+        train_filename_b = "d_40b_2000_800.dat"
+        train_filename_c = "d_40c_2000_800.dat"
+        train_filename_d = "d_40d_2000_800.dat"
+        weights_filename = "d_39_2000_800.h5"
 
-        self_play.play(1000, 800, pos, train_filename_a, 24, weights_filename)
+        config.search_config.move_count_temp0 = 24
+        config.search_config.temp0 = 1.4
+        self_play.play(500, 800, pos, train_filename_a, 24, weights_filename)
         TrainRecordSet.merge_and_rotate(train_filename_a, 24)
 
-        self_play.play(1000, 800, pos, train_filename_b, 24, weights_filename)
+        config.search_config.move_count_temp0 = 26
+        config.search_config.temp0 = 1.25
+        self_play.play(500, 800, pos, train_filename_b, 24, weights_filename)
         TrainRecordSet.merge_and_rotate(train_filename_b, 24)
+
+        config.search_config.move_count_temp0 = 30
+        config.search_config.temp0 = 1.1
+        self_play.play(500, 800, pos, train_filename_c, 24, weights_filename)
+        TrainRecordSet.merge_and_rotate(train_filename_c, 24)
+
+        config.search_config.move_count_temp0 = 40
+        config.search_config.temp0 = 0.8
+        self_play.play(500, 800, pos, train_filename_d, 24, weights_filename)
+        TrainRecordSet.merge_and_rotate(train_filename_d, 24)
 
         recordset = TrainRecordSet()
 
@@ -92,11 +106,30 @@ class SelfPlayTestCase(unittest.TestCase):
         recordset.extend(r.records)
         r = TrainRecordSet.load_from_file(train_filename_b)
         recordset.extend(r.records)
+        r = TrainRecordSet.load_from_file(train_filename_c)
+        recordset.extend(r.records)
+        r = TrainRecordSet.load_from_file(train_filename_d)
+        recordset.extend(r.records)
         random.shuffle(recordset.records)
-
         recordset.save_to_file(train_filename)
 
         print("fin. time: " + str(time.time() - start_time))
+
+        total, different, duplicated = TrainRecordSet.duplications(train_filename_a, 0.9)
+        print("final positions: " + train_filename_a)
+        print("total: {}, different: {}, duplicated: {}".format(total, different, duplicated))
+
+        total, different, duplicated = TrainRecordSet.duplications(train_filename_b, 0.9)
+        print("final positions: " + train_filename_b)
+        print("total: {}, different: {}, duplicated: {}".format(total, different, duplicated))
+
+        total, different, duplicated = TrainRecordSet.duplications(train_filename_c, 0.9)
+        print("final positions: " + train_filename_c)
+        print("total: {}, different: {}, duplicated: {}".format(total, different, duplicated))
+
+        total, different, duplicated = TrainRecordSet.duplications(train_filename_d, 0.9)
+        print("final positions: " + train_filename_d)
+        print("total: {}, different: {}, duplicated: {}".format(total, different, duplicated))
 
         total, different, duplicated = TrainRecordSet.duplications(train_filename, 0.9)
         print("final positions:")
@@ -104,15 +137,6 @@ class SelfPlayTestCase(unittest.TestCase):
 
         TrainerTestCase().test_train()
 
-
-        # TrainRecordSetTestCase().test_merge()
-        #
-        # total, different, duplicated = TrainRecordSet.duplications("d_9_4000_800.dat", 0.9)
-        # print("final positions:")
-        # print("total: {}, different: {}, duplicated: {}".format(total, different, duplicated))
-        #
-        # TrainerTestCase().test_train_multi()
-        # print("Revisar duplicados!!!")
 
 
 if __name__ == '__main__':
