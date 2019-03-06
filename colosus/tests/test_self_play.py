@@ -69,35 +69,39 @@ class SelfPlayTestCase(unittest.TestCase):
         start_time = time.time()
         config = SelfPlayMpConfig()
 
-        config.search_config.tempf = 0.35
+        config.search_config.tempf = 0.4
         config.state_config.policy_offset = -0.99 / 800
         self_play = SelfPlayMp(config)
 
-        train_filename = "d_40_2000_800.dat"
-        train_filename_a = "d_40a_2000_800.dat"
-        train_filename_b = "d_40b_2000_800.dat"
-        train_filename_c = "d_40c_2000_800.dat"
-        train_filename_d = "d_40d_2000_800.dat"
-        weights_filename = "d_39_2000_800.h5"
+        train_filename = "d_51_2000_800.dat"
+        train_filename_a = "d_51a_2000_800.dat"
+        train_filename_b = "d_51b_2000_800.dat"
+        train_filename_c = "d_51c_2000_800.dat"
+        train_filename_d = "d_51d_2000_800.dat"
+        weights_filename = "d_50_2000_800.h5"
 
         config.search_config.move_count_temp0 = 24
-        config.search_config.temp0 = 1.4
+        config.search_config.temp0 = 1.45
         self_play.play(500, 800, pos, train_filename_a, 24, weights_filename)
+        time.sleep(5)
         TrainRecordSet.merge_and_rotate(train_filename_a, 24)
 
         config.search_config.move_count_temp0 = 26
-        config.search_config.temp0 = 1.25
+        config.search_config.temp0 = 1.3
         self_play.play(500, 800, pos, train_filename_b, 24, weights_filename)
+        time.sleep(5)
         TrainRecordSet.merge_and_rotate(train_filename_b, 24)
 
         config.search_config.move_count_temp0 = 30
-        config.search_config.temp0 = 1.1
+        config.search_config.temp0 = 1.15
         self_play.play(500, 800, pos, train_filename_c, 24, weights_filename)
+        time.sleep(5)
         TrainRecordSet.merge_and_rotate(train_filename_c, 24)
 
         config.search_config.move_count_temp0 = 40
-        config.search_config.temp0 = 0.8
+        config.search_config.temp0 = 0.9
         self_play.play(500, 800, pos, train_filename_d, 24, weights_filename)
+        time.sleep(5)
         TrainRecordSet.merge_and_rotate(train_filename_d, 24)
 
         recordset = TrainRecordSet()
@@ -136,7 +140,6 @@ class SelfPlayTestCase(unittest.TestCase):
         print("total: {}, different: {}, duplicated: {}".format(total, different, duplicated))
 
         TrainerTestCase().test_train()
-
 
 
 if __name__ == '__main__':

@@ -68,17 +68,80 @@ d39 vs d38: 231.5-168.5
 d39 vs cpo: 130.5-269.5
 d40 vs d39: 249.5-150.5
 d40 vs cpo: 149.5-250.5
+d41 vs d40: 210.5-189.5
+d41 vs cpo: 145.0-255.0
+
+lr 0.00001
+----------
+d42 vs d41: 205.5-194.5
+d42 vs cpo: 172.0-228.0
+d43 vs d42: 207.0-193.0
+d43 vs cpo: 186.0-214.0
+d44 vs d43: 228.5-171.5
+d44 vs cpo: 190.0-210.0
+d45 vs d44: 218.0-182.0
+d45 vs cpo: 174.0-226.0
+d46 vs d45: 213.0-187.0
+d46 vs cpo: 165.0-235.0
+d47 vs d46: 201.0-199.0
+d47 vs cpo: 165.5-234.5
+d48 vs d47: 217.0-183.0
+d48 vs cpo: 167.0-233.0
+d49 vs d48: 215.5-184.5
+d49 vs cpo: 172.5-227.5
+d50 vs d49: 225.5-174.5
+d50 vs cpo: 168.0-232.0
+d51 vs d50: 197.0-203.0
+d51 vs cpo: 169.5-230.5
+
+d4789 vs cpo: 162.5-237.5
+
+d4750 vs d51: 211.0-189.0
+d4750 vs cpo: 197.5-202.5
+
+d4750_5ep vs d51: 247.5-152.5
+d4750_5ep vs cpo: 195.5-204.5
 
 
 
-training d_40_2000_800...
-training...
-Train on 715290 samples, validate on 14598 samples
-Epoch 1/3
- - 521s - loss: 2.2040 - policy_loss: 1.6353 - value_loss: 0.0877 - policy_acc: 0.7147 - val_loss: 2.1870 - val_policy_loss: 1.6236 - val_value_loss: 0.0855 - val_policy_acc: 0.7150
-Epoch 2/3
- - 515s - loss: 2.1852 - policy_loss: 1.6232 - value_loss: 0.0842 - policy_acc: 0.7225 - val_loss: 2.1792 - val_policy_loss: 1.6192 - val_value_loss: 0.0832 - val_policy_acc: 0.7194
-Epoch 3/3
- - 515s - loss: 2.1728 - policy_loss: 1.6151 - value_loss: 0.0819 - policy_acc: 0.7276 - val_loss: 2.1744 - val_policy_loss: 1.6164 - val_value_loss: 0.0819 - val_policy_acc: 0.7212
-training finished!
+
+d_4789_2000_800.h5 0003
+ - 1185s - loss: 2.0535 - policy_loss: 1.5046 - value_loss: 0.0742 - policy_acc: 0.7468 - val_loss: 2.1481 - val_policy_loss: 1.5672 - val_value_loss: 0.0906 - val_policy_acc: 0.7141
+
+d_4789_2000_800_001.h5
+ - 1195s - loss: 6.6565 - policy_loss: 4.8270 - value_loss: 0.6228 - policy_acc: 0.0288 - val_loss: 6.6621 - val_policy_loss: 4.8321 - val_value_loss: 0.6219 - val_policy_acc: 0.0287
+
+d_4789_2000_800_0001.h5
+ - 1204s - loss: 1.9414 - policy_loss: 1.4468 - value_loss: 0.0470 - policy_acc: 0.7789 - val_loss: 2.0723 - val_policy_loss: 1.5350 - val_value_loss: 0.0678 - val_policy_acc: 0.7261
+
+d_4789_2000_800_00003.h5
+ - 1191s - loss: 1.9717 - policy_loss: 1.4884 - value_loss: 0.0478 - policy_acc: 0.7607 - val_loss: 2.1095 - val_policy_loss: 1.5799 - val_value_loss: 0.0714 - val_policy_acc: 0.7098
+
+d_4789_2000_800_0001_5ep.h5
+ - 1192s - loss: 1.8548 - policy_loss: 1.3928 - value_loss: 0.0290 - policy_acc: 0.8148 - val_loss: 2.0304 - val_policy_loss: 1.5096 - val_value_loss: 0.0588 - val_policy_acc: 0.7391
+
+d_4750_2000_800.h5
+ - 1918s - loss: 1.8990 - policy_loss: 1.4234 - value_loss: 0.0417 - policy_acc: 0.7877 - val_loss: 1.9895 - val_policy_loss: 1.4794 - val_value_loss: 0.0625 - val_policy_acc: 0.7468
+
+d_4750_2000_800_5ep.h5
+val_policy_acc: 0.7540
+
+d_4750_2000_800_8res.h5
+val_policy_acc: 0.7560
+
+
+training d_51_2000_800...
+ - 366s - loss: 2.0655 - policy_loss: 1.5303 - value_loss: 0.0826 - policy_acc: 0.7558 - val_loss: 2.0750 - val_policy_loss: 1.5354 - val_value_loss: 0.0859 - val_policy_acc: 0.7569
+
+pip tf 1.12
+predict_on_batch time: 1.5773558616638184
+predict time: 12.099738121032715 0.18905840814113617
+
+training d_50_100_800...
+22s
+
+pip tf 1.13.1
+predict_on_batch time: 1.66
+predict time: 17
+
 

@@ -27,8 +27,11 @@ class TrainRecordSetTestCase(unittest.TestCase):
 
     def test_merge(self):
         files = [
-            'd_38_2000_800.dat',
-            'x1.dat'
+            'd_47_2000_800.dat',
+            'd_48_2000_800.dat',
+            'd_49_2000_800.dat',
+            'd_50_2000_800.dat',
+            'd_51_2000_800.dat'
         ]
 
         recordset = TrainRecordSet()
@@ -39,13 +42,13 @@ class TrainRecordSetTestCase(unittest.TestCase):
 
         random.shuffle(recordset.records)
 
-        recordset.save_to_file('d_3837_2000_800.dat')
+        recordset.save_to_file('d_4750_2000_800.dat')
 
 
     def test_truncate(self):
-        input = 'd_37_2000_800.dat'
-        output = 'x1.dat'
-        percent = 50
+        input = 'd_50_2000_800.dat'
+        output = 'd_50_100_800.dat'
+        percent = 5
 
         recordset = TrainRecordSet.load_from_file(input)
         count = int((len(recordset.records) * percent) / 100)
@@ -70,7 +73,7 @@ class TrainRecordSetTestCase(unittest.TestCase):
                 ...
 
     def test_duplications(self):
-        train_filename = "d_32b_2000_800.dat"
+        train_filename = "d_50c_2000_800.dat"
         total, different, duplicated = TrainRecordSet.duplications(train_filename, 0.9)
         print("final positions:")
         print("total: {}, different: {}, duplicated: {}".format(total, different, duplicated))

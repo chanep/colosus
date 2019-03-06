@@ -21,24 +21,47 @@ class Person:
 
 class TrainerTestCase(unittest.TestCase):
     def test_train(self):
-        print("training d_40_2000_800...")
-        train_filename = "d_40_2000_800.dat"
-        weights_filename = "d_40_2000_800.h5"
-        prev_weights_filename = "d_39_2000_800.h5"
+        print("training d_51_2000_800...")
+        train_filename = "d_51_2000_800.dat"
+        weights_filename = "d_51_2000_800.h5"
+        prev_weights_filename = "d_50_2000_800.h5"
         trainer_config = TrainerConfig()
-        trainer_config.colosus_config.lr = 0.00003
+        trainer_config.colosus_config.lr = 0.00001
         trainer = Trainer(trainer_config)
         trainer.train(train_filename, weights_filename, 3, prev_weights_filename)
 
     def test_train2(self):
-        print("training d_3837_2000_800...")
-        train_filename = "d_3837_2000_800.dat"
-        weights_filename = "d_3837_2000_800.h5"
-        prev_weights_filename = "d_37_2000_800.h5"
+        epochs = 4
+        train_filename = "d_4750_2000_800.dat"
+        weights_filename = "d_4750_2000_800_8res.h5"
+        prev_weights_filename = "d_4750_2000_800_8res.h5"
         trainer_config = TrainerConfig()
-        trainer_config.colosus_config.lr = 0.00003
         trainer = Trainer(trainer_config)
-        trainer.train(train_filename, weights_filename, 2, prev_weights_filename)
+        trainer_config.colosus_config.residual_blocks = 8
+
+        # lrs = [0.001, 0.0003, 0.0001, 0.00003, 0.00001]
+        # prev = None
+        lrs = [0.00003, 0.00001]
+        prev = prev_weights_filename
+
+        for lr in lrs:
+            print("training " + str(lr))
+            trainer_config.colosus_config.lr = lr
+            for ep in range(epochs):
+                print("epoch " + str(ep + 1) + "/" + str(epochs))
+                trainer.train(train_filename, weights_filename, 1, prev)
+                prev = prev_weights_filename
+
+    def test_train3(self):
+        print("training d_50_100_800...")
+        train_filename = "d_50_100_800.dat"
+        weights_filename = "d_50_100_800.h5"
+        prev_weights_filename = None
+        trainer_config = TrainerConfig()
+        trainer_config.colosus_config.lr = 0.0001
+        trainer = Trainer(trainer_config)
+        trainer.train(train_filename, weights_filename, 1, prev_weights_filename)
+
 
     def test_train_generator(self):
         print("training d_15_200_800...")
