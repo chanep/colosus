@@ -30,6 +30,36 @@ class TrainerTestCase(unittest.TestCase):
         trainer = Trainer(trainer_config)
         trainer.train(train_filename, weights_filename, 3, prev_weights_filename)
 
+    def test_train_clr(self):
+        print("training d_15_200_800...")
+        train_filename = "d_15_200_800.dat"
+        weights_filename = "d_15_200_800.h5"
+        prev_weights_filename = None
+        trainer_config = TrainerConfig()
+        trainer_config.colosus_config.lr = 0.00001
+        trainer = Trainer(trainer_config)
+        trainer.train_clr(train_filename, weights_filename, 10, prev_weights_filename, 0.00002, 0.001, 200)
+
+    def test_train_noclr(self):
+        epochs = 2
+        train_filename = "d_15_200_800.dat"
+        weights_filename = "d_15_200_800.h5"
+        prev_weights_filename = None
+        trainer_config = TrainerConfig()
+        trainer = Trainer(trainer_config)
+        trainer_config.colosus_config.residual_blocks = 8
+
+        lrs = [0.001, 0.0003, 0.0001, 0.00003, 0.00001]
+        prev = None
+
+        for lr in lrs:
+            print("training " + str(lr))
+            trainer_config.colosus_config.lr = lr
+            for ep in range(epochs):
+                print("epoch " + str(ep + 1) + "/" + str(epochs))
+                trainer.train(train_filename, weights_filename, 1, prev)
+                prev = prev_weights_filename
+
     def test_train2(self):
         epochs = 2
         train_filename = "d_4750_2000_800.dat"
