@@ -17,6 +17,7 @@ from colosus.config import ColosusConfig
 from colosus.game import model_position
 from colosus.game.model_position import ModelPosition
 from colosus.game.position import Position
+from .cyclical import CyclicLR
 
 
 class PositionSequence(Sequence):
@@ -220,6 +221,24 @@ class ColosusModel:
                                validation_split=0.02,
                                verbose=2,
                                callbacks=None)
+
+    def train_clr(self, positions, policies, values, epochs, base_lr, max_lr, step_size):
+
+        boards = self._positions_to_inputs(positions)
+        policies = np.stack(policies)
+        values = np.array(values)
+
+        clr = CyclicLR(base_lr=base_lr, max_lr=max_lr, step_size=step_size)
+
+        with self.graph.as_default():
+            with self.session.as_default():
+                self.model.fit(boards, [policies, values],
+                               batch_size=384,
+                               epochs=epochs,
+                               shuffle=True,
+                               validation_split=0.02,
+                               verbose=2,
+                               callbacks=[clr])
 
     def train_generator(self, positions, policies, values, epochs):
         batch_size = 512
