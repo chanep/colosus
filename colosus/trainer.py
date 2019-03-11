@@ -32,7 +32,8 @@ class Trainer:
 
         del colosus
 
-    def train_clr(self, train_filename, weights_filename, epochs, prev_weights_filename=None, base_lr=None, max_lr=None, step_size=2000):
+    def train_clr(self, train_filename, weights_filename, epochs, prev_weights_filename=None, base_lr=None,
+                  max_lr=None, step_size=2000, mode="triangular"):
         colosus = ColosusModel(self.config.colosus_config)
         colosus.build()
         if prev_weights_filename is not None:
@@ -51,7 +52,7 @@ class Trainer:
             max_lr = base_lr * 30
 
         print("training...")
-        colosus.train_clr(positions, policies, values, epochs, base_lr, max_lr, step_size)
+        colosus.train_clr(positions, policies, values, epochs, base_lr, max_lr, step_size, mode)
         print("training finished!")
         colosus.save_weights(weights_filename)
 

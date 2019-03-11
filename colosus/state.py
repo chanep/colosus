@@ -34,7 +34,7 @@ class State:
         temp_policy = np.power(policy, 1 / temperature)
         return temp_policy / np.sum(temp_policy)
 
-    def get_policy(self):
+    def get_policy2(self):
         policy_len = len(self.children())
         policy = np.zeros(policy_len)
         for i in range(policy_len):
@@ -42,6 +42,15 @@ class State:
             if child is not None:
                 policy[i] = child.N / self.N
         return policy
+
+    def get_policy(self):
+        policy_len = len(self.children())
+        policy = np.zeros(policy_len)
+        for i in range(policy_len):
+            child = self.children()[i]
+            if child is not None:
+                policy[i] = child.N / self.N + (child.P / math.sqrt(self.N))
+        return policy / np.sum(policy)
 
     def play(self, temperature) -> (int, float, int, 'State'):
         policy = self.get_policy()

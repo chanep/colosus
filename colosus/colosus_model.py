@@ -222,13 +222,13 @@ class ColosusModel:
                                verbose=2,
                                callbacks=None)
 
-    def train_clr(self, positions, policies, values, epochs, base_lr, max_lr, step_size):
+    def train_clr(self, positions, policies, values, epochs, base_lr, max_lr, step_size, mode='triangular'):
 
         boards = self._positions_to_inputs(positions)
         policies = np.stack(policies)
         values = np.array(values)
 
-        clr = CyclicLR(base_lr=base_lr, max_lr=max_lr, step_size=step_size)
+        clr = CyclicLR(base_lr=base_lr, max_lr=max_lr, step_size=step_size, mode=mode)
 
         with self.graph.as_default():
             with self.session.as_default():

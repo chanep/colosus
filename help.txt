@@ -91,16 +91,11 @@ d49 vs d48: 215.5-184.5
 d49 vs cpo: 172.5-227.5
 d50 vs d49: 225.5-174.5
 d50 vs cpo: 168.0-232.0
-d51 vs d50: 197.0-203.0
-d51 vs cpo: 169.5-230.5
 
-d4789 vs cpo: 162.5-237.5
-
-d4750 vs d51: 211.0-189.0
-d4750 vs cpo: 197.5-202.5
-
-d4750_5ep vs d51: 247.5-152.5
 d4750_5ep vs cpo: 195.5-204.5
+
+d51 vs d4750_5ep: 223.0-177.0
+d51 vs cpo: 195.0-205.0
 
 
 
@@ -143,5 +138,59 @@ training d_50_100_800...
 pip tf 1.13.1
 predict_on_batch time: 1.66
 predict time: 17
+
+
+clr
+ - 19s - loss: 2.7130 - policy_loss: 2.0222 - value_loss: 0.1348 - policy_acc: 0.6456 - val_loss: 4.0534 - val_policy_loss: 2.9940 - val_value_loss: 0.2597 - val_policy_acc: 0.3533
+training finished!
+Ran 1 test in 195.235s
+
+
+no clr
+ - 21s - loss: 3.9975 - policy_loss: 3.0121 - value_loss: 0.1979 - policy_acc: 0.3686 - val_loss: 4.6403 - val_policy_loss: 3.4695 - val_value_loss: 0.2690 - val_policy_acc: 0.2606
+training finished!
+Ran 1 test in 251.390s
+
+clr triangular
+training...
+D:\repos\colosus\colosus\colosus_model.py:281: FutureWarning: arrays to stack must be passed as a "sequence" type such as list or tuple. Support for non-sequence iterables such as generators is deprecated as of NumPy 1.16 and will raise an error in the future.
+  boards = np.stack(positions)
+Train on 2647223 samples, validate on 54025 samples
+Epoch 1/20
+ - 1940s - loss: 3.2307 - policy_loss: 2.3882 - value_loss: 0.1988 - policy_acc: 0.4815 - val_loss: 2.4912 - val_policy_loss: 1.8175 - val_value_loss: 0.1497 - val_policy_acc: 0.6189
+Epoch 2/20
+ - 1916s - loss: 2.3000 - policy_loss: 1.6760 - value_loss: 0.1225 - policy_acc: 0.6658 - val_loss: 2.1366 - val_policy_loss: 1.5671 - val_value_loss: 0.0971 - val_policy_acc: 0.7062
+Epoch 3/20
+ - 1922s - loss: 2.1867 - policy_loss: 1.5989 - value_loss: 0.1026 - policy_acc: 0.6944 - val_loss: 2.2676 - val_policy_loss: 1.6417 - val_value_loss: 0.1124 - val_policy_acc: 0.6693
+Epoch 4/20
+ - 1921s - loss: 2.1772 - policy_loss: 1.5798 - value_loss: 0.0959 - policy_acc: 0.7002 - val_loss: 2.0743 - val_policy_loss: 1.5174 - val_value_loss: 0.0793 - val_policy_acc: 0.7274
+Epoch 5/20
+ - 1916s - loss: 2.1035 - policy_loss: 1.5373 - value_loss: 0.0823 - policy_acc: 0.7196 - val_loss: 2.2123 - val_policy_loss: 1.5967 - val_value_loss: 0.1044 - val_policy_acc: 0.6847
+Epoch 6/20
+ - 1916s - loss: 2.1369 - policy_loss: 1.5498 - value_loss: 0.0853 - policy_acc: 0.7114 - val_loss: 2.0524 - val_policy_loss: 1.5008 - val_value_loss: 0.0718 - val_policy_acc: 0.7332
+Epoch 7/20
+ - 1916s - loss: 2.0663 - policy_loss: 1.5116 - value_loss: 0.0724 - policy_acc: 0.7309 - val_loss: 2.1670 - val_policy_loss: 1.5702 - val_value_loss: 0.0899 - val_policy_acc: 0.6980
+Epoch 8/20
+ - 1916s - loss: 2.1173 - policy_loss: 1.5360 - value_loss: 0.0801 - policy_acc: 0.7172 - val_loss: 2.0428 - val_policy_loss: 1.4930 - val_value_loss: 0.0697 - val_policy_acc: 0.7341
+Epoch 9/20
+ - 1916s - loss: 2.0434 - policy_loss: 1.4967 - value_loss: 0.0668 - policy_acc: 0.7376 - val_loss: 2.1452 - val_policy_loss: 1.5560 - val_value_loss: 0.0861 - val_policy_acc: 0.7012
+Epoch 10/20
+ - 1915s - loss: 2.1055 - policy_loss: 1.5284 - value_loss: 0.0770 - policy_acc: 0.7197 - val_loss: 2.0358 - val_policy_loss: 1.4884 - val_value_loss: 0.0675 - val_policy_acc: 0.7365
+Epoch 11/20
+ - 1915s - loss: 2.0276 - policy_loss: 1.4871 - value_loss: 0.0628 - policy_acc: 0.7427 - val_loss: 2.1257 - val_policy_loss: 1.5444 - val_value_loss: 0.0825 - val_policy_acc: 0.7054
+Epoch 12/20
+ - 1915s - loss: 2.0976 - policy_loss: 1.5237 - value_loss: 0.0752 - policy_acc: 0.7215 - val_loss: 2.0339 - val_policy_loss: 1.4874 - val_value_loss: 0.0665 - val_policy_acc: 0.7349
+Epoch 13/20
+ - 1915s - loss: 2.0158 - policy_loss: 1.4802 - value_loss: 0.0602 - policy_acc: 0.7460 - val_loss: 2.1161 - val_policy_loss: 1.5380 - val_value_loss: 0.0823 - val_policy_acc: 0.7081
+Epoch 14/20
+ - 1915s - loss: 2.0906 - policy_loss: 1.5199 - value_loss: 0.0736 - policy_acc: 0.7234 - val_loss: 2.0279 - val_policy_loss: 1.4843 - val_value_loss: 0.0647 - val_policy_acc: 0.7376
+Epoch 15/20
+ - 1916s - loss: 2.0059 - policy_loss: 1.4746 - value_loss: 0.0581 - policy_acc: 0.7489 - val_loss: 2.1050 - val_policy_loss: 1.5296 - val_value_loss: 0.0839 - val_policy_acc: 0.7129
+Epoch 16/20
+ - 1915s - loss: 2.0853 - policy_loss: 1.5172 - value_loss: 0.0727 - policy_acc: 0.7244 - val_loss: 2.0329 - val_policy_loss: 1.4875 - val_value_loss: 0.0659 - val_policy_acc: 0.7350
+Epoch 17/20
+ - 1915s - loss: 1.9982 - policy_loss: 1.4705 - value_loss: 0.0564 - policy_acc: 0.7510 - val_loss: 2.0906 - val_policy_loss: 1.5272 - val_value_loss: 0.0742 - val_policy_acc: 0.7141
+Epoch 18/20
+ - 1915s - loss: 2.0808 - policy_loss: 1.5151 - value_loss: 0.0719 - policy_acc: 0.7251 - val_loss: 2.0317 - val_policy_loss: 1.4861 - val_value_loss: 0.0668 - val_policy_acc: 0.7370
 
 

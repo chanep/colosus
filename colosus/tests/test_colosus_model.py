@@ -116,7 +116,7 @@ class ColosusModelTestCase(unittest.TestCase):
         colosus.build()
         # colosus.load_weights("c_1_500_1600.h5")
         # colosus.load_weights("c_4_600_1600.h5")
-        colosus.load_weights("c_30_1100_1600.h5")
+        colosus.load_weights("d_4750_2000_800_5ep.h5")
 
         pos.print()
 
@@ -150,13 +150,22 @@ class ColosusModelTestCase(unittest.TestCase):
             if c is not None:
                 print("{} N: {}, W: {:.3g}, Q: {:.3g}, p:{:.3g}".format(Square.to_string(m), c.N, c.W, c.Q, c.P))
 
+        print("policy 2")
+        policy2 = self.sort_policy(state.get_policy2())
+        for i in range(15):
+            m = policy2[i]
+            print("{} - {}".format(m[0], m[1]))
+
         print("temp_policy")
         sorted_temp_policy = self.sort_policy(temp_policy)
         for i in range(15):
             m = sorted_temp_policy[i]
             print("{} - {}".format(m[0], m[1]))
-
         print("sum temp_policy: " + str(np.sum(temp_policy)))
+
+
+
+
 
     def test_predict_on_batch(self):
         pos = Position()
