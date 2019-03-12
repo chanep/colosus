@@ -20,7 +20,7 @@ class State:
 
         self.N = 0
         self.W = 0
-        self.Q = 0 if parent is None else (-parent.Q if parent.parent is None else -parent.Q - 1.2 * math.sqrt(parent.P))
+        self.Q = 0
         self.is_leaf = True
         self._children = None
         self._prev_position = None
@@ -98,6 +98,8 @@ class State:
             if self.is_root() and self.noise is None and self.config.noise_factor > 0:
                 self.noise = np.random.dirichlet([self.config.noise_alpha] * len(self.children()))
 
+            fpu = -self.Q if self.is_root() else -self.Q - 1.2 * math.sqrt(self.P)
+
             for i in range(len(self.children())):
                 child = self.children()[i]
                 if child is not None:
@@ -105,12 +107,15 @@ class State:
                         child_p = (1 - self.config.noise_factor) * child.P + self.config.noise_factor * self.noise[i]
                     else:
                         child_p = child.P
-                    child_score = child.Q + ((factor * child_p) / (1 + child.N))
+                    child_score = child.get_q(fpu) + ((factor * child_p) / (1 + child.N))
                     if child_score > best_score:
                         best_score = child_score
                         selected_child = child
 
             selected_child.select()
+
+    def get_q(self, default_q):
+        return self.Q if self.N > 0 else default_q
 
     def expand(self):
         if self.position().is_end:
