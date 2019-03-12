@@ -20,7 +20,7 @@ class State:
 
         self.N = 0
         self.W = 0
-        self.Q = 0 if parent is None else -parent.Q
+        self.Q = 0 if parent is None else (-parent.Q if parent.parent is None else -parent.Q - 1.2 * math.sqrt(parent.P))
         self.is_leaf = True
         self._children = None
         self._prev_position = None
