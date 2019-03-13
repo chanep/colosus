@@ -96,9 +96,18 @@ d4750_5ep vs cpo: 195.5-204.5
 
 d51 vs d4750_5ep: 223.0-177.0
 d51 vs cpo: 195.0-205.0
+d52 vs d51: 237.5-162.5
+d52 vs cpo: 211.0-189.0
 
 
 
+fpu vs no fpu: 144.5-55.5
+
+cpuct
+1.41 vs 3: 220.5-179.5
+
+cpuct
+1.41 vs 2: 98.0-110.0
 
 d_4789_2000_800.h5 0003
  - 1185s - loss: 2.0535 - policy_loss: 1.5046 - value_loss: 0.0742 - policy_acc: 0.7468 - val_loss: 2.1481 - val_policy_loss: 1.5672 - val_value_loss: 0.0906 - val_policy_acc: 0.7141
