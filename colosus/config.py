@@ -31,6 +31,20 @@ class SearchConfig:
         self.mp_temp_factor = 0.38
 
 
+class SearchMbConfig:
+    def __init__(self):
+        self.move_count_temp0 = 44
+        self.temp0 = 1.0
+        self.tempf = 0.1
+        self.workers = 8
+        self.mp_cpuct_factor = 0.5
+        self.mp_cpuct0 = 0.5
+        self.mp_main_worker_id = 1
+        self.mp_temp_factor = 0.38
+        self.mb_size = 32
+        self.max_collisions = 1
+
+
 class TrainerConfig:
     def __init__(self):
         self.colosus_config = ColosusConfig()
