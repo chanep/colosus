@@ -31,7 +31,7 @@ class SearchConfig:
         self.mp_temp_factor = 0.38
 
 
-class SearchConfigMb:
+class SearchMbConfig:
     def __init__(self):
         self.move_count_temp0 = 44
         self.temp0 = 1.0
@@ -42,7 +42,7 @@ class SearchConfigMb:
         self.mp_main_worker_id = 1
         self.mp_temp_factor = 0.38
         self.mb_size = 32
-        self.max_collisions = 0
+        self.max_collisions = 1
 
 
 class TrainerConfig:
