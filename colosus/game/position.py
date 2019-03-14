@@ -119,14 +119,14 @@ class Position:
         self.move_count += 1
         self._check_end(square)
 
-    def is_legal_colosus(self, move):
+    def is_legal_colosus3(self, move):
         r, f = Square.to_rank_file(move)
         mid = int(self.B_SIZE / 2)
 
         if self.move_count == 0:
             return r == mid and f == mid
 
-        rank = self.boards[self.RANKS_I][Side.WHITE,  r] | self.boards[self.RANKS_I][Side.BLACK,  r]
+        rank = self.boards[self.RANKS_I][Side.WHITE,  r] | self.boards[self.RANKS_I][Side.BLACK,  r]  # 8%
         if rank & (1 << f) != 0:
             return False
 
@@ -134,11 +134,50 @@ class Position:
             return (abs(r - mid) == self.DISTANCE_MOVE2 and abs(f - mid) <= self.DISTANCE_MOVE2) or \
                    (abs(r - mid) <= self.DISTANCE_MOVE2 and abs(f - mid) == self.DISTANCE_MOVE2)
 
-        for i in range(max(0, r - 2), min(self.B_SIZE, r + 3)):
-            rank = self.boards[self.RANKS_I][Side.WHITE, i] | self.boards[self.RANKS_I][Side.BLACK, i]
+        # 80%
+        for i in range(max(0, r - 2), min(self.B_SIZE, r + 3)):  # 8%
+            rank = self.boards[self.RANKS_I][Side.WHITE, i] | self.boards[self.RANKS_I][Side.BLACK, i]  # 33%
             mask = (1 << f) | (1 << min(self.B_SIZE - 1, f + 1)) | (1 << max(0, f - 1)) | \
-                   (1 << min(self.B_SIZE - 1, f + 2)) | (1 << max(0, f - 2))
+                   (1 << min(self.B_SIZE - 1, f + 2)) | (1 << max(0, f - 2)) # 37%
             if rank & mask != 0:
+                return True
+        return False
+
+    def is_legal_colosus(self, move):
+        r, f = Square.to_rank_file(move)
+        mid = int(self.B_SIZE / 2)
+
+        if self.move_count == 0:
+            return r == mid and f == mid
+
+        ranks = self.boards[self.RANKS_I]
+
+        rank = ranks[Side.WHITE,  r] | ranks[Side.BLACK,  r]
+
+        if rank & (1 << f) != 0:
+            return False
+
+        if self.move_count == 2:
+            return (abs(r - mid) == self.DISTANCE_MOVE2 and abs(f - mid) <= self.DISTANCE_MOVE2) or \
+                   (abs(r - mid) <= self.DISTANCE_MOVE2 and abs(f - mid) == self.DISTANCE_MOVE2)
+
+        all = 65535
+        i_min = f - 2
+        if i_min < 0:
+            i_min = 0
+        i_max = f + 2
+        if i_max > self.B_SIZE - 1:
+            i_max = self.B_SIZE - 1
+        mask = (all << i_min) & (all >> (self.B_SIZE - i_max))
+
+        i_min = r - 2
+        if i_min < 0:
+            i_min = 0
+        i_max = r + 3
+        if i_max > self.B_SIZE:
+            i_max = self.B_SIZE
+        for i in range(i_min, i_max):
+            if mask & (ranks[Side.WHITE, i] | ranks[Side.BLACK, i]) != 0:  # 43%
                 return True
         return False
 
@@ -170,6 +209,8 @@ class Position:
     def legal_moves(self):
         moves = []
         for m in range(self.B_SIZE * self.B_SIZE):
+            # if self.is_legal_colosus(m) != self.is_legal_colosus2(m):
+            #     raise Exception
             if self.is_legal_colosus(m):
                 moves.append(m)
         return moves

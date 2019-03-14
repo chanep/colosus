@@ -32,7 +32,7 @@ class SearcherTestCase(unittest.TestCase):
         colosus_config = ColosusConfig()
         colosus = ColosusModel(colosus_config)
         colosus.build()
-        colosus.load_weights("d_52_2000_800.h5")
+        colosus.load_weights("cpo99345_47_5000_800.h5")
 
         pos = Position()
         pos.put_piece(Side.BLACK, 7, 7)
@@ -80,6 +80,7 @@ class SearcherTestCase(unittest.TestCase):
         colosus_config = ColosusConfig()
         colosus = ColosusModel(colosus_config)
         colosus.build()
+
         colosus.load_weights("d_53_2000_800.h5")
 
         pos = Position()
