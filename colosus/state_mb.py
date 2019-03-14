@@ -187,7 +187,7 @@ class StateMb:
             best_N = 0
             best_child = None
             for m in range(len(state.children())):
-                child: State = state.children()[m]
+                child: StateMb = state.children()[m]
                 if child is not None and child.N > best_N:
                     best_N = child.N
                     best_move = m

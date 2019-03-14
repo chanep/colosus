@@ -109,6 +109,11 @@ cpuct
 cpuct
 1.41 vs 2: 98.0-110.0
 
+cpuct
+2 vs 2.5: 36.0-28.0
+
+
+
 d_4789_2000_800.h5 0003
  - 1185s - loss: 2.0535 - policy_loss: 1.5046 - value_loss: 0.0742 - policy_acc: 0.7468 - val_loss: 2.1481 - val_policy_loss: 1.5672 - val_value_loss: 0.0906 - val_policy_acc: 0.7141
 

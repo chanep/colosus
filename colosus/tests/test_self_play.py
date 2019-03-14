@@ -99,7 +99,7 @@ class SelfPlayTestCase(unittest.TestCase):
         TrainRecordSet.merge_and_rotate(train_filename_c, 24)
 
         config.search_config.move_count_temp0 = 40
-        config.search_config.temp0 = 0.9
+        config.search_config.temp0 = 0.85
         self_play.play(500, 800, pos, train_filename_d, 24, weights_filename)
         time.sleep(5)
         TrainRecordSet.merge_and_rotate(train_filename_d, 24)

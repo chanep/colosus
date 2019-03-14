@@ -21,7 +21,7 @@ class EvaluatorTestCase(unittest.TestCase):
         config.player2_config.search_config.temp0 = 0.8
         config.player_config.state_config.policy_offset = 0
         config.player2_config.state_config.policy_offset = 0
-        config.player2_config.state_config.cpuct = 2
+        config.player2_config.state_config.cpuct = 2.5
 
         evaluator = Evaluator(config)
         evaluator.evaluate(400, 256, pos, "d_52_2000_800.h5", "d_52_2000_800.h5")
