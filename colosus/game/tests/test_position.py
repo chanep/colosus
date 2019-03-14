@@ -6,6 +6,8 @@ from ..position import Position
 from ..square import Square
 from ..side import Side
 
+import time
+
 
 class PositionTestCase(unittest.TestCase):
     def test_put_piece_profile(self):
@@ -50,7 +52,6 @@ class PositionTestCase(unittest.TestCase):
         self.assertFalse(pos.is_legal_colosus(move))
         move = Square.square(3, 11)
         self.assertTrue(pos.is_legal_colosus(move))
-
 
     def test_is_legal_colosus(self):
         pos = Position()
@@ -247,6 +248,38 @@ class PositionTestCase(unittest.TestCase):
         self.assertFalse(np.array_equal(model_position.board[0, 4:9, 4], np.array([1, 1, 1, 1, 1])))
         self.assertTrue(np.array_equal(model_position.board[1, 4:9, 4], np.array([1, 1, 1, 1, 1])))
 
+    def test_is_legal_colosus_performance(self):
+        a = np.full((4, 10), 1, dtype=np.int)
+
+        a[1:] = 2
+        a[2:] = 4
+        a[3:] = 8
+
+        start = time.time()
+
+        for i in range(1000000):
+            b = np.bitwise_or.reduce(a)  # 1.84
+            #b = a[0] | a[1] | a[2] | a[3]
+
+        print("time: " + str(time.time() - start))
+
+        print(a)
+        print(b)
+
+    def test_bitwise_mask(self):
+        f = 3
+        all = 65535
+
+        i_min = f - 2
+        if i_min < 0:
+            i_min = 0
+        i_max = f + 2
+        if i_max > 15 - 1:
+            i_max = 15 - 1
+
+        mask = (all << i_min) & (all >> (15 - i_max))
+
+        print(bin(mask))
 
 if __name__ == '__main__':
     unittest.main()
