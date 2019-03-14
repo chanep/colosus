@@ -9,17 +9,20 @@ class Player:
     def __init__(self, config: PlayerConfig, colosus: ColosusModel):
         self.config = config
         self.iterations = None
+        self.time_per_move = None
         self.state = None
         self.searcher = None
         self.colosus = colosus
 
-    def new_game(self, initial_pos: Position, iterations_per_move: int):
+    def new_game(self, initial_pos: Position, iterations_per_move: int = 0, time_per_move: float = 0):
         self.iterations = iterations_per_move
+        self.time_per_move = time_per_move
         self.state = State(initial_pos, None, None, self.colosus, self.config.state_config)
         self.searcher = Searcher(self.config.search_config)
 
     def move(self):
-        policy, policy_temp, value, move, new_state = self.searcher.search(self.state, self.iterations)
+        policy, policy_temp, value, move, new_state = \
+            self.searcher.search(self.state, self.iterations, self.time_per_move)
         old_state = self.state
         self.state = new_state
         return policy, value, move, old_state, new_state

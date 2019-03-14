@@ -2,18 +2,25 @@ import numpy as np
 
 from colosus.config import SearchConfig
 from .state import State
+import time
 
 
 class Searcher:
     def __init__(self, config: SearchConfig):
         self.config = config
 
-    def search(self, root_state: State, iterations: int) -> (np.array, float, int, State):
+    def search(self, root_state: State, iterations: int = 0, time_per_move: float = 1) -> (np.array, float, int, State):
         if iterations == 1:
             return root_state.play_static_policy(self._get_temperature(root_state.position().move_count))
 
-        for i in range(iterations):
-            root_state.select()
+        if iterations != 0:
+            for i in range(iterations):
+                root_state.select()
+        else:
+            start = time.time()
+            while time.time() - start < time_per_move:
+                root_state.select()
+
         policy, temp_policy, value, move, new_state = root_state.play(self._get_temperature(root_state.position().move_count))
         return policy, temp_policy, value, move, new_state
 

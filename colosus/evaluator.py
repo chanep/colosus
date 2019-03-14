@@ -9,6 +9,7 @@ from colosus.game.position import Position
 from colosus.game.square import Square
 from colosus.player import Player
 from colosus.player2 import Player2
+from colosus.player_mb import PlayerMb
 from colosus.player_mp import PlayerMp
 from colosus.searcher import Searcher
 from colosus.searcher2 import Searcher2
@@ -31,14 +32,13 @@ class Evaluator:
         self.final_positions = {}
         self.final_position_rotations = {}
 
-    def evaluate(self, games: int, iterations: int, position_ini: Position, weights_filename, weights_filename2, iterations2=None):
+    def evaluate(self, games: int, iterations: int, position_ini: Position, weights_filename, weights_filename2,
+                 iterations2=None, times_per_move : float = 1):
         self._initialize()
 
         iterations_player2 = iterations
         if iterations2 is not None:
             iterations_player2 = iterations2
-        if self.config.player2_is_mp:
-            iterations_player2 = int(iterations * self.config.iterations_mp_factor)
 
         colosus = ColosusModel(self.config.colosus_config)
         colosus.build()
@@ -51,8 +51,8 @@ class Evaluator:
             colosus2.load_weights(weights_filename2)
 
         self.player = Player(self.config.player_config, colosus)
-        if self.config.player2_is_mp:
-            self.player2 = PlayerMp(self.config.player2_config, colosus2)
+        if self.config.player2_is_mb:
+            self.player2 = PlayerMb(self.config.player2_config, colosus2)
         else:
             self.player2 = Player2(self.config.player2_config, colosus2)
 
@@ -70,7 +70,7 @@ class Evaluator:
         start_time = time.time()
 
         for game_num in range(games):
-            game_score_2, game_mc = self.play_game(iterations, iterations_player2, game_num, position_ini)
+            game_score_2, game_mc = self.play_game(iterations, iterations_player2, times_per_move, game_num, position_ini)
             total_score_1 += 1 - game_score_2
             total_score_2 += game_score_2
             win_rate_2 = total_score_2 / (game_num + 1)
@@ -110,12 +110,12 @@ class Evaluator:
         else:
             return self.player
 
-    def play_game(self, iterations: int, iterations_player2: int, game_num: int, position_ini: Position):
+    def play_game(self, iterations: int, iterations_player2: int, time_per_move: float, game_num: int, position_ini: Position):
         move_num = 0
         end = False
         position = position_ini
-        self.player.new_game(position.clone(), iterations)
-        self.player2.new_game(position.clone(), iterations_player2)
+        self.player.new_game(position.clone(), iterations, time_per_move)
+        self.player2.new_game(position.clone(), iterations_player2, time_per_move)
         while not end:
             self.mc_total += 1
             player = self.get_player(game_num, move_num)
@@ -128,9 +128,9 @@ class Evaluator:
             else:
                 self.var += np.var(policy)
 
-            # self.print_children(old_state)
-            # position.print()
-            # print('')
+            self.print_children(old_state)
+            position.print()
+            print('')
 
             end = position.is_end
             if end:
