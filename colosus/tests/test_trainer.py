@@ -39,8 +39,22 @@ class TrainerTestCase(unittest.TestCase):
         trainer = Trainer(trainer_config)
         trainer.train_clr(train_filename, weights_filename, 5, prev_weights_filename, 0.00001, 0.0001, 1300)
 
+    def test_train_clr_bignn(self):
+        print("training d_4953_2000_800...")
+        train_filename = "d_4953_2000_800.dat"
+        weights_filename = "d_4953_2000_800_bignn.h5"
+        prev_weights_filename = None
+        trainer_config = TrainerConfig()
+        trainer = Trainer(trainer_config)
 
+        trainer_config.colosus_config.conv_size = 160
+        trainer_config.colosus_config.residual_blocks = 6
 
+        # trainer.train_clr(train_filename, weights_filename, 4, prev_weights_filename, 0.0001, 0.001, 5000)
+
+        prev_weights_filename = "d_4953_2000_800_bignn.h5"
+        trainer.train_clr(train_filename, weights_filename, 2, prev_weights_filename, 0.00003, 0.0003, 2000)
+        trainer.train_clr(train_filename, weights_filename, 2, prev_weights_filename, 0.00001, 0.0001, 2000)
 
     def test_train_noclr(self):
         epochs = 2

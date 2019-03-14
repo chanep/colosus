@@ -42,7 +42,7 @@ class SearchMbConfig:
         self.mp_main_worker_id = 1
         self.mp_temp_factor = 0.38
         self.mb_size = 32
-        self.max_collisions = 1
+        self.max_collisions = 4
 
 
 class TrainerConfig:
