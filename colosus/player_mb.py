@@ -1,12 +1,12 @@
 from colosus.colosus_model import ColosusModel
-from colosus.config import PlayerConfig
+from colosus.config import PlayerMbConfig
 from colosus.game.position import Position
-from colosus.searcher2 import Searcher2
-from colosus.state2 import State2
+from colosus.searcher_mb import SearcherMb
+from colosus.state_mb import StateMb
 
 
-class Player2:
-    def __init__(self, config: PlayerConfig, colosus: ColosusModel):
+class PlayerMb:
+    def __init__(self, config: PlayerMbConfig, colosus: ColosusModel):
         self.config = config
         self.iterations = None
         self.time_per_move = None
@@ -14,11 +14,12 @@ class Player2:
         self.searcher = None
         self.colosus = colosus
 
-    def new_game(self, initial_pos: Position, iterations_per_move: int = 0, time_per_move: float = 0):
+    def new_game(self, initial_pos: Position, iterations_per_move: int = 0, time_per_move: float = 1):
         self.iterations = iterations_per_move
         self.time_per_move = time_per_move
-        self.state = State2(initial_pos, None, None, self.colosus, self.config.state_config)
-        self.searcher = Searcher2(self.config.search_config)
+
+        self.state = StateMb(initial_pos, None, None, self.config.state_config)
+        self.searcher = SearcherMb(self.config.search_config, self.colosus)
 
     def move(self):
         policy, policy_temp, value, move, new_state = \
@@ -32,4 +33,4 @@ class Player2:
             self.state = self.state.children()[move]
         else:
             position = self.state.position().move(move)
-            self.state = State2(position, None, None, self.state.colosus, self.config.state_config)
+            self.state = StateMb(position, None, None, self.config.state_config)

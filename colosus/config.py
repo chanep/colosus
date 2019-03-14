@@ -76,9 +76,7 @@ class EvaluatorConfig:
         self.player2_config.search_config.move_count_temp0 = 38
         self.player_config.search_config.temp0 = 0.75
         self.player2_config.search_config.temp0 = 0.75
-        self.player2_is_mp = False
-        self.iterations_mp_factor = 0.4
-
+        self.player2_is_mb = False
 
 class PlayerConfig:
     def __init__(self):
@@ -90,9 +88,19 @@ class PlayerConfig:
         self.search_config.tempf = 0.01
 
 
+class PlayerMbConfig:
+    def __init__(self):
+        self.state_config = StateConfig()
+        self.search_config = SearchMbConfig()
+        self.state_config.noise_factor = 0.0
+        self.search_config.move_count_temp0 = 20
+        self.search_config.temp0 = 0.5
+        self.search_config.tempf = 0.01
+
+
 class MatchConfig:
     def __init__(self):
-        self.weights_filename = "./colosus/tests/d_52_2000_800.h5"
+        self.weights_filename = "./colosus/tests/d_53_2000_800.h5"
         self.colosus_config = ColosusConfig()
         self.player_config = PlayerConfig()
         self.mp = False

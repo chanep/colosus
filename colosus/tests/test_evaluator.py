@@ -24,7 +24,7 @@ class EvaluatorTestCase(unittest.TestCase):
         # config.player2_config.state_config.cpuct = 2.5
 
         evaluator = Evaluator(config)
-        evaluator.evaluate(400, 1, pos, "d_53_2000_800.h5", "cpo99345_47_5000_800.h5")
+        evaluator.evaluate(400, 0, pos, "cpo99345_47_5000_800.h5", "cpo99345_47_5000_800.h5", times_per_move=1)
         # evaluator.evaluate(200, 256, pos, "cpo99345_47_5000_800.h5", "cpo99345_47_5000_800.h5")
 
     def test_evaluate2(self):

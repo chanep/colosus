@@ -5,6 +5,7 @@ import numpy as np
 from colosus.colosus_model import ColosusModel
 from colosus.config import SearchMbConfig
 from .state_mb import StateMb
+import time
 
 
 class Stats:
@@ -49,7 +50,7 @@ class SearcherMb:
         self._iterations = 0
         self.stats = Stats()
 
-    def search(self, root_state: StateMb, iterations: int) -> (np.array, float, int, StateMb):
+    def search(self, root_state: StateMb, iterations: int = 0, time_per_move: float = 1) -> (np.array, float, int, StateMb):
         self.root_state = root_state
         self._nodes = 0
         self._iterations = iterations
@@ -59,8 +60,13 @@ class SearcherMb:
             self._execute_mb_iteration(1)
             return root_state.play_static_policy(self._get_temperature(root_state.position().move_count))
 
-        while self._nodes < iterations:
-            self._execute_mb_iteration(self.config.mb_size)
+        if iterations != 0:
+            while self._nodes < iterations:
+                self._execute_mb_iteration(self.config.mb_size)
+        else:
+            start = time.time()
+            while time.time() - start < time_per_move:
+                self._execute_mb_iteration(self.config.mb_size)
 
         policy, temp_policy, value, move, new_state = root_state.play(self._get_temperature(root_state.position().move_count))
         return policy, temp_policy, value, move, new_state
