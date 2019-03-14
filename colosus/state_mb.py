@@ -95,20 +95,23 @@ class StateMb:
         best_child = None
         best_score = -10000
         factor = self.config.cpuct * math.sqrt(self.N + self.N_in_flight)
+        children = self.children()
 
         if self.is_root() and self.noise is None and self.config.noise_factor > 0:
-            self.noise = np.random.dirichlet([self.config.noise_alpha] * len(self.children()))
+            self.noise = np.random.dirichlet([self.config.noise_alpha] * len(children))
 
         fpu = -self.Q if self.is_root() else -self.Q - 1.2 * math.sqrt(self.P)
 
-        for i in range(len(self.children())):
-            child = self.children()[i]
+        for i in range(len(children)):
+            child = children[i]  # 20%
             if child is not None:
                 if self.noise is not None:
                     child_p = (1 - self.config.noise_factor) * child.P + self.config.noise_factor * self.noise[i]
                 else:
                     child_p = child.P
-                child_score = child.get_q(fpu) + ((factor * child_p) / (1 + child.N + child.N_in_flight))
+
+                child_score = (child.Q if child.N > 0 else fpu) + ((factor * child_p) / (1 + child.N + child.N_in_flight))  # 55%
+
                 if child_score > best_score:
                     best_score = child_score
                     best_child = child
@@ -147,7 +150,7 @@ class StateMb:
         for move in range(len(self.legal_policy)):
             p = self.legal_policy[move]
             if p is not None:
-                child = self.__class__(None, p, self, self.config)
+                child = self.__class__(None, p.item(), self, self.config)
                 child._prev_position = self._position
                 child._move = move
                 self._children[move] = child

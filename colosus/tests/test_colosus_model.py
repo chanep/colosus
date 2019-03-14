@@ -17,6 +17,11 @@ from colosus.state import State
 
 
 class ColosusModelTestCase(unittest.TestCase):
+    def test_np_types(self):
+        x = np.float32(1.0).item()
+        print(str(type(x)))
+
+
     def test_evaluate(self):
         colosus = ColosusModel()
         colosus.build()

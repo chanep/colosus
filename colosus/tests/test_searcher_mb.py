@@ -87,12 +87,13 @@ class SearcherTestCase(unittest.TestCase):
         pos.put_piece(Side.WHITE, 8, 8)
         pos.put_piece(Side.BLACK, 12, 12)
 
-        pos.put_piece(Side.WHITE, 7, 8)
+        # pos.put_piece(Side.WHITE, 7, 8)
         # pos.put_piece(Side.BLACK, 1, 2)
         # pos.put_piece(Side.WHITE, 6, 8)
         # pos.put_piece(Side.BLACK, 4, 9)
 
-        # pos.switch_side()
+
+        pos.switch_side()
 
         config = SearchMbConfig()
         config.temp0 = 0
