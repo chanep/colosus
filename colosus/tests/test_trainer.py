@@ -1,5 +1,6 @@
 import unittest
 import numpy as np
+import cProfile, pstats, io
 
 from colosus.config import TrainerConfig
 from colosus.tests.test_evaluator import EvaluatorTestCase
@@ -94,14 +95,25 @@ class TrainerTestCase(unittest.TestCase):
 
 
     def test_train_generator(self):
-        print("training d_15_200_800...")
-        train_filename = "d_15_200_800.dat"
+        print("training d_15_20_800...")
+        train_filename = "d_15_20_800.dat"
         weights_filename = "xg.h5"
-        prev_weights_filename = "d_14_2000_800.h5"
+        prev_weights_filename = None
         trainer_config = TrainerConfig()
         trainer_config.colosus_config.lr = 0.003
         trainer = Trainer(trainer_config)
-        trainer.train_generator(train_filename, weights_filename, 1, prev_weights_filename)
+
+        pr = cProfile.Profile()
+        pr.enable()
+
+        trainer.train(train_filename, weights_filename, 1, prev_weights_filename)
+
+        pr.disable()
+        s = io.StringIO()
+        sortby = 'cumulative'
+        ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+        ps.print_stats()
+        print(s.getvalue())
 
     def test_train_multi(self):
         print("training d_9_4000_800.h5...")
