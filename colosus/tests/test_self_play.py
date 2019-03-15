@@ -6,12 +6,13 @@ import time
 import random
 
 from colosus.colosus_model import ColosusModel
-from colosus.config import SelfPlayConfig, ColosusConfig, SelfPlayMpConfig
+from colosus.config import SelfPlayConfig, ColosusConfig, SelfPlayMpConfig, SelfPlayMpMbConfig
 from colosus.game.square import Square
 from colosus.self_play import SelfPlay
 from colosus.game.position import Position
 from colosus.game.side import Side
 from colosus.self_play_mp import SelfPlayMp
+from colosus.self_play_mp_mb import SelfPlayMpMb
 from colosus.tests.test_train_record_set import TrainRecordSetTestCase
 from colosus.tests.test_trainer import TrainerTestCase
 from colosus.train_record_set import TrainRecordSet
@@ -140,6 +141,48 @@ class SelfPlayTestCase(unittest.TestCase):
         print("total: {}, different: {}, duplicated: {}".format(total, different, duplicated))
 
         TrainerTestCase().test_train_clr()
+
+
+    def test_play_mp_1(self):
+        # TrainerTestCase().test_train_multi()
+
+        pos = Position()
+        start_time = time.time()
+        config = SelfPlayMpConfig()
+
+        config.search_config.tempf = 0.35
+        config.state_config.policy_offset = -0.5 / 800
+        self_play = SelfPlayMp(config)
+
+        train_filename = "mp1.dat"
+        weights_filename = "d_4953_2000_800_bignn.h5"
+
+        config.search_config.move_count_temp0 = 30
+        config.search_config.temp0 = 1.15
+        self_play.play(48, 800, pos, train_filename, 24, weights_filename)
+
+        print("fin. time: " + str(time.time() - start_time))
+
+    def test_play_mp_mb_1(self):
+        pos = Position()
+        start_time = time.time()
+        config = SelfPlayMpMbConfig()
+
+        config.search_config.tempf = 0.35
+        config.state_config.policy_offset = -0.5 / 800
+        config.search_config.mb_size = 8
+        config.search_config.max_collisions = 1
+
+        self_play = SelfPlayMpMb(config)
+
+        train_filename = "mpmb1.dat"
+        weights_filename = "d_4953_2000_800_bignn.h5"
+
+        config.search_config.move_count_temp0 = 30
+        config.search_config.temp0 = 1.15
+        self_play.play(48, 800, pos, train_filename, 12, weights_filename)
+
+        print("fin. time: " + str(time.time() - start_time))
 
 
 if __name__ == '__main__':
