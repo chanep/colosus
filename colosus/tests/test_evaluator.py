@@ -30,17 +30,21 @@ class EvaluatorTestCase(unittest.TestCase):
     def test_evaluate2(self):
         pos = Position()
         config = EvaluatorConfig()
-        config.player_config.search_config.move_count_temp0 = 22
-        config.player2_config.search_config.move_count_temp0 = 22
+        config.player_config.search_config.move_count_temp0 = 30
+        config.player2_config.search_config.move_count_temp0 = 30
 
         config.player_config.search_config.temp0 = 0.5
         config.player2_config.search_config.temp0 = 0.5
         config.player_config.state_config.policy_offset = 0
         config.player2_config.state_config.policy_offset = 0
+
+        config.colosus2_config.residual_blocks = 4
+        config.colosus2_config.conv_size = 120
+
         evaluator = Evaluator(config)
 
-        # evaluator.evaluate(200, 512, pos, "xres.h5", "c_17_400_3200.h5")
-        evaluator.evaluate(200, 1, pos, None, "d_1_2000_800.h5")
+        evaluator.evaluate(400, 1, pos, "e_01_2000_800.h5", "cpo99345_47_5000_800.h5")
+
 
     def test_evaluate_mp(self):
         pos = Position()

@@ -128,9 +128,9 @@ class Evaluator:
             else:
                 self.var += np.var(policy)
 
-            self.print_children(old_state)
-            position.print()
-            print('')
+            # self.print_children(old_state)
+            # position.print()
+            # print('')
 
             end = position.is_end
             if end:

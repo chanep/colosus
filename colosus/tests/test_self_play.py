@@ -80,23 +80,23 @@ class SelfPlayTestCase(unittest.TestCase):
         train_filename_d = "e_01d_2000_800.dat"
         weights_filename = "d_4953_2000_800_bignn.h5"
 
-        # config.search_config.move_count_temp0 = 24
-        # config.search_config.temp0 = 1.45
-        # self_play.play(500, 800, pos, train_filename_a, 24, weights_filename)
-        # time.sleep(5)
-        # TrainRecordSet.merge_and_rotate(train_filename_a, 24)
-        #
-        # config.search_config.move_count_temp0 = 26
-        # config.search_config.temp0 = 1.3
-        # self_play.play(500, 800, pos, train_filename_b, 24, weights_filename)
-        # time.sleep(5)
-        # TrainRecordSet.merge_and_rotate(train_filename_b, 24)
-        #
-        # config.search_config.move_count_temp0 = 30
-        # config.search_config.temp0 = 1.15
-        # self_play.play(500, 800, pos, train_filename_c, 24, weights_filename)
-        # time.sleep(5)
-        # TrainRecordSet.merge_and_rotate(train_filename_c, 24)
+        config.search_config.move_count_temp0 = 24
+        config.search_config.temp0 = 1.4
+        self_play.play(500, 800, pos, train_filename_a, 24, weights_filename)
+        time.sleep(5)
+        TrainRecordSet.merge_and_rotate(train_filename_a, 24)
+
+        config.search_config.move_count_temp0 = 26
+        config.search_config.temp0 = 1.25
+        self_play.play(500, 800, pos, train_filename_b, 24, weights_filename)
+        time.sleep(5)
+        TrainRecordSet.merge_and_rotate(train_filename_b, 24)
+
+        config.search_config.move_count_temp0 = 30
+        config.search_config.temp0 = 1.1
+        self_play.play(500, 800, pos, train_filename_c, 24, weights_filename)
+        time.sleep(5)
+        TrainRecordSet.merge_and_rotate(train_filename_c, 24)
 
         config.search_config.move_count_temp0 = 40
         config.search_config.temp0 = 0.8
