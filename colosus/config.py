@@ -25,10 +25,6 @@ class SearchConfig:
         self.temp0 = 1.0
         self.tempf = 0.1
         self.workers = 8
-        self.mp_cpuct_factor = 0.5
-        self.mp_cpuct0 = 0.5
-        self.mp_main_worker_id = 1
-        self.mp_temp_factor = 0.38
 
 
 class SearchMbConfig:
@@ -37,10 +33,6 @@ class SearchMbConfig:
         self.temp0 = 1.0
         self.tempf = 0.1
         self.workers = 8
-        self.mp_cpuct_factor = 0.5
-        self.mp_cpuct0 = 0.5
-        self.mp_main_worker_id = 1
-        self.mp_temp_factor = 0.38
         self.mb_size = 32
         self.max_collisions = 4
 
@@ -66,6 +58,16 @@ class SelfPlayMpConfig:
         self.search_config = SearchConfig()
 
 
+class SelfPlayMpMbConfig:
+    def __init__(self):
+        self.colosus_config = ColosusConfig()
+        self.state_config = StateConfig()
+        self.state_config.cpuct = 2 * 3
+        self.search_config = SearchMbConfig()
+        self.search_config.mb_size = 8
+        self.search_config.max_collisions = 1
+
+
 class EvaluatorConfig:
     def __init__(self):
         self.colosus_config = ColosusConfig()
@@ -77,6 +79,7 @@ class EvaluatorConfig:
         self.player_config.search_config.temp0 = 0.75
         self.player2_config.search_config.temp0 = 0.75
         self.player2_is_mb = False
+
 
 class PlayerConfig:
     def __init__(self):
