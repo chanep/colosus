@@ -70,36 +70,36 @@ class SelfPlayTestCase(unittest.TestCase):
         config = SelfPlayMpConfig()
 
         config.search_config.tempf = 0.35
-        config.state_config.policy_offset = -0.99 / 800
+        config.state_config.policy_offset = -0.5 / 800
         self_play = SelfPlayMp(config)
 
-        train_filename = "d_53_2000_800.dat"
-        train_filename_a = "d_53a_2000_800.dat"
-        train_filename_b = "d_53b_2000_800.dat"
-        train_filename_c = "d_53c_2000_800.dat"
-        train_filename_d = "d_53d_2000_800.dat"
-        weights_filename = "d_52_2000_800.h5"
+        train_filename = "e_01_2000_800.dat"
+        train_filename_a = "e_01a_2000_800.dat"
+        train_filename_b = "e_01b_2000_800.dat"
+        train_filename_c = "e_01c_2000_800.dat"
+        train_filename_d = "e_01d_2000_800.dat"
+        weights_filename = "d_4953_2000_800_bignn.h5"
 
-        config.search_config.move_count_temp0 = 24
-        config.search_config.temp0 = 1.45
-        self_play.play(500, 800, pos, train_filename_a, 24, weights_filename)
-        time.sleep(5)
-        TrainRecordSet.merge_and_rotate(train_filename_a, 24)
-
-        config.search_config.move_count_temp0 = 26
-        config.search_config.temp0 = 1.3
-        self_play.play(500, 800, pos, train_filename_b, 24, weights_filename)
-        time.sleep(5)
-        TrainRecordSet.merge_and_rotate(train_filename_b, 24)
-
-        config.search_config.move_count_temp0 = 30
-        config.search_config.temp0 = 1.15
-        self_play.play(500, 800, pos, train_filename_c, 24, weights_filename)
-        time.sleep(5)
-        TrainRecordSet.merge_and_rotate(train_filename_c, 24)
+        # config.search_config.move_count_temp0 = 24
+        # config.search_config.temp0 = 1.45
+        # self_play.play(500, 800, pos, train_filename_a, 24, weights_filename)
+        # time.sleep(5)
+        # TrainRecordSet.merge_and_rotate(train_filename_a, 24)
+        #
+        # config.search_config.move_count_temp0 = 26
+        # config.search_config.temp0 = 1.3
+        # self_play.play(500, 800, pos, train_filename_b, 24, weights_filename)
+        # time.sleep(5)
+        # TrainRecordSet.merge_and_rotate(train_filename_b, 24)
+        #
+        # config.search_config.move_count_temp0 = 30
+        # config.search_config.temp0 = 1.15
+        # self_play.play(500, 800, pos, train_filename_c, 24, weights_filename)
+        # time.sleep(5)
+        # TrainRecordSet.merge_and_rotate(train_filename_c, 24)
 
         config.search_config.move_count_temp0 = 40
-        config.search_config.temp0 = 0.85
+        config.search_config.temp0 = 0.8
         self_play.play(500, 800, pos, train_filename_d, 24, weights_filename)
         time.sleep(5)
         TrainRecordSet.merge_and_rotate(train_filename_d, 24)
