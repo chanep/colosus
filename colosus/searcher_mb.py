@@ -10,6 +10,7 @@ import time
 
 class Stats:
     def __init__(self):
+        self.nodes = 0
         self.nn_computations = 0
         self.out_of_orders = 0
         self.collisions = 0
@@ -26,12 +27,14 @@ class Stats:
         self.collisions += 1
 
     def reset(self):
+        self.nodes = 0
         self.nn_computations = 0
         self.out_of_orders = 0
         self.collisions = 0
         self.mini_batches = []
 
     def print(self):
+        print(f"nodes: {self.nodes}")
         print(f"nn computations: {self.nn_computations}")
         print(f"mini batch size (avg/min/max): {sum(self.mini_batches) / len(self.mini_batches) : .1f}/"
               f"{min(self.mini_batches)}/{max(self.mini_batches)}")
@@ -48,28 +51,36 @@ class SearcherMb:
         self.root_state = None
         self._nodes = 0
         self._iterations = 0
+        self._time_per_move = 0
+        self._start_time = 0
         self.stats = Stats()
 
     def search(self, root_state: StateMb, iterations: int = 0, time_per_move: float = 1) -> (np.array, float, int, StateMb):
         self.root_state = root_state
         self._nodes = 0
         self._iterations = iterations
+        self._time_per_move = time_per_move
+        self._start_time = time.time()
         self.stats.reset()
 
         if iterations == 1:
             self._execute_mb_iteration(1)
             return root_state.play_static_policy(self._get_temperature(root_state.position().move_count))
 
-        if iterations != 0:
-            while self._nodes < iterations:
-                self._execute_mb_iteration(self.config.mb_size)
-        else:
-            start = time.time()
-            while time.time() - start < time_per_move:
-                self._execute_mb_iteration(self.config.mb_size)
+        while not self._should_stop():
+            self._execute_mb_iteration(self.config.mb_size)
+
+        self.stats.nodes = self._nodes
 
         policy, temp_policy, value, move, new_state = root_state.play(self._get_temperature(root_state.position().move_count))
         return policy, temp_policy, value, move, new_state
+
+    def _should_stop(self):
+        if self._iterations == 0:
+            elapsed = time.time() - self._start_time
+            return elapsed > self._time_per_move
+        else:
+            return self._nodes >= self._iterations
 
     def _get_temperature(self, move_count):
         if move_count <= self.config.move_count_temp0:
@@ -84,7 +95,6 @@ class SearcherMb:
 
     def _execute_mb_iteration(self, mb_size):
         mini_batch = self._gather_mb(mb_size)
-        # print("mb size: " + str(len(mini_batch)))
         if len(mini_batch) > 0:
             self._run_nn_computation(mini_batch)
 
@@ -92,7 +102,7 @@ class SearcherMb:
         # print("gather " + str(self._nodes))
         mini_batch = []
         collisions = self.config.max_collisions
-        while mb_size > len(mini_batch) and collisions > 0 and self._nodes < self._iterations:
+        while mb_size > len(mini_batch) and collisions > 0 and not self._should_stop():
             state = self._pick_state_to_extend()
             if state.is_end():
                 # print("is_end")

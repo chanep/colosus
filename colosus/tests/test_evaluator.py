@@ -15,7 +15,8 @@ class EvaluatorTestCase(unittest.TestCase):
         config = EvaluatorConfig()
         config.player_config.search_config.move_count_temp0 = 30
         config.player2_config.search_config.move_count_temp0 = 30
-        # config.colosus2_config.residual_blocks = 8
+        config.colosus_config.residual_blocks = 4
+        config.colosus_config.conv_size = 120
 
         config.player_config.search_config.temp0 = 0.8
         config.player2_config.search_config.temp0 = 0.8
@@ -24,7 +25,7 @@ class EvaluatorTestCase(unittest.TestCase):
         # config.player2_config.state_config.cpuct = 2.5
 
         evaluator = Evaluator(config)
-        evaluator.evaluate(400, 0, pos, "cpo99345_47_5000_800.h5", "cpo99345_47_5000_800.h5", times_per_move=1)
+        evaluator.evaluate(400, 0, pos, "cpo99345_47_5000_800.h5", "e_01_2000_800.h5", times_per_move=1)
         # evaluator.evaluate(200, 256, pos, "cpo99345_47_5000_800.h5", "cpo99345_47_5000_800.h5")
 
     def test_evaluate2(self):

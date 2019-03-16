@@ -81,7 +81,7 @@ class SearcherTestCase(unittest.TestCase):
         colosus = ColosusModel(colosus_config)
         colosus.build()
 
-        colosus.load_weights("d_53_2000_800.h5")
+        colosus.load_weights("e_01_2000_800.h5")
 
         pos = Position()
         pos.put_piece(Side.BLACK, 7, 7)
@@ -99,7 +99,7 @@ class SearcherTestCase(unittest.TestCase):
         config = SearchMbConfig()
         config.temp0 = 0
         config.mb_size = 64
-        config.max_collisions = 8
+        config.max_collisions = 16
 
         searcher = SearcherMb(config, colosus)
 
@@ -132,7 +132,95 @@ class SearcherTestCase(unittest.TestCase):
 
         print("value: " + str(value))
 
+    def test_search_time_per_move(self):
+        colosus_config = ColosusConfig()
+        colosus = ColosusModel(colosus_config)
+        colosus.build()
+        colosus.load_weights("e_01_2000_800.h5")
 
+        pos = Position()
+        pos.put_piece(Side.BLACK, 7, 7)
+        pos.put_piece(Side.WHITE, 8, 8)
+        pos.put_piece(Side.BLACK, 12, 12)
+
+        # pos.put_piece(Side.WHITE, 7, 8)
+        # pos.put_piece(Side.BLACK, 1, 2)
+        # pos.put_piece(Side.WHITE, 6, 8)
+        # pos.put_piece(Side.BLACK, 4, 9)
+
+        pos.switch_side()
+
+        config = SearchConfig()
+        config.temp0 = 0
+        searcher = Searcher(config)
+
+        state_config = StateConfig()
+        state_config.noise_factor = 0.0
+        state = State(pos, None, None, colosus, state_config)
+
+        searcher.search(state, 2)
+
+        start = time.time()
+        policy, temp_policy, value, move, new_state = searcher.search(state, 0, time_per_move=1)
+
+        print("nodes " + str(state.N))
+        print("time: " + str(time.time() - start))
+
+        state.print()
+        new_state.print()
+
+        print("value: " + str(value))
+
+    def test_search_mb_time_per_move(self):
+        colosus_config = ColosusConfig()
+        colosus = ColosusModel(colosus_config)
+        colosus.build()
+
+        colosus.load_weights("e_01_2000_800.h5")
+
+        pos = Position()
+        pos.put_piece(Side.BLACK, 7, 7)
+        pos.put_piece(Side.WHITE, 8, 8)
+        pos.put_piece(Side.BLACK, 12, 12)
+
+        # pos.put_piece(Side.WHITE, 7, 8)
+        # pos.put_piece(Side.BLACK, 1, 2)
+        # pos.put_piece(Side.WHITE, 6, 8)
+        # pos.put_piece(Side.BLACK, 4, 9)
+
+        pos.switch_side()
+
+        config = SearchMbConfig()
+        config.temp0 = 0
+        config.mb_size = 64
+        config.max_collisions = 32
+
+        searcher = SearcherMb(config, colosus)
+
+        state_config = StateConfig()
+        state_config.noise_factor = 0.0
+        state = StateMb(pos, None, None, state_config)
+
+        searcher.search(state, 2)
+
+        start = time.time()
+        policy, temp_policy, value, move, new_state = searcher.search(state, 0, time_per_move=1)
+
+        searcher.stats.print()
+        print("time: " + str(time.time() - start))
+
+        state.print()
+        new_state.print()
+
+        print("value: " + str(value))
+
+    def test_time(self):
+        start = time.time()
+
+        for i in range(100000):
+            time.time()
+
+        print("time: " + str(time.time() - start))
 
 
 if __name__ == '__main__':

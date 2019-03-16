@@ -24,7 +24,6 @@ class SearchConfig:
         self.move_count_temp0 = 44
         self.temp0 = 1.0
         self.tempf = 0.1
-        self.workers = 8
 
 
 class SearchMbConfig:
@@ -32,9 +31,8 @@ class SearchMbConfig:
         self.move_count_temp0 = 44
         self.temp0 = 1.0
         self.tempf = 0.1
-        self.workers = 8
-        self.mb_size = 32
-        self.max_collisions = 4
+        self.mb_size = 64
+        self.max_collisions = 16
 
 
 class TrainerConfig:
@@ -64,7 +62,7 @@ class SelfPlayMpMbConfig:
         self.state_config = StateConfig()
         self.state_config.cpuct = 2 * 3
         self.search_config = SearchMbConfig()
-        self.search_config.mb_size = 8
+        self.search_config.mb_size = 16
         self.search_config.max_collisions = 1
 
 
@@ -73,12 +71,12 @@ class EvaluatorConfig:
         self.colosus_config = ColosusConfig()
         self.colosus2_config = ColosusConfig()
         self.player_config = PlayerConfig()
-        self.player2_config = PlayerConfig()
+        self.player2_config = PlayerMbConfig()
         self.player_config.search_config.move_count_temp0 = 38
         self.player2_config.search_config.move_count_temp0 = 38
         self.player_config.search_config.temp0 = 0.75
         self.player2_config.search_config.temp0 = 0.75
-        self.player2_is_mb = False
+        self.player2_is_mb = True
 
 
 class PlayerConfig:

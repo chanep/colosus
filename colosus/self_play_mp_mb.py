@@ -57,6 +57,7 @@ class SelfPlayMpMb:
         self.config = config
 
     def _get_seed(self, id: int):
+        # return id
         return hash(str(datetime.now()) + str(id)) % (2 ** 32 - 1)
 
     def _play(self, id: int, iterations_per_move: int, initial_pos: Position, train_filename, colosus, stats):
@@ -173,11 +174,11 @@ class SelfPlayMpMb:
                 for i in range(len(position_indexes)):
                     start = position_starts[i]
                     end = position_lengths[i] + start
-                    policies = policies[start:end]
-                    values = values[start:end]
+                    pols = policies[start:end]
+                    vals = values[start:end]
                     c = position_indexes[i]
                     conn = conns[c]
-                    conn.send((policies, values))
+                    conn.send((pols, vals))
 
             alive = sum(1 for c in conns if c is not None)
 

@@ -57,6 +57,7 @@ class SelfPlayMp:
         self.config = config
 
     def _get_seed(self, id: int):
+        # return id
         return hash(str(datetime.now()) + str(id)) % (2 ** 32 - 1)
 
     def _play(self, id: int, iterations_per_move: int, initial_pos: Position, train_filename, colosus, stats):
