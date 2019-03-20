@@ -32,13 +32,13 @@ class TrainerTestCase(unittest.TestCase):
         trainer.train(train_filename, weights_filename, 3, prev_weights_filename)
 
     def test_train_clr(self):
-        print("training e_02_2000_800...")
-        train_filename = "e_02_2000_800.dat"
-        weights_filename = "e_02_2000_800.h5"
-        prev_weights_filename = "e_01_2000_800.h5"
+        print("training e_07_2000_800...")
+        train_filename = "e_07_2000_800.dat"
+        weights_filename = "e_07_2000_800.h5"
+        prev_weights_filename = "e_06_2000_800.h5"
         trainer_config = TrainerConfig()
         trainer = Trainer(trainer_config)
-        trainer.train_clr(train_filename, weights_filename, 5, prev_weights_filename, 0.00001, 0.0001, 1000)
+        trainer.train_clr(train_filename, weights_filename, 4, prev_weights_filename, 0.00001, 0.0001, 1000)
 
     def test_train_clr_bignn(self):
         print("training d_4953_2000_800...")

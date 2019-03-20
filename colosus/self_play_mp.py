@@ -2,7 +2,7 @@ import multiprocessing as mp
 import numpy as np
 
 from colosus.colosus_model import ColosusModel
-from colosus.config import SelfPlayMpConfig, SearchConfig
+from colosus.config import SelfPlayConfig, SearchConfig
 from colosus.game.position import Position
 from colosus.searcher import Searcher
 from colosus.state import State
@@ -53,7 +53,7 @@ def get_time():
 
 
 class SelfPlayMp:
-    def __init__(self, config: SelfPlayMpConfig):
+    def __init__(self, config: SelfPlayConfig):
         self.config = config
 
     def _get_seed(self, id: int):

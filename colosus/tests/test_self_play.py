@@ -6,9 +6,8 @@ import time
 import random
 
 from colosus.colosus_model import ColosusModel
-from colosus.config import SelfPlayConfig, ColosusConfig, SelfPlayMpConfig, SelfPlayMpMbConfig
+from colosus.config import SelfPlayConfig, ColosusConfig
 from colosus.game.square import Square
-from colosus.self_play import SelfPlay
 from colosus.game.position import Position
 from colosus.game.side import Side
 from colosus.self_play_mp import SelfPlayMp
@@ -19,56 +18,12 @@ from colosus.train_record_set import TrainRecordSet
 
 
 class SelfPlayTestCase(unittest.TestCase):
-    def test_play_p(self):
-        colosus = ColosusModel(ColosusConfig())
-        colosus.build()
-        colosus.load_weights("c_1_2000_256.h5")
-
-        pr = cProfile.Profile()
-        pr.enable()
-
-        self.test_play(colosus)
-
-        pr.disable()
-        s = io.StringIO()
-        sortby = 'cumulative'
-        ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
-        ps.print_stats()
-        print(s.getvalue())
-
-    def test_play(self, colosus=None):
-        pos = Position()
-
-        start_time = time.time()
-
-        config = SelfPlayConfig()
-        self_play = SelfPlay(config)
-
-        # self_play.play(200, 30, pos, "c_1_200_30.dat", None)
-
-        self_play.play(1, 256, pos, "x.dat", "c_18_1000_1600.h5", colosus=colosus)
-
-        print("fin. time: " + str(time.time() - start_time))
-
-    def test_play_parallel(self):
-        pos = Position()
-
-        start_time = time.time()
-
-        config = SelfPlayConfig()
-        self_play = SelfPlay(config)
-        # self_play.play(1000, 200, pos, colosus, "t2_1_1000_200.dat")
-        # self_play.play_parallel(500, 300, pos, "c_7_500_300.dat", 4, "c_6_400_400.h5")
-        self_play.play_parallel(200, 400, pos, "c_1_600_1600.dat", 8, "c_1_500_1600.h5")
-
-        print("fin. time: " + str(time.time() - start_time))
-
     def test_play_mp(self):
         # TrainerTestCase().test_train_multi()
 
         pos = Position()
         start_time = time.time()
-        config = SelfPlayMpConfig()
+        config = SelfPlayConfig()
 
         config.search_config.tempf = 0.35
         config.state_config.policy_offset = -0.5 / 800
@@ -145,40 +100,40 @@ class SelfPlayTestCase(unittest.TestCase):
     def test_play_mp_mb(self):
         pos = Position()
         start_time = time.time()
-        config = SelfPlayMpMbConfig()
+        config = SelfPlayConfig()
 
-        config.search_config.tempf = 0.35
+        config.search_config.tempf = 0.25
         config.state_config.policy_offset = -0.5 / 800
 
         self_play = SelfPlayMpMb(config)
 
-        train_filename = "e_02_2000_800.dat"
-        train_filename_a = "e_02a_2000_800.dat"
-        train_filename_b = "e_02b_2000_800.dat"
-        train_filename_c = "e_02c_2000_800.dat"
-        train_filename_d = "e_02d_2000_800.dat"
-        weights_filename = "e_01_2000_800.h5"
+        train_filename = "e_07_2000_800.dat"
+        train_filename_a = "e_07a_2000_800.dat"
+        train_filename_b = "e_07b_2000_800.dat"
+        train_filename_c = "e_07c_2000_800.dat"
+        train_filename_d = "e_07d_2000_800.dat"
+        weights_filename = "e_06_2000_800.h5"
 
-        # config.search_config.move_count_temp0 = 24
-        # config.search_config.temp0 = 1.4
-        # self_play.play(500, 800, pos, train_filename_a, 11, weights_filename)
-        # time.sleep(5)
-        # TrainRecordSet.merge_and_rotate(train_filename_a, 11)
-        #
-        # config.search_config.move_count_temp0 = 26
-        # config.search_config.temp0 = 1.25
-        # self_play.play(500, 800, pos, train_filename_b, 11, weights_filename)
-        # time.sleep(5)
-        # TrainRecordSet.merge_and_rotate(train_filename_b, 11)
-        #
-        # config.search_config.move_count_temp0 = 30
-        # config.search_config.temp0 = 1.1
-        # self_play.play(500, 800, pos, train_filename_c, 11, weights_filename)
-        # time.sleep(5)
-        # TrainRecordSet.merge_and_rotate(train_filename_c, 11)
+        config.search_config.move_count_temp0 = 24
+        config.search_config.temp0 = 1.4
+        self_play.play(500, 800, pos, train_filename_a, 11, weights_filename)
+        time.sleep(5)
+        TrainRecordSet.merge_and_rotate(train_filename_a, 11)
+
+        config.search_config.move_count_temp0 = 26
+        config.search_config.temp0 = 1.25
+        self_play.play(500, 800, pos, train_filename_b, 11, weights_filename)
+        time.sleep(5)
+        TrainRecordSet.merge_and_rotate(train_filename_b, 11)
+
+        config.search_config.move_count_temp0 = 30
+        config.search_config.temp0 = 1.1
+        self_play.play(500, 800, pos, train_filename_c, 11, weights_filename)
+        time.sleep(5)
+        TrainRecordSet.merge_and_rotate(train_filename_c, 11)
 
         config.search_config.move_count_temp0 = 40
-        config.search_config.temp0 = 0.8
+        config.search_config.temp0 = 0.85
         self_play.play(500, 800, pos, train_filename_d, 11, weights_filename)
         time.sleep(5)
         TrainRecordSet.merge_and_rotate(train_filename_d, 11)
@@ -225,7 +180,7 @@ class SelfPlayTestCase(unittest.TestCase):
 
         pos = Position()
         start_time = time.time()
-        config = SelfPlayMpConfig()
+        config = SelfPlayConfig()
 
         config.search_config.tempf = 0.35
         config.state_config.policy_offset = -0.5 / 800
@@ -243,7 +198,7 @@ class SelfPlayTestCase(unittest.TestCase):
     def test_play_mp_mb_1(self):
         pos = Position()
         start_time = time.time()
-        config = SelfPlayMpMbConfig()
+        config = SelfPlayConfig()
 
         config.search_config.tempf = 0.35
         config.state_config.policy_offset = -0.5 / 800

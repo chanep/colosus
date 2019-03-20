@@ -1,12 +1,12 @@
 from colosus.colosus_model import ColosusModel
-from colosus.config import PlayerMbConfig
+from colosus.config import PlayerConfig
 from colosus.game.position import Position
 from colosus.searcher_mb import SearcherMb
 from colosus.state_mb import StateMb
 
 
 class PlayerMb:
-    def __init__(self, config: PlayerMbConfig, colosus: ColosusModel):
+    def __init__(self, config: PlayerConfig, colosus: ColosusModel):
         self.config = config
         self.iterations = None
         self.time_per_move = None

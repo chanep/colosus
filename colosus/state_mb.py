@@ -141,20 +141,15 @@ class StateMb:
         if len(legal_moves) == 0:
             raise Exception('No legal moves but position is not end')
         else:
-            legal_policy = self._get_legal_policy(self.policy, legal_moves)
-            self.legal_policy = [None] * len(self.policy)
-            for m in legal_moves:
-                self.legal_policy[m] = legal_policy[m]
+            self.legal_policy = self._get_legal_policy(self.policy, legal_moves)
 
         self._children = [None] * len(self.legal_policy)
-        for move in range(len(self.legal_policy)):
+        for move in legal_moves:
             p = self.legal_policy[move]
-            if p is not None:
-                child = self.__class__(None, p.item(), self, self.config)
-                child._prev_position = self._position
-                child._move = move
-                self._children[move] = child
-        # self.legal_policy = None
+            child = self.__class__(None, p.item(), self, self.config)
+            child._prev_position = self._position
+            child._move = move
+            self._children[move] = child
         return self._children
 
     def backup(self, v, is_mini_bach=False):

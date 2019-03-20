@@ -3,7 +3,7 @@ from typing import List
 import numpy as np
 
 from colosus.colosus_model import ColosusModel
-from colosus.config import SearchMbConfig
+from colosus.config import SearchConfig
 from .state_mb import StateMb
 import time
 
@@ -45,7 +45,7 @@ class Stats:
 class SearcherMb:
     root_state: StateMb
 
-    def __init__(self, config: SearchMbConfig, colosus: ColosusModel):
+    def __init__(self, config: SearchConfig, colosus: ColosusModel):
         self.config = config
         self.colosus = colosus
         self.root_state = None
@@ -144,6 +144,6 @@ class SearcherMb:
 
         self.stats.inc_nn_computation(len(mini_batch))
 
-        for i in range(len(policies)):
+        for i in range(len(mini_batch)):
             state = mini_batch[i]
             state.apply_policy_and_value(policies[i], values[i], is_mini_batch=True)

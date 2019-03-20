@@ -3,7 +3,7 @@ import cProfile, pstats, io
 
 import time
 
-from colosus.config import SearchConfig, SearchMbConfig, StateConfig, ColosusConfig
+from colosus.config import SearchConfig, StateConfig, ColosusConfig
 from colosus.game.square import Square
 from colosus.state import State
 from colosus.state_mb import StateMb
@@ -96,7 +96,7 @@ class SearcherTestCase(unittest.TestCase):
 
         pos.switch_side()
 
-        config = SearchMbConfig()
+        config = SearchConfig()
         config.temp0 = 0
         config.mb_size = 64
         config.max_collisions = 16
@@ -190,7 +190,7 @@ class SearcherTestCase(unittest.TestCase):
 
         pos.switch_side()
 
-        config = SearchMbConfig()
+        config = SearchConfig()
         config.temp0 = 0
         config.mb_size = 64
         config.max_collisions = 32

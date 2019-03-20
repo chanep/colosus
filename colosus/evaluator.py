@@ -4,7 +4,7 @@ import time
 
 from colosus.colosus_model import ColosusModel
 from colosus.colosus_model2 import ColosusModel2
-from colosus.config import EvaluatorConfig, PlayerConfig
+from colosus.config import EvaluatorConfig, PlayerConfig, PlayerType
 from colosus.game.position import Position
 from colosus.game.square import Square
 from colosus.player import Player
@@ -50,11 +50,19 @@ class Evaluator:
         if weights_filename2 is not None:
             colosus2.load_weights(weights_filename2)
 
-        self.player = Player(self.config.player_config, colosus)
-        if self.config.player2_is_mb:
-            self.player2 = PlayerMb(self.config.player2_config, colosus2)
-        else:
-            self.player2 = Player2(self.config.player2_config, colosus2)
+        if self.config.player_type == PlayerType.player:
+            self.player = Player(self.config.player_config, colosus)
+        elif self.config.player_type == PlayerType.player2:
+            self.player = Player2(self.config.player_config, colosus)
+        elif self.config.player_type == PlayerType.player_mb:
+            self.player = PlayerMb(self.config.player_config, colosus)
+
+        if self.config.player2_type == PlayerType.player:
+            self.player2 = Player(self.config.player_config, colosus)
+        elif self.config.player2_type == PlayerType.player2:
+            self.player2 = Player2(self.config.player_config, colosus)
+        elif self.config.player2_type == PlayerType.player_mb:
+            self.player2 = PlayerMb(self.config.player_config, colosus)
 
         total_score_1 = 0.0
         total_score_2 = 0.0

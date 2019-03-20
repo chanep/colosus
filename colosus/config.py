@@ -1,3 +1,5 @@
+from enum import Enum
+
 class ColosusConfig:
     def __init__(self):
         self.thread_safe = False
@@ -24,13 +26,6 @@ class SearchConfig:
         self.move_count_temp0 = 44
         self.temp0 = 1.0
         self.tempf = 0.1
-
-
-class SearchMbConfig:
-    def __init__(self):
-        self.move_count_temp0 = 44
-        self.temp0 = 1.0
-        self.tempf = 0.1
         self.mb_size = 64
         self.max_collisions = 16
 
@@ -46,24 +41,14 @@ class SelfPlayConfig:
         self.state_config = StateConfig()
         self.state_config.cpuct = 2 * 3
         self.search_config = SearchConfig()
-
-
-class SelfPlayMpConfig:
-    def __init__(self):
-        self.colosus_config = ColosusConfig()
-        self.state_config = StateConfig()
-        self.state_config.cpuct = 2 * 3
-        self.search_config = SearchConfig()
-
-
-class SelfPlayMpMbConfig:
-    def __init__(self):
-        self.colosus_config = ColosusConfig()
-        self.state_config = StateConfig()
-        self.state_config.cpuct = 2 * 3
-        self.search_config = SearchMbConfig()
         self.search_config.mb_size = 16
         self.search_config.max_collisions = 1
+
+
+class PlayerType(Enum):
+    player = 1
+    player2 = 2
+    player_mb = 3
 
 
 class EvaluatorConfig:
@@ -71,28 +56,19 @@ class EvaluatorConfig:
         self.colosus_config = ColosusConfig()
         self.colosus2_config = ColosusConfig()
         self.player_config = PlayerConfig()
-        self.player2_config = PlayerMbConfig()
+        self.player2_config = PlayerConfig()
         self.player_config.search_config.move_count_temp0 = 38
         self.player2_config.search_config.move_count_temp0 = 38
         self.player_config.search_config.temp0 = 0.75
         self.player2_config.search_config.temp0 = 0.75
-        self.player2_is_mb = True
+        self.player_type = PlayerType.player
+        self.player2_type = PlayerType.player2
 
 
 class PlayerConfig:
     def __init__(self):
         self.state_config = StateConfig()
         self.search_config = SearchConfig()
-        self.state_config.noise_factor = 0.0
-        self.search_config.move_count_temp0 = 20
-        self.search_config.temp0 = 0.5
-        self.search_config.tempf = 0.01
-
-
-class PlayerMbConfig:
-    def __init__(self):
-        self.state_config = StateConfig()
-        self.search_config = SearchMbConfig()
         self.state_config.noise_factor = 0.0
         self.search_config.move_count_temp0 = 20
         self.search_config.temp0 = 0.5
