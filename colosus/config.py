@@ -19,6 +19,7 @@ class StateConfig:
         self.noise_factor = 0.25
         self.backup_factor = 0.999
         self.policy_offset = 0
+        self.fpuRoot = 0.5
 
 
 class SearchConfig:

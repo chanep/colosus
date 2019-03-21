@@ -102,7 +102,7 @@ class SelfPlayTestCase(unittest.TestCase):
         start_time = time.time()
         config = SelfPlayConfig()
 
-        config.search_config.tempf = 0.25
+        config.search_config.tempf = 0.3
         config.state_config.policy_offset = -0.5 / 800
 
         self_play = SelfPlayMpMb(config)

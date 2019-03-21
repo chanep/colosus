@@ -116,6 +116,10 @@ e05 vs e04: 185.0-215.0
 e05 vs cpo: 197.5-202.5
 e06 vs e05: 207.5-192.5
 e06 vs cpo: 203.0-197.0
+e07 vs e06: 186.0-214.0  0.5s 63.5-43.5
+e07 vs cpo: 206.0-194.0  1s   15.0-30.0
+
+
 
 fpu vs no fpu: 144.5-55.5
 
@@ -129,35 +133,6 @@ cpuct
 2 vs 2.5: 36.0-28.0
 
 
-
-d_4789_2000_800.h5 0003
- - 1185s - loss: 2.0535 - policy_loss: 1.5046 - value_loss: 0.0742 - policy_acc: 0.7468 - val_loss: 2.1481 - val_policy_loss: 1.5672 - val_value_loss: 0.0906 - val_policy_acc: 0.7141
-
-d_4789_2000_800_001.h5
- - 1195s - loss: 6.6565 - policy_loss: 4.8270 - value_loss: 0.6228 - policy_acc: 0.0288 - val_loss: 6.6621 - val_policy_loss: 4.8321 - val_value_loss: 0.6219 - val_policy_acc: 0.0287
-
-d_4789_2000_800_0001.h5
- - 1204s - loss: 1.9414 - policy_loss: 1.4468 - value_loss: 0.0470 - policy_acc: 0.7789 - val_loss: 2.0723 - val_policy_loss: 1.5350 - val_value_loss: 0.0678 - val_policy_acc: 0.7261
-
-d_4789_2000_800_00003.h5
- - 1191s - loss: 1.9717 - policy_loss: 1.4884 - value_loss: 0.0478 - policy_acc: 0.7607 - val_loss: 2.1095 - val_policy_loss: 1.5799 - val_value_loss: 0.0714 - val_policy_acc: 0.7098
-
-d_4789_2000_800_0001_5ep.h5
- - 1192s - loss: 1.8548 - policy_loss: 1.3928 - value_loss: 0.0290 - policy_acc: 0.8148 - val_loss: 2.0304 - val_policy_loss: 1.5096 - val_value_loss: 0.0588 - val_policy_acc: 0.7391
-
-d_4750_2000_800.h5
- - 1918s - loss: 1.8990 - policy_loss: 1.4234 - value_loss: 0.0417 - policy_acc: 0.7877 - val_loss: 1.9895 - val_policy_loss: 1.4794 - val_value_loss: 0.0625 - val_policy_acc: 0.7468
-
-d_4750_2000_800_5ep.h5
-val_policy_acc: 0.7540
-
-d_4750_2000_800_8res.h5
-val_policy_acc: 0.7560
-
-
-training d_51_2000_800...
- - 366s - loss: 2.0655 - policy_loss: 1.5303 - value_loss: 0.0826 - policy_acc: 0.7558 - val_loss: 2.0750 - val_policy_loss: 1.5354 - val_value_loss: 0.0859 - val_policy_acc: 0.7569
-
 pip tf 1.12
 predict_on_batch time: 1.5773558616638184
 predict time: 12.099738121032715 0.18905840814113617
@@ -170,57 +145,40 @@ predict_on_batch time: 1.66
 predict time: 17
 
 
-clr
- - 19s - loss: 2.7130 - policy_loss: 2.0222 - value_loss: 0.1348 - policy_acc: 0.6456 - val_loss: 4.0534 - val_policy_loss: 2.9940 - val_value_loss: 0.2597 - val_policy_acc: 0.3533
-training finished!
-Ran 1 test in 195.235s
 
 
-no clr
- - 21s - loss: 3.9975 - policy_loss: 3.0121 - value_loss: 0.1979 - policy_acc: 0.3686 - val_loss: 4.6403 - val_policy_loss: 3.4695 - val_value_loss: 0.2690 - val_policy_acc: 0.2606
-training finished!
-Ran 1 test in 251.390s
+training 160-6
+ - 1360s - loss: 3.6013 - policy_loss: 2.6451 - value_loss: 0.2197 - policy_acc: 0.4596 - val_loss: 2.8237 - val_policy_loss: 2.0545 - val_value_loss: 0.1613 - val_policy_acc: 0.5876
+ - 1352s - loss: 2.7003 - policy_loss: 1.9657 - value_loss: 0.1389 - policy_acc: 0.6175 - val_loss: 2.6471 - val_policy_loss: 1.9216 - val_value_loss: 0.1333 - val_policy_acc: 0.6301
+ - 1355s - loss: 2.4460 - policy_loss: 1.7965 - value_loss: 0.0952 - policy_acc: 0.6837 - val_loss: 2.4655 - val_policy_loss: 1.8045 - val_value_loss: 0.1083 - val_policy_acc: 0.6707
+ - 1353s - loss: 2.3687 - policy_loss: 1.7503 - value_loss: 0.0804 - policy_acc: 0.7061 - val_loss: 2.4255 - val_policy_loss: 1.7897 - val_value_loss: 0.0889 - val_policy_acc: 0.6777
+ - 1355s - loss: 2.2775 - policy_loss: 1.6926 - value_loss: 0.0637 - policy_acc: 0.7431 - val_loss: 2.3851 - val_policy_loss: 1.7657 - val_value_loss: 0.0811 - val_policy_acc: 0.6893
+ - 1353s - loss: 2.2503 - policy_loss: 1.6763 - value_loss: 0.0587 - policy_acc: 0.7536 - val_loss: 2.3980 - val_policy_loss: 1.7643 - val_value_loss: 0.0971 - val_policy_acc: 0.6891
+ - 1355s - loss: 2.2138 - policy_loss: 1.6533 - value_loss: 0.0521 - policy_acc: 0.7722 - val_loss: 2.3635 - val_policy_loss: 1.7548 - val_value_loss: 0.0752 - val_policy_acc: 0.7001
+ - 1353s - loss: 2.2050 - policy_loss: 1.6481 - value_loss: 0.0505 - policy_acc: 0.7762 - val_loss: 2.3626 - val_policy_loss: 1.7548 - val_value_loss: 0.0750 - val_policy_acc: 0.6971
+ - 1355s - loss: 2.1930 - policy_loss: 1.6405 - value_loss: 0.0483 - policy_acc: 0.7831 - val_loss: 2.3616 - val_policy_loss: 1.7526 - val_value_loss: 0.0769 - val_policy_acc: 0.7007
+ - 1353s - loss: 2.1903 - policy_loss: 1.6389 - value_loss: 0.0479 - policy_acc: 0.7846 - val_loss: 2.3580 - val_policy_loss: 1.7523 - val_value_loss: 0.0739 - val_policy_acc: 0.7021
 
-clr triangular
-training...
-D:\repos\colosus\colosus\colosus_model.py:281: FutureWarning: arrays to stack must be passed as a "sequence" type such as list or tuple. Support for non-sequence iterables such as generators is deprecated as of NumPy 1.16 and will raise an error in the future.
-  boards = np.stack(positions)
-Train on 2647223 samples, validate on 54025 samples
-Epoch 1/20
- - 1940s - loss: 3.2307 - policy_loss: 2.3882 - value_loss: 0.1988 - policy_acc: 0.4815 - val_loss: 2.4912 - val_policy_loss: 1.8175 - val_value_loss: 0.1497 - val_policy_acc: 0.6189
-Epoch 2/20
- - 1916s - loss: 2.3000 - policy_loss: 1.6760 - value_loss: 0.1225 - policy_acc: 0.6658 - val_loss: 2.1366 - val_policy_loss: 1.5671 - val_value_loss: 0.0971 - val_policy_acc: 0.7062
-Epoch 3/20
- - 1922s - loss: 2.1867 - policy_loss: 1.5989 - value_loss: 0.1026 - policy_acc: 0.6944 - val_loss: 2.2676 - val_policy_loss: 1.6417 - val_value_loss: 0.1124 - val_policy_acc: 0.6693
-Epoch 4/20
- - 1921s - loss: 2.1772 - policy_loss: 1.5798 - value_loss: 0.0959 - policy_acc: 0.7002 - val_loss: 2.0743 - val_policy_loss: 1.5174 - val_value_loss: 0.0793 - val_policy_acc: 0.7274
-Epoch 5/20
- - 1916s - loss: 2.1035 - policy_loss: 1.5373 - value_loss: 0.0823 - policy_acc: 0.7196 - val_loss: 2.2123 - val_policy_loss: 1.5967 - val_value_loss: 0.1044 - val_policy_acc: 0.6847
-Epoch 6/20
- - 1916s - loss: 2.1369 - policy_loss: 1.5498 - value_loss: 0.0853 - policy_acc: 0.7114 - val_loss: 2.0524 - val_policy_loss: 1.5008 - val_value_loss: 0.0718 - val_policy_acc: 0.7332
-Epoch 7/20
- - 1916s - loss: 2.0663 - policy_loss: 1.5116 - value_loss: 0.0724 - policy_acc: 0.7309 - val_loss: 2.1670 - val_policy_loss: 1.5702 - val_value_loss: 0.0899 - val_policy_acc: 0.6980
-Epoch 8/20
- - 1916s - loss: 2.1173 - policy_loss: 1.5360 - value_loss: 0.0801 - policy_acc: 0.7172 - val_loss: 2.0428 - val_policy_loss: 1.4930 - val_value_loss: 0.0697 - val_policy_acc: 0.7341
-Epoch 9/20
- - 1916s - loss: 2.0434 - policy_loss: 1.4967 - value_loss: 0.0668 - policy_acc: 0.7376 - val_loss: 2.1452 - val_policy_loss: 1.5560 - val_value_loss: 0.0861 - val_policy_acc: 0.7012
-Epoch 10/20
- - 1915s - loss: 2.1055 - policy_loss: 1.5284 - value_loss: 0.0770 - policy_acc: 0.7197 - val_loss: 2.0358 - val_policy_loss: 1.4884 - val_value_loss: 0.0675 - val_policy_acc: 0.7365
-Epoch 11/20
- - 1915s - loss: 2.0276 - policy_loss: 1.4871 - value_loss: 0.0628 - policy_acc: 0.7427 - val_loss: 2.1257 - val_policy_loss: 1.5444 - val_value_loss: 0.0825 - val_policy_acc: 0.7054
-Epoch 12/20
- - 1915s - loss: 2.0976 - policy_loss: 1.5237 - value_loss: 0.0752 - policy_acc: 0.7215 - val_loss: 2.0339 - val_policy_loss: 1.4874 - val_value_loss: 0.0665 - val_policy_acc: 0.7349
-Epoch 13/20
- - 1915s - loss: 2.0158 - policy_loss: 1.4802 - value_loss: 0.0602 - policy_acc: 0.7460 - val_loss: 2.1161 - val_policy_loss: 1.5380 - val_value_loss: 0.0823 - val_policy_acc: 0.7081
-Epoch 14/20
- - 1915s - loss: 2.0906 - policy_loss: 1.5199 - value_loss: 0.0736 - policy_acc: 0.7234 - val_loss: 2.0279 - val_policy_loss: 1.4843 - val_value_loss: 0.0647 - val_policy_acc: 0.7376
-Epoch 15/20
- - 1916s - loss: 2.0059 - policy_loss: 1.4746 - value_loss: 0.0581 - policy_acc: 0.7489 - val_loss: 2.1050 - val_policy_loss: 1.5296 - val_value_loss: 0.0839 - val_policy_acc: 0.7129
-Epoch 16/20
- - 1915s - loss: 2.0853 - policy_loss: 1.5172 - value_loss: 0.0727 - policy_acc: 0.7244 - val_loss: 2.0329 - val_policy_loss: 1.4875 - val_value_loss: 0.0659 - val_policy_acc: 0.7350
-Epoch 17/20
- - 1915s - loss: 1.9982 - policy_loss: 1.4705 - value_loss: 0.0564 - policy_acc: 0.7510 - val_loss: 2.0906 - val_policy_loss: 1.5272 - val_value_loss: 0.0742 - val_policy_acc: 0.7141
-Epoch 18/20
- - 1915s - loss: 2.0808 - policy_loss: 1.5151 - value_loss: 0.0719 - policy_acc: 0.7251 - val_loss: 2.0317 - val_policy_loss: 1.4861 - val_value_loss: 0.0668 - val_policy_acc: 0.7370
+training 160-4
+ - 933s - loss: 3.4667 - policy_loss: 2.5509 - value_loss: 0.2094 - policy_acc: 0.4787 - val_loss: 2.8277 - val_policy_loss: 2.0569 - val_value_loss: 0.1700 - val_policy_acc: 0.5760
+ - 930s - loss: 2.6995 - policy_loss: 1.9757 - value_loss: 0.1333 - policy_acc: 0.6150 - val_loss: 2.7145 - val_policy_loss: 1.9721 - val_value_loss: 0.1443 - val_policy_acc: 0.6133
+ - 933s - loss: 2.4565 - policy_loss: 1.8113 - value_loss: 0.0922 - policy_acc: 0.6801 - val_loss: 2.4859 - val_policy_loss: 1.8328 - val_value_loss: 0.0977 - val_policy_acc: 0.6561
+ - 931s - loss: 2.3831 - policy_loss: 1.7669 - value_loss: 0.0785 - policy_acc: 0.7009 - val_loss: 2.4624 - val_policy_loss: 1.8147 - val_value_loss: 0.0993 - val_policy_acc: 0.6670
+ - 933s - loss: 2.2941 - policy_loss: 1.7102 - value_loss: 0.0627 - policy_acc: 0.7367 - val_loss: 2.4037 - val_policy_loss: 1.7854 - val_value_loss: 0.0793 - val_policy_acc: 0.6810
+ - 931s - loss: 2.2686 - policy_loss: 1.6951 - value_loss: 0.0581 - policy_acc: 0.7458 - val_loss: 2.3967 - val_policy_loss: 1.7822 - val_value_loss: 0.0780 - val_policy_acc: 0.6815
+ - 933s - loss: 2.2338 - policy_loss: 1.6729 - value_loss: 0.0520 - policy_acc: 0.7637 - val_loss: 2.3839 - val_policy_loss: 1.7751 - val_value_loss: 0.0746 - val_policy_acc: 0.6919
+ - 931s - loss: 2.2256 - policy_loss: 1.6679 - value_loss: 0.0507 - policy_acc: 0.7672 - val_loss: 2.3835 - val_policy_loss: 1.7744 - val_value_loss: 0.0757 - val_policy_acc: 0.6891
+ - 933s - loss: 2.2142 - policy_loss: 1.6606 - value_loss: 0.0487 - policy_acc: 0.7735 - val_loss: 2.3797 - val_policy_loss: 1.7731 - val_value_loss: 0.0738 - val_policy_acc: 0.6891
+ - 931s - loss: 2.2116 - policy_loss: 1.6591 - value_loss: 0.0483 - policy_acc: 0.7741 - val_loss: 2.3778 - val_policy_loss: 1.7720 - val_value_loss: 0.0734 - val_policy_acc: 0.6918
 
-
+120-6
+ - 771s - loss: 3.4854 - policy_loss: 2.5616 - value_loss: 0.2163 - policy_acc: 0.4762 - val_loss: 2.8873 - val_policy_loss: 2.0946 - val_value_loss: 0.1850 - val_policy_acc: 0.5749
+ - 768s - loss: 2.6931 - policy_loss: 1.9680 - value_loss: 0.1390 - policy_acc: 0.6163 - val_loss: 2.6711 - val_policy_loss: 1.9331 - val_value_loss: 0.1528 - val_policy_acc: 0.6197
+ - 773s - loss: 2.4499 - policy_loss: 1.8050 - value_loss: 0.0967 - policy_acc: 0.6797 - val_loss: 2.4723 - val_policy_loss: 1.8242 - val_value_loss: 0.0980 - val_policy_acc: 0.6601
+ - 770s - loss: 2.3756 - policy_loss: 1.7609 - value_loss: 0.0813 - policy_acc: 0.7012 - val_loss: 2.4411 - val_policy_loss: 1.8059 - val_value_loss: 0.0914 - val_policy_acc: 0.6698
+ - 773s - loss: 2.2864 - policy_loss: 1.7045 - value_loss: 0.0645 - policy_acc: 0.7370 - val_loss: 2.3967 - val_policy_loss: 1.7799 - val_value_loss: 0.0817 - val_policy_acc: 0.6812
+ - 770s - loss: 2.2598 - policy_loss: 1.6888 - value_loss: 0.0593 - policy_acc: 0.7479 - val_loss: 2.4286 - val_policy_loss: 1.7840 - val_value_loss: 0.1100 - val_policy_acc: 0.6843
+ - 778s - loss: 2.2246 - policy_loss: 1.6666 - value_loss: 0.0529 - policy_acc: 0.7650 - val_loss: 2.3775 - val_policy_loss: 1.7705 - val_value_loss: 0.0763 - val_policy_acc: 0.6923
+ - 779s - loss: 2.2163 - policy_loss: 1.6618 - value_loss: 0.0513 - policy_acc: 0.7692 - val_loss: 2.3774 - val_policy_loss: 1.7702 - val_value_loss: 0.0771 - val_policy_acc: 0.6891
+ - 779s - loss: 2.2048 - policy_loss: 1.6545 - value_loss: 0.0492 - policy_acc: 0.7751 - val_loss: 2.3740 - val_policy_loss: 1.7690 - val_value_loss: 0.0753 - val_policy_acc: 0.6931
+ - 772s - loss: 2.2022 - policy_loss: 1.6530 - value_loss: 0.0487 - policy_acc: 0.7764 - val_loss: 2.3741 - val_policy_loss: 1.7695 - val_value_loss: 0.0750 - val_policy_acc: 0.6920

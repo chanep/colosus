@@ -100,7 +100,7 @@ class StateMb:
         if self.is_root() and self.noise is None and self.config.noise_factor > 0:
             self.noise = np.random.dirichlet([self.config.noise_alpha] * len(children))
 
-        fpu = -self.Q if self.is_root() else -self.Q - 1.2 * math.sqrt(self.P)
+        fpu = (-self.Q + self.config.fpuRoot) if self.is_root() else -self.Q - 1.2 * math.sqrt(self.P)
 
         for i in range(len(children)):
             child = children[i]  # 20%
@@ -131,7 +131,7 @@ class StateMb:
         self._prev_position = None
         return self._position
 
-    def children(self):
+    def children(self) -> List['StateMb']:
         if self._children is not None:
             return self._children
         if self.policy is None:
@@ -205,9 +205,21 @@ class StateMb:
         return legal_policy / np.sum(legal_policy)
 
     def print(self):
-        print("N: {}, W: {}, Q: {}".format(self.N, self.W, self.Q))
+        print("N: {}, W: {}, Q: {}, P: {}".format(self.N, self.W, self.Q, self.P))
         self.position().print()
 
+    def print_children_stats(self, count=10):
+        sorted_children = sorted(self.children(), key=lambda c: -1 if c is None else c.N, reverse=True)
+        for i in range(count):
+            c = sorted_children[i]
+            print(f"{Square.to_string(c._move)} - N: {c.N}, Q: {c.Q}, W: {c.W}, P: {c.P}")
+
+    def sort_policy(self, policy):
+        move_policy = []
+        for m in range(len(policy)):
+            m_str = Square.to_string(m)
+            move_policy.append((m_str, policy[m]))
+        return sorted(move_policy, key=lambda t: t[1], reverse=True)
 
     @staticmethod
     def print_policy(policy, limit):

@@ -39,15 +39,15 @@ class EvaluatorTestCase(unittest.TestCase):
         config.player_config.state_config.policy_offset = 0
         config.player2_config.state_config.policy_offset = 0
 
-        # config.colosus2_config.residual_blocks = 4
-        # config.colosus2_config.conv_size = 120
+        config.colosus2_config.residual_blocks = 4
+        config.colosus2_config.conv_size = 120
 
-        config.player_type = PlayerType.player
-        config.player2_type = PlayerType.player
+        config.player_type = PlayerType.player_mb
+        config.player2_type = PlayerType.player_mb
 
         evaluator = Evaluator(config)
 
-        evaluator.evaluate(400, 1, pos, "e_06_2000_800.h5", "e_04_2000_800.h5", times_per_move=0.5)
+        evaluator.evaluate(400, 0, pos, "e_07_2000_800.h5", "cpo99345_47_5000_800.h5", times_per_move=1)
         # evaluator.evaluate(400, 1, pos, "e_01_2000_800.h5", "cpo99345_47_5000_800.h5")
 
     def test_evaluate_mp(self):

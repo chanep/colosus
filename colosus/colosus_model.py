@@ -7,7 +7,7 @@ from threading import Lock
 
 from tensorflow.python.keras.utils import Sequence
 from tensorflow.python.keras import Input
-from tensorflow.python.keras.optimizers import Adam
+from tensorflow.python.keras.optimizers import Adam, SGD
 from tensorflow.python.keras.models import Model
 from tensorflow.python.keras.layers import Conv2D, Activation, Flatten, Dense, Add, Multiply, Lambda, Concatenate
 from tensorflow.python.layers.normalization import BatchNormalization
@@ -125,11 +125,12 @@ class ColosusModel:
             self.model = Model(in_x, [policy_out, value_out], name="colosus_model")
 
             opt = Adam(lr=self.config.lr, beta_1=0.9, beta_2=0.999, epsilon=1e-8)
+            opt2 = SGD(lr=self.config.lr, momentum=0.85, nesterov=True)
             losses = ['categorical_crossentropy', 'mean_squared_error']
             metrics = {"policy": 'acc'}
             # metrics = ['accuracy']
 
-            self.model.compile(optimizer=opt, loss=losses, metrics=metrics, loss_weights=[1.25, 1.0])
+            self.model.compile(optimizer=opt2, loss=losses, metrics=metrics, loss_weights=[1.25, 1.0])
             self.model._make_predict_function()  # for multithread
 
     def _build_residual_block(self, x, index):
@@ -201,16 +202,6 @@ class ColosusModel:
         boards = self._positions_to_inputs(positions)
         policies = np.stack(policies)
         values = np.array(values)
-
-        # print("antes cast")
-        #
-        # boards = boards.astype(np.float32)
-        # policies = policies.astype(np.float32)
-        # values = values.astype(np.float32)
-        #
-        # print(boards.shape, boards.dtype)
-        # print(policies.shape, policies.dtype)
-        # print(values.shape, values.dtype)
 
         with self.graph.as_default():
             with self.session.as_default():

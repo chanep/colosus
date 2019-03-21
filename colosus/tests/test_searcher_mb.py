@@ -81,7 +81,7 @@ class SearcherTestCase(unittest.TestCase):
         colosus = ColosusModel(colosus_config)
         colosus.build()
 
-        colosus.load_weights("e_01_2000_800.h5")
+        colosus.load_weights("e_07_2000_800.h5")
 
         pos = Position()
         pos.put_piece(Side.BLACK, 7, 7)
@@ -92,7 +92,6 @@ class SearcherTestCase(unittest.TestCase):
         # pos.put_piece(Side.BLACK, 1, 2)
         # pos.put_piece(Side.WHITE, 6, 8)
         # pos.put_piece(Side.BLACK, 4, 9)
-
 
         pos.switch_side()
 
@@ -105,25 +104,28 @@ class SearcherTestCase(unittest.TestCase):
 
         state_config = StateConfig()
         state_config.noise_factor = 0.0
+        state_config.fpuRoot = 0.5
         state = StateMb(pos, None, None, state_config)
 
         searcher.search(state, 2)
 
-        pr = cProfile.Profile()
-        pr.enable()
+        # pr = cProfile.Profile()
+        # pr.enable()
 
         start = time.time()
         policy, temp_policy, value, move, new_state = searcher.search(state, 512)
 
         print("time: " + str(time.time() - start))
 
-        pr.disable()
-        s = io.StringIO()
-        sortby = 'cumulative'
-        ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
-        ps.print_stats()
-        print(s.getvalue())
+        # pr.disable()
+        # s = io.StringIO()
+        # sortby = 'cumulative'
+        # ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+        # ps.print_stats()
+        # print(s.getvalue())
 
+        state.print_children_stats(20)
+        print()
         state.print()
         new_state.print()
 
@@ -176,7 +178,7 @@ class SearcherTestCase(unittest.TestCase):
         colosus = ColosusModel(colosus_config)
         colosus.build()
 
-        colosus.load_weights("e_01_2000_800.h5")
+        colosus.load_weights("e_07_2000_800.h5")
 
         pos = Position()
         pos.put_piece(Side.BLACK, 7, 7)

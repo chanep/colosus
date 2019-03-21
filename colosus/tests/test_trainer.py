@@ -41,21 +41,79 @@ class TrainerTestCase(unittest.TestCase):
         trainer.train_clr(train_filename, weights_filename, 4, prev_weights_filename, 0.00001, 0.0001, 1000)
 
     def test_train_clr_bignn(self):
-        print("training d_4953_2000_800...")
-        train_filename = "d_4953_2000_800.dat"
-        weights_filename = "d_4953_2000_800_bignn.h5"
-        prev_weights_filename = None
+        print("training e_07_2000_800...")
+        train_filename = "e_07_2000_800.dat"
+
         trainer_config = TrainerConfig()
         trainer = Trainer(trainer_config)
 
-        trainer_config.colosus_config.conv_size = 160
-        trainer_config.colosus_config.residual_blocks = 6
+        print("training 160-6")
+        weights_filename = "160_6_sgd.h5"
+        prev_weights_filename = None
+        trainer_config.colosus_config.lr = 0.003
+        trainer.train(train_filename, weights_filename, 1, prev_weights_filename)
+        prev_weights_filename = weights_filename
+        trainer_config.colosus_config.lr = 0.001
+        trainer.train(train_filename, weights_filename, 1, prev_weights_filename)
+        trainer_config.colosus_config.lr = 0.0003
+        trainer.train(train_filename, weights_filename, 1, prev_weights_filename)
 
-        # trainer.train_clr(train_filename, weights_filename, 4, prev_weights_filename, 0.0001, 0.001, 5000)
 
-        prev_weights_filename = "d_4953_2000_800_bignn.h5"
-        trainer.train_clr(train_filename, weights_filename, 2, prev_weights_filename, 0.00003, 0.0003, 2000)
-        trainer.train_clr(train_filename, weights_filename, 2, prev_weights_filename, 0.00001, 0.0001, 2000)
+        # print("training 160-6")
+        # weights_filename = "160_6.h5"
+        # prev_weights_filename = None
+        # trainer_config.colosus_config.lr = 0.001
+        # trainer.train(train_filename, weights_filename, 2, prev_weights_filename)
+        # prev_weights_filename = weights_filename
+        # trainer_config.colosus_config.lr = 0.0003
+        # trainer.train(train_filename, weights_filename, 2, prev_weights_filename)
+        # trainer_config.colosus_config.lr = 0.0001
+        # trainer.train(train_filename, weights_filename, 2, prev_weights_filename)
+        # trainer_config.colosus_config.lr = 0.00003
+        # trainer.train(train_filename, weights_filename, 2, prev_weights_filename)
+        # trainer_config.colosus_config.lr = 0.00001
+        # trainer.train(train_filename, weights_filename, 2, prev_weights_filename)
+
+        # weights_filename = "160_6_2.h5"
+        # trainer.train_clr(train_filename, weights_filename, 1, prev_weights_filename, 0.0002, 0.001, 1000)
+        # prev_weights_filename = weights_filename
+        # trainer.train_clr(train_filename, weights_filename, 1, prev_weights_filename, 0.00006, 0.0003, 1000)
+        # trainer.train_clr(train_filename, weights_filename, 1, prev_weights_filename, 0.00002, 0.0001, 1000)
+        # trainer.train_clr(train_filename, weights_filename, 1, prev_weights_filename, 0.000006, 0.00003, 1000)
+
+        # print("training 160-4")
+        # weights_filename = "160_4.h5"
+        # prev_weights_filename = None
+        # trainer_config.colosus_config.conv_size = 160
+        # trainer_config.colosus_config.residual_blocks = 4
+        # trainer_config.colosus_config.lr = 0.001
+        # trainer.train(train_filename, weights_filename, 2, prev_weights_filename)
+        # prev_weights_filename = weights_filename
+        # trainer_config.colosus_config.lr = 0.0003
+        # trainer.train(train_filename, weights_filename, 2, prev_weights_filename)
+        # trainer_config.colosus_config.lr = 0.0001
+        # trainer.train(train_filename, weights_filename, 2, prev_weights_filename)
+        # trainer_config.colosus_config.lr = 0.00003
+        # trainer.train(train_filename, weights_filename, 2, prev_weights_filename)
+        # trainer_config.colosus_config.lr = 0.00001
+        # trainer.train(train_filename, weights_filename, 2, prev_weights_filename)
+        #
+        # print("training 120-6")
+        # weights_filename = "120_6.h5"
+        # prev_weights_filename = None
+        # trainer_config.colosus_config.conv_size = 120
+        # trainer_config.colosus_config.residual_blocks = 6
+        # trainer_config.colosus_config.lr = 0.001
+        # trainer.train(train_filename, weights_filename, 2, prev_weights_filename)
+        # prev_weights_filename = weights_filename
+        # trainer_config.colosus_config.lr = 0.0003
+        # trainer.train(train_filename, weights_filename, 2, prev_weights_filename)
+        # trainer_config.colosus_config.lr = 0.0001
+        # trainer.train(train_filename, weights_filename, 2, prev_weights_filename)
+        # trainer_config.colosus_config.lr = 0.00003
+        # trainer.train(train_filename, weights_filename, 2, prev_weights_filename)
+        # trainer_config.colosus_config.lr = 0.00001
+        # trainer.train(train_filename, weights_filename, 2, prev_weights_filename)
 
     def test_train_noclr(self):
         epochs = 2
