@@ -103,22 +103,22 @@ class SelfPlayTestCase(unittest.TestCase):
         config = SelfPlayConfig()
 
         config.search_config.tempf = 0.3
-        config.state_config.policy_offset = -0.5 / 800
+        config.state_config.policy_offset = -0.99 / 800
 
         self_play = SelfPlayMpMb(config)
 
-        train_filename = "e_07_2000_800.dat"
-        train_filename_a = "e_07a_2000_800.dat"
-        train_filename_b = "e_07b_2000_800.dat"
-        train_filename_c = "e_07c_2000_800.dat"
-        train_filename_d = "e_07d_2000_800.dat"
-        weights_filename = "e_06_2000_800.h5"
+        train_filename = "e_10_2000_800.dat"
+        train_filename_a = "e_10a_2000_800.dat"
+        train_filename_b = "e_10b_2000_800.dat"
+        train_filename_c = "e_10c_2000_800.dat"
+        train_filename_d = "e_10d_2000_800.dat"
+        weights_filename = "e_09_2000_800.h5"
 
-        config.search_config.move_count_temp0 = 24
-        config.search_config.temp0 = 1.4
-        self_play.play(500, 800, pos, train_filename_a, 11, weights_filename)
-        time.sleep(5)
-        TrainRecordSet.merge_and_rotate(train_filename_a, 11)
+        # config.search_config.move_count_temp0 = 24
+        # config.search_config.temp0 = 1.4
+        # self_play.play(500, 800, pos, train_filename_a, 11, weights_filename)
+        # time.sleep(5)
+        # TrainRecordSet.merge_and_rotate(train_filename_a, 11)
 
         config.search_config.move_count_temp0 = 26
         config.search_config.temp0 = 1.25

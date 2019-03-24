@@ -138,7 +138,7 @@ class SearcherTestCase(unittest.TestCase):
         colosus_config = ColosusConfig()
         colosus = ColosusModel(colosus_config)
         colosus.build()
-        colosus.load_weights("e_01_2000_800.h5")
+        colosus.load_weights("e_0806_2000_800.h5")
 
         pos = Position()
         pos.put_piece(Side.BLACK, 7, 7)
@@ -175,10 +175,14 @@ class SearcherTestCase(unittest.TestCase):
 
     def test_search_mb_time_per_move(self):
         colosus_config = ColosusConfig()
+        # colosus_config.conv_size = 120
+        # colosus_config.residual_blocks = 4
+
         colosus = ColosusModel(colosus_config)
         colosus.build()
 
-        colosus.load_weights("e_07_2000_800.h5")
+        colosus.load_weights("e_0608_2000_800.h5")
+        # colosus.load_weights("cpo99345_47_5000_800.h5")
 
         pos = Position()
         pos.put_piece(Side.BLACK, 7, 7)
@@ -195,7 +199,7 @@ class SearcherTestCase(unittest.TestCase):
         config = SearchConfig()
         config.temp0 = 0
         config.mb_size = 64
-        config.max_collisions = 32
+        config.max_collisions = 16
 
         searcher = SearcherMb(config, colosus)
 

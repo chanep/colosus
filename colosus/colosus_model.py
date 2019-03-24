@@ -18,6 +18,7 @@ from colosus.game import model_position
 from colosus.game.model_position import ModelPosition
 from colosus.game.position import Position
 from .cyclical import CyclicLR
+from .batch_renormalization import BatchRenormalization
 
 
 class PositionSequence(Sequence):
@@ -70,7 +71,7 @@ class ColosusModel:
 
         with self.graph.as_default():
             data_format = "channels_last" if self.config.data_format_channel_last else "channels_first"
-            bn_axis = 3 if self.config.data_format_channel_last else 1
+            bn_axis = -1 if self.config.data_format_channel_last else 1
 
             if self.config.data_format_channel_last:
                 in_x = x = Input((self.B_SIZE, self.B_SIZE, 2))
@@ -93,6 +94,7 @@ class ColosusModel:
             # x = Add(name="in_conv_add")([x, x2, x3])
 
             x = BatchNormalization(axis=bn_axis, name="input_batchnorm")(x)
+            # x = BatchRenormalization(axis=bn_axis, name="input_batchnorm")(x)
             x = Activation("relu", name="input_relu")(x)
 
             for i in range(self.config.residual_blocks):
@@ -106,6 +108,7 @@ class ColosusModel:
                        kernel_regularizer=self.reg,
                        name="policy_conv-1-2")(res_out)
             x = BatchNormalization(axis=bn_axis, name="policy_batchnorm")(x)
+            # x = BatchRenormalization(axis=bn_axis, name="policy_batchnorm")(x)
             x = Activation("relu", name="policy_relu")(x)
             x = Flatten(name="policy_flatten")(x)
             policy_out = Dense(self.B_SIZE * self.B_SIZE, kernel_regularizer=self.reg, activation="softmax",
@@ -116,6 +119,7 @@ class ColosusModel:
                        kernel_regularizer=self.reg,
                        name="value_conv-1-4")(res_out)
             x = BatchNormalization(axis=bn_axis, name="value_batchnorm")(x)
+            # x = BatchRenormalization(axis=bn_axis, name="value_batchnorm")(x)
             x = Activation("relu", name="value_relu")(x)
             x = Flatten(name="value_flatten")(x)
             x = Dense(256, kernel_regularizer=self.reg, activation="relu", name="value_dense")(x)
@@ -125,12 +129,12 @@ class ColosusModel:
             self.model = Model(in_x, [policy_out, value_out], name="colosus_model")
 
             opt = Adam(lr=self.config.lr, beta_1=0.9, beta_2=0.999, epsilon=1e-8)
-            opt2 = SGD(lr=self.config.lr, momentum=0.85, nesterov=True)
+            # opt2 = SGD(lr=self.config.lr, momentum=0.85, nesterov=True)
             losses = ['categorical_crossentropy', 'mean_squared_error']
             metrics = {"policy": 'acc'}
             # metrics = ['accuracy']
 
-            self.model.compile(optimizer=opt2, loss=losses, metrics=metrics, loss_weights=[1.25, 1.0])
+            self.model.compile(optimizer=opt, loss=losses, metrics=metrics, loss_weights=[1.25, 1.0])
             self.model._make_predict_function()  # for multithread
 
     def _build_residual_block(self, x, index):
@@ -144,11 +148,13 @@ class ColosusModel:
                    data_format=data_format, use_bias=False, kernel_regularizer=self.reg,
                    name=res_name + "_conv1-3-256")(x)
         x = BatchNormalization(axis=bn_axis, name=res_name + "_batchnorm1")(x)
+        # x = BatchRenormalization(axis=bn_axis, name=res_name + "_batchnorm1")(x)
         x = Activation("relu", name=res_name + "_relu1")(x)
         x = Conv2D(filters=self.config.conv_size, kernel_size=3, padding="same",
                    data_format=data_format, use_bias=False, kernel_regularizer=self.reg,
                    name=res_name + "_conv2-3-256")(x)
         x = BatchNormalization(axis=bn_axis, name="res" + str(index) + "_batchnorm2")(x)
+        # x = BatchRenormalization(axis=bn_axis, name="res" + str(index) + "_batchnorm2")(x)
         x = Add(name=res_name + "_add")([in_x, x])
         x = Activation("relu", name=res_name + "_relu2")(x)
         return x
