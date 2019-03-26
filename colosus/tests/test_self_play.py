@@ -107,12 +107,14 @@ class SelfPlayTestCase(unittest.TestCase):
 
         self_play = SelfPlayMpMb(config)
 
-        train_filename = "e_10_2000_800.dat"
-        train_filename_a = "e_10a_2000_800.dat"
-        train_filename_b = "e_10b_2000_800.dat"
-        train_filename_c = "e_10c_2000_800.dat"
-        train_filename_d = "e_10d_2000_800.dat"
+        train_filename = "e_10_2000_800_noz.dat"
+        train_filename_a = "e_10a_2000_800_noz.dat"
+        train_filename_b = "e_10b_2000_800_noz.dat"
+        train_filename_c = "e_10c_2000_800_noz.dat"
+        train_filename_d = "e_10d_2000_800_noz.dat"
         weights_filename = "e_09_2000_800.h5"
+
+        config.z_factor = 0
 
         config.search_config.move_count_temp0 = 24
         config.search_config.temp0 = 1.4

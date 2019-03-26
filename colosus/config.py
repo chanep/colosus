@@ -38,6 +38,7 @@ class TrainerConfig:
 
 class SelfPlayConfig:
     def __init__(self):
+        self.z_factor = 0.25
         self.colosus_config = ColosusConfig()
         self.state_config = StateConfig()
         self.state_config.cpuct = 2 * 3

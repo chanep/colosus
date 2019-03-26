@@ -98,7 +98,7 @@ class SelfPlayMpMb:
 
             z = - state.position().score
             for j in reversed(range(len(game_records_z))):
-                game_records_z[j].value = 0.75 * game_records_z[j].value + 0.25 * z
+                game_records_z[j].value = (1 - self.config.z_factor) * game_records_z[j].value + self.config.z_factor * z
                 z = -z * state.config.backup_factor
 
             # train_record_set.extend(game_records)
