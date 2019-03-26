@@ -22,47 +22,57 @@ class Person:
 
 class TrainerTestCase(unittest.TestCase):
     def test_train(self):
-        print("training e_08_2000_800...")
-        train_filename = "e_09_2000_800.dat"
-        weights_filename = "e_09_2000_800.h5"
-        prev_weights_filename = "e_0608_2000_800.h5"
+        print("training e_10_2000_800...")
+        train_filename = "e_10_2000_800.dat"
+        weights_filename = "e_10_2000_800_noclr.h5"
+        prev_weights_filename = "e_09_2000_800.h5"
         trainer_config = TrainerConfig()
         trainer = Trainer(trainer_config)
-        # trainer_config.colosus_config.lr = 0.00003
-        # trainer.train(train_filename, weights_filename, 2, prev_weights_filename)
+        trainer_config.colosus_config.lr = 0.00003
+        trainer.train(train_filename, weights_filename, 2, prev_weights_filename)
         trainer_config.colosus_config.lr = 0.00001
         trainer.train(train_filename, weights_filename, 1, weights_filename)
 
     def test_train_clr(self):
-        print("training e_10_2000_800...")
-        train_filename = "e_10_2000_800.dat"
-        weights_filename = "e_10_2000_800.h5"
+        print("training e_0810_2000_800...")
+        train_filename = "e_0810_2000_800.dat"
+        weights_filename = "e_0810_2000_800.h5"
         prev_weights_filename = "e_09_2000_800.h5"
         trainer_config = TrainerConfig()
         trainer = Trainer(trainer_config)
-        trainer.train_clr(train_filename, weights_filename, 3, prev_weights_filename, 0.00001, 0.00006, 200)
+        trainer.train_clr(train_filename, weights_filename, 2, prev_weights_filename, 0.00001, 0.00006, 500)
 
     def test_train_clr_bignn(self):
-        print("training e_07_2000_800...")
-        train_filename = "e_07_2000_800.dat"
+        print("training e_0810_2000_800...")
+        train_filename = "e_0810_2000_800.dat"
 
         trainer_config = TrainerConfig()
         trainer = Trainer(trainer_config)
 
-        print("training 120-6_GN.h5")
-        weights_filename = "120-6_Bren.h5"
+        weights_filename = "e_0810_2000_800_None.h5"
         prev_weights_filename = None
         trainer_config.colosus_config.lr = 0.001
         trainer.train(train_filename, weights_filename, 2, prev_weights_filename)
         prev_weights_filename = weights_filename
-        trainer_config.colosus_config.lr = 0.0003
-        trainer.train(train_filename, weights_filename, 2, prev_weights_filename)
-        trainer_config.colosus_config.lr = 0.0001
-        trainer.train(train_filename, weights_filename, 2, prev_weights_filename)
-        trainer_config.colosus_config.lr = 0.00003
-        trainer.train(train_filename, weights_filename, 2, prev_weights_filename)
-        trainer_config.colosus_config.lr = 0.00001
-        trainer.train(train_filename, weights_filename, 2, prev_weights_filename)
+        trainer.train_clr(train_filename, weights_filename, 2, prev_weights_filename, 0.0002, 0.001, 1000)
+        trainer.train_clr(train_filename, weights_filename, 3, prev_weights_filename, 0.00004, 0.0002, 1000)
+        trainer.train_clr(train_filename, weights_filename, 3, prev_weights_filename, 0.00001, 0.00004, 1000)
+
+
+        # print("training 120-6_GN.h5")
+        # weights_filename = "120-6_Bren.h5"
+        # prev_weights_filename = None
+        # trainer_config.colosus_config.lr = 0.001
+        # trainer.train(train_filename, weights_filename, 2, prev_weights_filename)
+        # prev_weights_filename = weights_filename
+        # trainer_config.colosus_config.lr = 0.0003
+        # trainer.train(train_filename, weights_filename, 2, prev_weights_filename)
+        # trainer_config.colosus_config.lr = 0.0001
+        # trainer.train(train_filename, weights_filename, 2, prev_weights_filename)
+        # trainer_config.colosus_config.lr = 0.00003
+        # trainer.train(train_filename, weights_filename, 2, prev_weights_filename)
+        # trainer_config.colosus_config.lr = 0.00001
+        # trainer.train(train_filename, weights_filename, 2, prev_weights_filename)
 
 
         # print("training 160-6")

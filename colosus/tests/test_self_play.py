@@ -114,11 +114,11 @@ class SelfPlayTestCase(unittest.TestCase):
         train_filename_d = "e_10d_2000_800.dat"
         weights_filename = "e_09_2000_800.h5"
 
-        # config.search_config.move_count_temp0 = 24
-        # config.search_config.temp0 = 1.4
-        # self_play.play(500, 800, pos, train_filename_a, 11, weights_filename)
-        # time.sleep(5)
-        # TrainRecordSet.merge_and_rotate(train_filename_a, 11)
+        config.search_config.move_count_temp0 = 24
+        config.search_config.temp0 = 1.4
+        self_play.play(500, 800, pos, train_filename_a, 11, weights_filename)
+        time.sleep(5)
+        TrainRecordSet.merge_and_rotate(train_filename_a, 11)
 
         config.search_config.move_count_temp0 = 26
         config.search_config.temp0 = 1.25
