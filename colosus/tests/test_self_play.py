@@ -26,7 +26,7 @@ class SelfPlayTestCase(unittest.TestCase):
         config = SelfPlayConfig()
 
         config.search_config.tempf = 0.35
-        config.state_config.policy_offset = -0.5 / 800
+        config.state_config.policy_offset = -0.5
         self_play = SelfPlayMp(config)
 
         train_filename = "e_01_2000_800.dat"
@@ -103,7 +103,7 @@ class SelfPlayTestCase(unittest.TestCase):
         config = SelfPlayConfig()
 
         config.search_config.tempf = 0.3
-        config.state_config.policy_offset = -0.99 / 800
+        config.state_config.policy_offset = -0.99
 
         self_play = SelfPlayMpMb(config)
 
@@ -187,7 +187,7 @@ class SelfPlayTestCase(unittest.TestCase):
         config = SelfPlayConfig()
 
         config.search_config.tempf = 0.35
-        config.state_config.policy_offset = -0.5 / 800
+        config.state_config.policy_offset = -0.5
         self_play = SelfPlayMp(config)
 
         train_filename = "mp1.dat"
@@ -205,7 +205,7 @@ class SelfPlayTestCase(unittest.TestCase):
         config = SelfPlayConfig()
 
         config.search_config.tempf = 0.35
-        config.state_config.policy_offset = -0.5 / 800
+        config.state_config.policy_offset = -0.5
         config.search_config.mb_size = 16
         config.search_config.max_collisions = 1
 

@@ -49,7 +49,7 @@ class State:
         for i in range(policy_len):
             child = self.children()[i]
             if child is not None:
-                policy[i] = child.N / self.N + (child.P / math.sqrt(self.N))
+                policy[i] = max(0, (child.N - self.config.policy_offset)) / self.N + (child.P / math.sqrt(self.N))
         return policy / np.sum(policy)
 
     def play(self, temperature) -> (int, float, int, 'State'):
@@ -59,10 +59,7 @@ class State:
             temp_policy = np.zeros_like(policy)
             temp_policy[move] = 1.0
         else:
-            play_policy = np.clip(policy + self.config.policy_offset, 0.0, None)
-            play_policy = play_policy / np.sum(play_policy)
-
-            temp_policy = self.apply_temperature(play_policy, temperature)
+            temp_policy = self.apply_temperature(policy, temperature)
             move = np.random.choice(len(temp_policy), 1, p=temp_policy)[0]
         new_root_state = self.children()[move]
         new_root_state.parent = None

@@ -36,8 +36,8 @@ class EvaluatorTestCase(unittest.TestCase):
 
         config.player_config.search_config.temp0 = 0.9
         config.player2_config.search_config.temp0 = 0.9
-        config.player_config.state_config.policy_offset = -0.7/300
-        config.player2_config.state_config.policy_offset = -0.7/300
+        config.player_config.state_config.policy_offset = -0.7
+        config.player2_config.state_config.policy_offset = -0.7
 
         config.colosus2_config.residual_blocks = 4
         config.colosus2_config.conv_size = 120
