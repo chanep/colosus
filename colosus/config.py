@@ -41,7 +41,7 @@ class SelfPlayConfig:
         self.z_factor = 0.25
         self.colosus_config = ColosusConfig()
         self.state_config = StateConfig()
-        self.state_config.cpuct = 2 * 3
+        self.state_config.cpuct = 3
         self.search_config = SearchConfig()
         self.search_config.mb_size = 16
         self.search_config.max_collisions = 1

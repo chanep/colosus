@@ -107,12 +107,12 @@ class SelfPlayTestCase(unittest.TestCase):
 
         self_play = SelfPlayMpMb(config)
 
-        train_filename = "e_10_2000_800_noz.dat"
-        train_filename_a = "e_10a_2000_800_noz.dat"
-        train_filename_b = "e_10b_2000_800_noz.dat"
-        train_filename_c = "e_10c_2000_800_noz.dat"
-        train_filename_d = "e_10d_2000_800_noz.dat"
-        weights_filename = "e_09_2000_800.h5"
+        train_filename = "e_11_2000_800.dat"
+        train_filename_a = "e_11a_2000_800.dat"
+        train_filename_b = "e_11b_2000_800.dat"
+        train_filename_c = "e_11c_2000_800.dat"
+        train_filename_d = "e_11d_2000_800.dat"
+        weights_filename = "e_10_2000_800_cpuct3.h5"
 
         config.z_factor = 0
 
@@ -133,6 +133,8 @@ class SelfPlayTestCase(unittest.TestCase):
         self_play.play(500, 800, pos, train_filename_c, 11, weights_filename)
         time.sleep(5)
         TrainRecordSet.merge_and_rotate(train_filename_c, 11)
+
+        config.z_factor = 0.25
 
         config.search_config.move_count_temp0 = 40
         config.search_config.temp0 = 0.85

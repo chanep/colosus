@@ -143,6 +143,20 @@ e0810None vs e0810: 207.5-192.5
 e0810None vs e09: 185.5-214.5
 e0810None vs cpo: 182.5-217.5
 
+e10noz vs e10: 103.5-96.5
+e10z vs e10: 68.0-69.0
+e10zulti vs e10: 96.5-80.5
+
+e10cpuct4 vs e10zulti: 1s 113.5-86.5
+e10cpuct4 vs cpo: 1s 99.0-101.0
+e10cpuct3 vs e10cpuct4: 1s 88.0-78.0
+e10cpuct3 vs cpo: 1s 95.5-104.5
+
+e11 vs e10cpuct3: 190.5-209.5
+e11 vs cpo: 225.5-174.5  1s 110.5-89.5
+
+
+
 
 
 fpu vs no fpu: 144.5-55.5
@@ -243,3 +257,8 @@ SGD
  - 2406s - loss: 2.2878 - policy_loss: 1.7127 - value_loss: 0.0580 - policy_acc: 0.7594 - val_loss: 2.3415 - val_policy_loss: 1.7475 - val_value_loss: 0.0693 - val_policy_acc: 0.7329
 
  - 2396s - loss: 2.2610 - policy_loss: 1.7003 - value_loss: 0.0525 - policy_acc: 0.7701 - val_loss: 2.3317 - val_policy_loss: 1.7460 - val_value_loss: 0.0667 - val_policy_acc: 0.7389
+
+e11 trainer.train_clr(train_filename, weights_filename, 4, prev_weights_filename, 0.00001, 0.00005, 500)
+ - 1646s - loss: 2.5880 - policy_loss: 1.9936 - value_loss: 0.0241 - policy_acc: 0.7073 - val_loss: 2.6102 - val_policy_loss: 2.0109 - val_value_loss: 0.0249 - val_policy_acc: 0.6942
+
+ - 1770s - loss: 2.5634 - policy_loss: 1.9684 - value_loss: 0.0197 - policy_acc: 0.7239 - val_loss: 2.6120 - val_policy_loss: 2.0058 - val_value_loss: 0.0224 - val_policy_acc: 0.7027

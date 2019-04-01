@@ -34,13 +34,16 @@ class TrainerTestCase(unittest.TestCase):
         trainer.train(train_filename, weights_filename, 1, weights_filename)
 
     def test_train_clr(self):
-        print("training e_10_2000_800_noz...")
-        train_filename = "e_10_2000_800_noz.dat"
-        weights_filename = "e_10_2000_800_noz.h5"
-        prev_weights_filename = "e_09_2000_800.h5"
+        print("training e_11_2000_800...")
+        train_filename = "e_11_2000_800.dat"
+        weights_filename = "e_11_2000_800_3clr.h5"
+        prev_weights_filename = "e_10_2000_800_cpuct3.h5"
         trainer_config = TrainerConfig()
         trainer = Trainer(trainer_config)
-        trainer.train_clr(train_filename, weights_filename, 4, prev_weights_filename, 0.00001, 0.00005, 500)
+        # trainer.train_clr(train_filename, weights_filename, 1, prev_weights_filename, 0.0003, 0.0015, 500)
+        prev_weights_filename = weights_filename
+        # trainer.train_clr(train_filename, weights_filename, 1, prev_weights_filename, 0.00005, 0.0003, 500)
+        trainer.train_clr(train_filename, weights_filename, 1, prev_weights_filename, 0.00001, 0.00005, 500)
 
     def test_train_clr_bignn(self):
         print("training e_0810_2000_800...")
