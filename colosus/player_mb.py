@@ -31,6 +31,7 @@ class PlayerMb:
     def opponent_move(self, move):
         if self.state.children() is not None and self.state.children()[move] is not None:
             self.state = self.state.children()[move]
+            self.state.parent = None
         else:
             position = self.state.position().move(move)
             self.state = StateMb(position, None, None, self.config.state_config)

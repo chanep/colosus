@@ -103,16 +103,16 @@ class SelfPlayTestCase(unittest.TestCase):
         config = SelfPlayConfig()
 
         config.search_config.tempf = 0.3
-        config.state_config.policy_offset = -0.99
+        config.state_config.policy_offset = -1
 
         self_play = SelfPlayMpMb(config)
 
-        train_filename = "e_11_2000_800.dat"
-        train_filename_a = "e_11a_2000_800.dat"
-        train_filename_b = "e_11b_2000_800.dat"
-        train_filename_c = "e_11c_2000_800.dat"
-        train_filename_d = "e_11d_2000_800.dat"
-        weights_filename = "e_10_2000_800_cpuct3.h5"
+        train_filename = "e_12_2000_800.dat"
+        train_filename_a = "e_12a_2000_800.dat"
+        train_filename_b = "e_12b_2000_800.dat"
+        train_filename_c = "e_12c_2000_800.dat"
+        train_filename_d = "e_12d_2000_800.dat"
+        weights_filename = "e_11_2000_800.h5"
 
         config.z_factor = 0
 

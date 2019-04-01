@@ -47,7 +47,7 @@ class StateMb:
         for i in range(policy_len):
             child = self.children()[i]
             if child is not None:
-                policy[i] = max(0, (child.N - self.config.policy_offset)) / self.N + (child.P / math.sqrt(self.N))
+                policy[i] = max(0, (child.N + self.config.policy_offset)) / self.N + (child.P / math.sqrt(self.N))
         return policy / np.sum(policy)
 
     def play(self, temperature) -> (int, float, int, 'StateMb'):
@@ -209,7 +209,8 @@ class StateMb:
         sorted_children = sorted(self.children(), key=lambda c: -1 if c is None else c.N, reverse=True)
         for i in range(count):
             c = sorted_children[i]
-            print(f"{Square.to_string(c._move)} - N: {c.N}, Q: {c.Q}, W: {c.W}, P: {c.P}")
+            if c is not None:
+                print(f"{Square.to_string(c._move)} - N: {c.N}, Q: {c.Q}, W: {c.W}, P: {c.P}")
 
     def sort_policy(self, policy):
         move_policy = []

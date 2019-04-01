@@ -138,7 +138,10 @@ class Evaluator:
 
             # self.print_children(old_state)
             # position.print()
-            # print('')
+            # print('N: ' + str(old_state.N))
+            # print('move count: ' + str(old_state.position().move_count))
+            # old_state.print()
+            # old_state.print_children_stats(20)
 
             end = position.is_end
             if end:
