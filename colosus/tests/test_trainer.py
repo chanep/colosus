@@ -34,10 +34,10 @@ class TrainerTestCase(unittest.TestCase):
         trainer.train(train_filename, weights_filename, 1, weights_filename)
 
     def test_train_clr(self):
-        print("training e_12_2000_800...")
-        train_filename = "e_12_2000_800.dat"
-        weights_filename = "e_12_2000_800.h5"
-        prev_weights_filename = "e_11_2000_800.h5"
+        print("training e_14_2000_800...")
+        train_filename = "e_14_2000_800.dat"
+        weights_filename = "e_14_2000_800.h5"
+        prev_weights_filename = "e_13_2000_800.h5"
         trainer_config = TrainerConfig()
         trainer = Trainer(trainer_config)
         # trainer.train_clr(train_filename, weights_filename, 1, prev_weights_filename, 0.0003, 0.0015, 500)
@@ -47,20 +47,26 @@ class TrainerTestCase(unittest.TestCase):
         trainer.train_clr(train_filename, weights_filename, 2, prev_weights_filename, 0.00001, 0.00005, 500)
 
     def test_train_clr_bignn(self):
-        print("training e_0810_2000_800...")
-        train_filename = "e_0810_2000_800.dat"
+        print("training e_1112_2000_800...")
+        train_filename = "e_1112_2000_800.dat"
 
         trainer_config = TrainerConfig()
         trainer = Trainer(trainer_config)
 
-        weights_filename = "e_0810_2000_800_None.h5"
-        prev_weights_filename = None
-        trainer_config.colosus_config.lr = 0.001
-        trainer.train(train_filename, weights_filename, 2, prev_weights_filename)
+        weights_filename = "e_1112_2000_800.h5"
+        # prev_weights_filename = None
+        # trainer_config.colosus_config.lr = 0.001
+        # trainer.train(train_filename, weights_filename, 3, prev_weights_filename)
         prev_weights_filename = weights_filename
-        trainer.train_clr(train_filename, weights_filename, 2, prev_weights_filename, 0.0002, 0.001, 1000)
-        trainer.train_clr(train_filename, weights_filename, 3, prev_weights_filename, 0.00004, 0.0002, 1000)
-        trainer.train_clr(train_filename, weights_filename, 3, prev_weights_filename, 0.00001, 0.00004, 1000)
+        # print("0.0002 - 0.001")
+        # trainer.train_clr(train_filename, weights_filename, 1, prev_weights_filename, 0.0002, 0.001, 500)
+        # trainer.train_clr(train_filename, weights_filename, 2, prev_weights_filename, 0.0002, 0.001, 1000)
+        # print("0.00004 - 0.0002")
+        # trainer.train_clr(train_filename, weights_filename, 1, prev_weights_filename, 0.00004, 0.0002, 500)
+        # trainer.train_clr(train_filename, weights_filename, 2, prev_weights_filename, 0.00004, 0.0002, 1000)
+        print("0.00001 - 0.00004")
+        # trainer.train_clr(train_filename, weights_filename, 1, prev_weights_filename, 0.00001, 0.00004, 500)
+        trainer.train_clr(train_filename, weights_filename, 2, prev_weights_filename, 0.00001, 0.00004, 1000)
 
 
         # print("training 120-6_GN.h5")
