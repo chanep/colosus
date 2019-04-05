@@ -96,7 +96,8 @@ class State:
             if self.is_root() and self.noise is None and self.config.noise_factor > 0:
                 self.noise = np.random.dirichlet([self.config.noise_alpha] * len(children))
 
-            fpu = -self.Q if self.is_root() else -self.Q - 1.2 * math.sqrt(self.P)
+            # fpu = -self.Q if self.is_root() else -self.Q - 1.2 * math.sqrt(self.P)
+            fpu = 0
 
             for i in range(len(children)):
                 child = children[i]
