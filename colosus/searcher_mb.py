@@ -87,6 +87,8 @@ class SearcherMb:
             return self._iterations - self._nodes
         else:
             elapsed = time.time() - self._start_time
+            if elapsed == 0:
+                return 10000000
             nodes_per_second = self._nodes / elapsed
             remaining = self._time_per_move - elapsed
             return int(remaining * nodes_per_second)
@@ -163,7 +165,7 @@ class SearcherMb:
             child = children[i]  # 20%
             if child is not None:
                 if max_visits > 0 and self._nodes > 0 and (
-                        (max_visits - child.N) * self.config.smart_pruning_factor) > self._get_remaining_nodes():
+                        (max_visits - child.N) * self.config.smart_pruning_factor) > max(1, self._get_remaining_nodes()):
                     # print('continue...')
                     # print(f"nodes: {self._nodes}, max visits: {max_visits}, N: {child.N}, remaining: {self._get_remaining_nodes()}")
                     # print("elapsed: " + str(time.time() - self._start_time))
