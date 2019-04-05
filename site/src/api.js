@@ -17,8 +17,8 @@ socket.on('disconnect', () => {
 });
 
 export default {
-    newGame(blackHuman, whiteHuman, iterations){
-        socket.emit('new_game', {blackHuman: blackHuman, whiteHuman:whiteHuman, iterations: iterations});
+    newGame(blackHuman, whiteHuman, iterations, time){
+        socket.emit('new_game', {blackHuman: blackHuman, whiteHuman:whiteHuman, iterations: iterations, time: time});
     },
     move(rank, file){
         socket.emit('move', {rank: rank, file: file});

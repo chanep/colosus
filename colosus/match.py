@@ -4,15 +4,15 @@ from colosus.Illegal_move import IllegalMove
 from colosus.colosus_model import ColosusModel
 from colosus.config import PlayerConfig, ColosusConfig, MatchConfig
 from colosus.game.position import Position
-from colosus.player import Player
-from colosus.player_mp import PlayerMp
+from colosus.player_mb import PlayerMb
 from colosus.player_type import PlayerType
 
 
 class PlayerSettings:
-    def __init__(self, type: PlayerType, iterations: int=None, weights_filename: str=None):
+    def __init__(self, type: PlayerType, iterations: int = None, time: float = None, weights_filename: str = None):
         self.type = type
         self.iterations = iterations
+        self.time = time
         self.weights_filename = weights_filename
 
 
@@ -56,9 +56,8 @@ class Match:
                 colosus.build()
                 if player_sets.weights_filename is not None:
                     colosus.load_weights(player_sets.weights_filename)
-                self.players[i] = PlayerMp(self.config.player_config, colosus) if self.config.mp else \
-                    Player(self.config.player_config, colosus)
-                self.players[i].new_game(self.position.clone(), player_sets.iterations)
+                self.players[i] = PlayerMb(self.config.player_config, colosus)
+                self.players[i].new_game(self.position.clone(), player_sets.iterations, player_sets.time)
             else:
                 self.players[i] = None
         self.initialized = True
@@ -71,7 +70,7 @@ class Match:
             self._match_initialized_callback(self)
         self._start_thinking_if_applies()
 
-    def _current_player(self) -> Player:
+    def _current_player(self) -> PlayerMb:
         return self.players[self.position.side_to_move]
 
     def _colosus_thinks(self):

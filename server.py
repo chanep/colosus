@@ -43,7 +43,7 @@ def handle_disconnect():
 @socketio.on('new_game')
 def handle_new_game(data):
     print("new_game:" + str(data))
-    match_c.new_match(data['blackHuman'], data['whiteHuman'], data['iterations'])
+    match_c.new_match(data['blackHuman'], data['whiteHuman'], data['iterations'], data['time'])
 
 
 @socketio.on('move')

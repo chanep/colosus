@@ -80,15 +80,14 @@ class PlayerConfig:
         self.state_config.noise_factor = 0.0
         self.search_config.move_count_temp0 = 20
         self.search_config.temp0 = 0.5
-        self.search_config.tempf = 0.01
+        self.search_config.tempf = 0.2
 
 
 class MatchConfig:
     def __init__(self):
-        self.weights_filename = "./colosus/tests/d_53_2000_800.h5"
+        self.weights_filename = "./colosus/tests/e_07_2000_800.h5"
         self.colosus_config = ColosusConfig()
         self.player_config = PlayerConfig()
-        self.mp = False
 
 
 

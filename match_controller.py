@@ -16,15 +16,15 @@ class MatchController:
         self._status_update_callback = status_update_callback
         self._match = Match(config)
 
-    def new_match(self, black_human, white_human, iterations=None):
+    def new_match(self, black_human, white_human, iterations=None, time=None):
         if black_human:
             black = PlayerSettings(PlayerType.HUMAN)
         else:
-            black = PlayerSettings(PlayerType.COLOSUS, iterations, self.config.weights_filename)
+            black = PlayerSettings(PlayerType.COLOSUS, iterations, time, self.config.weights_filename)
         if white_human:
             white = PlayerSettings(PlayerType.HUMAN)
         else:
-            white = PlayerSettings(PlayerType.COLOSUS, iterations, self.config.weights_filename)
+            white = PlayerSettings(PlayerType.COLOSUS, iterations, time, self.config.weights_filename)
 
         self._match.new_game(black, white, initial_pos=None, move_callback=self._on_move,
                              match_initialized_callback=self._on_match_initialized)
