@@ -34,10 +34,10 @@ class TrainerTestCase(unittest.TestCase):
         trainer.train(train_filename, weights_filename, 1, weights_filename)
 
     def test_train_clr(self):
-        print("training e_14_2000_800...")
-        train_filename = "e_14_2000_800.dat"
-        weights_filename = "e_14_2000_800.h5"
-        prev_weights_filename = "e_13_2000_800.h5"
+        print("training e_1314_2000_800...")
+        train_filename = "e_1314_2000_800.dat"
+        weights_filename = "e_1314_2000_800.h5"
+        prev_weights_filename = "e_14_2000_800.h5"
         trainer_config = TrainerConfig()
         trainer = Trainer(trainer_config)
         # trainer.train_clr(train_filename, weights_filename, 1, prev_weights_filename, 0.0003, 0.0015, 500)

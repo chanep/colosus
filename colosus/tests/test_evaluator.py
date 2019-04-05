@@ -50,7 +50,7 @@ class EvaluatorTestCase(unittest.TestCase):
 
         evaluator = Evaluator(config)
 
-        evaluator.evaluate(200, 0, pos, "e_13_2000_800.h5", "cpo99345_47_5000_800.h5", times_per_move=1)
+        evaluator.evaluate(200, 0, pos, "e_1314_2000_800.h5", "cpo99345_47_5000_800.h5", times_per_move=1)
         # evaluator.evaluate(400, 1, pos, "e_01_2000_800.h5", "cpo99345_47_5000_800.h5")
 
     def test_evaluate_mp(self):

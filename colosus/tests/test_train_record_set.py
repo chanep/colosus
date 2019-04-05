@@ -27,8 +27,8 @@ class TrainRecordSetTestCase(unittest.TestCase):
 
     def test_merge(self):
         files = [
-            'e_11_2000_800.dat',
-            'e_12_2000_800.dat'
+            'e_13_2000_800.dat',
+            'e_14_2000_800.dat'
         ]
 
         recordset = TrainRecordSet()
@@ -39,7 +39,7 @@ class TrainRecordSetTestCase(unittest.TestCase):
 
         random.shuffle(recordset.records)
 
-        recordset.save_to_file('e_1112_2000_800.dat')
+        recordset.save_to_file('e_1314_2000_800.dat')
 
 
     def test_truncate(self):
