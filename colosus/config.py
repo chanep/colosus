@@ -17,18 +17,23 @@ class StateConfig:
         self.cpuct = 2
         self.noise_alpha = 0.3
         self.noise_factor = 0.25
+        self.fpuRoot = 0.5
         self.backup_factor = 0.999
         self.policy_offset = -1
-        self.fpuRoot = 0.5
 
 
 class SearchConfig:
     def __init__(self):
+        self.cpuct = 2
+        self.noise_alpha = 0.3
+        self.noise_factor = 0.25
+        self.fpuRoot = 0.5
         self.move_count_temp0 = 44
         self.temp0 = 1.0
         self.tempf = 0.1
         self.mb_size = 64
         self.max_collisions = 16
+        self.smart_pruning_factor = 0
 
 
 class TrainerConfig:
@@ -41,8 +46,8 @@ class SelfPlayConfig:
         self.z_factor = 0.25
         self.colosus_config = ColosusConfig()
         self.state_config = StateConfig()
-        self.state_config.cpuct = 3
         self.search_config = SearchConfig()
+        self.search_config.cpuct = 3
         self.search_config.mb_size = 16
         self.search_config.max_collisions = 1
 
@@ -51,6 +56,7 @@ class PlayerType(Enum):
     player = 1
     player2 = 2
     player_mb = 3
+    player_mb2 = 4
 
 
 class EvaluatorConfig:

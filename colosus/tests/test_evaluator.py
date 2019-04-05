@@ -20,7 +20,6 @@ class EvaluatorTestCase(unittest.TestCase):
         config.player2_config.search_config.temp0 = 1.0
         config.player_config.state_config.policy_offset = -1
         config.player2_config.state_config.policy_offset = -1
-        # config.player2_config.state_config.cpuct = 2.5
 
         config.player_type = PlayerType.player_mb
         config.player2_type = PlayerType.player_mb

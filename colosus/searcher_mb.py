@@ -1,5 +1,5 @@
 from typing import List
-
+import math
 import numpy as np
 
 from colosus.colosus_model import ColosusModel
@@ -82,6 +82,15 @@ class SearcherMb:
         else:
             return self._nodes >= self._iterations
 
+    def _get_remaining_nodes(self):
+        if self._iterations != 0:
+            return self._iterations - self._nodes
+        else:
+            elapsed = time.time() - self._start_time
+            nodes_per_second = self._nodes / elapsed
+            remaining = self._time_per_move - elapsed
+            return int(remaining * nodes_per_second)
+
     def _get_temperature(self, move_count):
         if move_count <= self.config.move_count_temp0:
             if isinstance(self.config.temp0, list):
@@ -128,12 +137,50 @@ class SearcherMb:
 
         state = self.root_state
         while True:
-            best_child = state.get_best_child()
+            best_child = self._get_best_child(state)
 
             if best_child.is_leaf:
                 return best_child
 
             state = best_child
+
+    def _get_best_child(self, state: StateMb) -> StateMb:
+        best_child = None
+        max_visits = 0
+        best_score = -10000
+        factor = self.config.cpuct * math.sqrt(state.N + state.N_in_flight)
+        children = state.children()
+
+        if state.is_root() and state.noise is None and self.config.noise_factor > 0:
+            state.noise = np.random.dirichlet([self.config.noise_alpha] * len(children))
+
+        fpu = (-state.Q + self.config.fpuRoot) if state.is_root() else -state.Q - 1.2 * math.sqrt(state.P)
+
+        if self.config.smart_pruning_factor > 0 and state.is_root():
+            max_visits = max((c.N if c is not None else 0) for c in children)
+
+        for i in range(len(children)):
+            child = children[i]  # 20%
+            if child is not None:
+                if max_visits > 0 and self._nodes > 0 and (
+                        (max_visits - child.N) * self.config.smart_pruning_factor) > self._get_remaining_nodes():
+                    # print('continue...')
+                    # print(f"nodes: {self._nodes}, max visits: {max_visits}, N: {child.N}, remaining: {self._get_remaining_nodes()}")
+                    # print("elapsed: " + str(time.time() - self._start_time))
+                    continue
+
+                if state.noise is not None:
+                    child_p = (1 - self.config.noise_factor) * child.P + self.config.noise_factor * state.noise[i]
+                else:
+                    child_p = child.P
+
+                child_score = (child.Q if child.N > 0 else fpu) + ((factor * child_p) / (1 + child.N + child.N_in_flight))  # 55%
+
+                if child_score > best_score:
+                    best_score = child_score
+                    best_child = child
+
+        return best_child
 
     def _run_nn_computation(self, mini_batch: List[StateMb]):
         model_positions = []

@@ -78,6 +78,8 @@ class SearcherTestCase(unittest.TestCase):
 
     def test_search_mb(self):
         colosus_config = ColosusConfig()
+        colosus_config.residual_blocks = 6
+        colosus_config.conv_size = 160
         colosus = ColosusModel(colosus_config)
         colosus.build()
 
@@ -99,12 +101,13 @@ class SearcherTestCase(unittest.TestCase):
         config.temp0 = 0
         config.mb_size = 64
         config.max_collisions = 16
+        config.noise_factor = 0.0
+        config.smart_pruning_factor = 1
 
         searcher = SearcherMb(config, colosus)
 
         state_config = StateConfig()
-        state_config.noise_factor = 0.0
-        state_config.fpuRoot = 0.5
+
         state = StateMb(pos, None, None, state_config)
 
         searcher.search(state, 2)
@@ -113,7 +116,7 @@ class SearcherTestCase(unittest.TestCase):
         # pr.enable()
 
         start = time.time()
-        policy, temp_policy, value, move, new_state = searcher.search(state, 512)
+        policy, temp_policy, value, move, new_state = searcher.search(state, 0, 5.0)
 
         print("time: " + str(time.time() - start))
 

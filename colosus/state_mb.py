@@ -7,7 +7,6 @@ import numpy as np
 from colosus.config import StateConfig
 from colosus.game.square import Square
 from .game.position import Position
-from .colosus_model import ColosusModel
 
 
 class StateMb:
@@ -87,33 +86,6 @@ class StateMb:
 
     def is_end(self):
         return self.position().is_end
-
-    def get_best_child(self) -> 'StateMb':
-        best_child = None
-        best_score = -10000
-        factor = self.config.cpuct * math.sqrt(self.N + self.N_in_flight)
-        children = self.children()
-
-        if self.is_root() and self.noise is None and self.config.noise_factor > 0:
-            self.noise = np.random.dirichlet([self.config.noise_alpha] * len(children))
-
-        fpu = (-self.Q + self.config.fpuRoot) if self.is_root() else -self.Q - 1.2 * math.sqrt(self.P)
-
-        for i in range(len(children)):
-            child = children[i]  # 20%
-            if child is not None:
-                if self.noise is not None:
-                    child_p = (1 - self.config.noise_factor) * child.P + self.config.noise_factor * self.noise[i]
-                else:
-                    child_p = child.P
-
-                child_score = (child.Q if child.N > 0 else fpu) + ((factor * child_p) / (1 + child.N + child.N_in_flight))  # 55%
-
-                if child_score > best_score:
-                    best_score = child_score
-                    best_child = child
-
-        return best_child
 
     def get_q(self, default_q):
         return self.Q if self.N > 0 else default_q

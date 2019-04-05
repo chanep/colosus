@@ -10,9 +10,7 @@ from colosus.game.square import Square
 from colosus.player import Player
 from colosus.player2 import Player2
 from colosus.player_mb import PlayerMb
-from colosus.player_mp import PlayerMp
-from colosus.searcher import Searcher
-from colosus.searcher2 import Searcher2
+from colosus.player_mb2 import PlayerMb2
 from colosus.state import State
 from colosus.state2 import State2
 
@@ -56,6 +54,8 @@ class Evaluator:
             self.player = Player2(self.config.player_config, colosus)
         elif self.config.player_type == PlayerType.player_mb:
             self.player = PlayerMb(self.config.player_config, colosus)
+        elif self.config.player_type == PlayerType.player_mb2:
+            self.player = PlayerMb2(self.config.player_config, colosus)
 
         if self.config.player2_type == PlayerType.player:
             self.player2 = Player(self.config.player_config, colosus)
@@ -63,6 +63,8 @@ class Evaluator:
             self.player2 = Player2(self.config.player_config, colosus)
         elif self.config.player2_type == PlayerType.player_mb:
             self.player2 = PlayerMb(self.config.player_config, colosus)
+        elif self.config.player2_type == PlayerType.player_mb2:
+            self.player2 = PlayerMb2(self.config.player_config, colosus)
 
         total_score_1 = 0.0
         total_score_2 = 0.0
@@ -205,12 +207,6 @@ class Evaluator:
                 board = rot90_board(board)
 
         return hashes
-
-    def print_children(self, state: State):
-        for m in range(len(state.children())):
-            c = state.children()[m]
-            if c is not None:
-                print("{} N: {}, W: {:.3g}, Q: {:.3g}, p:{:.3g}".format(Square.to_string(m), c.N, c.W, c.Q, c.P))
 
 
 
