@@ -37,15 +37,15 @@ class MatchController:
             status = self._create_match_status(self._match, error=err.value)
             self._status_update_callback(status)
 
-    def _on_move(self, match: Match, move=None, value=None, pv=None):
-        status = self._create_match_status(match, move, value, pv)
+    def _on_move(self, match: Match, move=None, value=None, pv=None, stats=None):
+        status = self._create_match_status(match, move, value, pv, stats=stats)
         self._status_update_callback(status)
 
     def _on_match_initialized(self, match: Match):
         status = self._create_match_status(match)
         self._status_update_callback(status)
 
-    def _create_match_status(self, match: Match, last_move=None, value=None, pv=None, error: str=None):
+    def _create_match_status(self, match: Match, last_move=None, value=None, pv=None, stats=None, error: str=None):
         winner = None
         depth = None
         win_line = []
@@ -69,7 +69,8 @@ class MatchController:
             'error': error,
             'sideToMove': match.position.side_to_move,
             'inProgress': match.in_progress,
-            'winLine': win_line
+            'winLine': win_line,
+            'nodes': stats.nodes if stats is not None else None
         }
 
     def _move_to_dict(self, move: int):

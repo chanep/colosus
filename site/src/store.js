@@ -40,10 +40,12 @@ let store = {
         this.gameStatus.winner = status.winner;
         this.gameStatus.value = status.value;
         this.gameStatus.depth = status.depth;
+        this.gameStatus.nodes = status.nodes;
         this.gameStatus.error = status.error;
         this.gameStatus.sideToMove = status.sideToMove;
         this.gameStatus.inProgress = status.inProgress;
         this.gameStatus.winLine = status.winLine;
+        
     }
 }
 

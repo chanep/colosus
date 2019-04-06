@@ -76,14 +76,15 @@ class Match:
     def _colosus_thinks(self):
         c_player = self._current_player()
         policy, value, move, old_state, new_state = c_player.move()
-        return policy, value, int(move), old_state, new_state
+        stats = c_player.searcher.stats
+        return policy, value, int(move), old_state, new_state, stats
 
     def _colosus_thinks_done(self, future):
-        policy, value, move, old_state, new_state = future.result()
+        policy, value, move, old_state, new_state, stats = future.result()
         print("colosus thinks done " + str(move))
         value = new_state.Q
         pv = old_state.principal_variation()
-        self._do_move(move, value, pv)
+        self._do_move(move, value, pv, stats)
 
     def move(self, move):
         if not self.initialized or not self.is_human_turn():
@@ -104,12 +105,12 @@ class Match:
     def is_end(self):
         return self.position.is_end
 
-    def _do_move(self, move, value=None, pv=None):
+    def _do_move(self, move, value=None, pv=None, stats=None):
         self.position = self.position.move(move)
         if self.position.is_end:
             self.in_progress = False
         if self._move_callback is not None:
-            self._move_callback(self, move=move, value=value, pv=pv)
+            self._move_callback(self, move=move, value=value, pv=pv, stats=stats)
         opponent = self.players[self.position.side_to_move]
         if opponent is not None:
             opponent.opponent_move(move)

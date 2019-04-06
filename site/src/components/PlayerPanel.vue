@@ -15,6 +15,9 @@
         <tr v-if="depth != null">
             <td class="eval" colspan="2">depth: {{depth}}</td>
         </tr>
+        <tr v-if="nodes != null">
+            <td class="eval" colspan="2">nodes: {{nodes}}</td>
+        </tr>
     </table>
 </template>
 
@@ -31,6 +34,7 @@
                 running: false,
                 value: null,
                 depth: null,
+                nodes: null,
                 timerId: null
                 }
             },
@@ -80,8 +84,9 @@
                     }
                 }
                 if(newSideToMove != this.side){
-                    this.value = this.gameStatus.value
-                    this.depth = this.gameStatus.depth
+                    this.value = this.gameStatus.value;
+                    this.depth = this.gameStatus.depth;
+                    this.nodes = this.gameStatus.nodes;
                 }
             }
         }

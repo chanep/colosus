@@ -33,7 +33,7 @@ class SearchConfig:
         self.tempf = 0.1
         self.mb_size = 64
         self.max_collisions = 16
-        self.smart_pruning_factor = 0
+        self.smart_pruning_factor = 1
 
 
 class TrainerConfig:
@@ -43,13 +43,14 @@ class TrainerConfig:
 
 class SelfPlayConfig:
     def __init__(self):
-        self.z_factor = 0.25
+        self.z_factor = 0
         self.colosus_config = ColosusConfig()
         self.state_config = StateConfig()
         self.search_config = SearchConfig()
         self.search_config.cpuct = 3
         self.search_config.mb_size = 16
         self.search_config.max_collisions = 1
+        self.search_config.smart_pruning_factor = 0
 
 
 class PlayerType(Enum):
@@ -69,8 +70,8 @@ class EvaluatorConfig:
         self.player2_config.search_config.move_count_temp0 = 38
         self.player_config.search_config.temp0 = 0.75
         self.player2_config.search_config.temp0 = 0.75
-        self.player_type = PlayerType.player
-        self.player2_type = PlayerType.player2
+        self.player_type = PlayerType.player_mb
+        self.player2_type = PlayerType.player2_mb
 
 
 class PlayerConfig:
@@ -78,14 +79,14 @@ class PlayerConfig:
         self.state_config = StateConfig()
         self.search_config = SearchConfig()
         self.state_config.noise_factor = 0.0
-        self.search_config.move_count_temp0 = 20
+        self.search_config.move_count_temp0 = 25
         self.search_config.temp0 = 0.5
         self.search_config.tempf = 0.2
 
 
 class MatchConfig:
     def __init__(self):
-        self.weights_filename = "./colosus/tests/e_07_2000_800.h5"
+        self.weights_filename = "./colosus/tests/e_14_2000_800.h5"
         self.colosus_config = ColosusConfig()
         self.player_config = PlayerConfig()
 

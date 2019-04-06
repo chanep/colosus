@@ -6,6 +6,8 @@ from colosus.state_mb import StateMb
 
 
 class PlayerMb:
+    searcher: SearcherMb
+
     def __init__(self, config: PlayerConfig, colosus: ColosusModel):
         self.config = config
         self.iterations = None
