@@ -42,6 +42,23 @@ class Stats:
         print(f"collisions: {self.collisions}")
 
 
+class HashTable:
+    def __init__(self):
+        self.entries = {}
+        self.hits = 0
+        self.searches = 0
+
+    def store(self, hash):
+        self.entries[hash] = 1
+
+    def search(self, hash):
+        self.searches += 1
+        entry = self.entries.get(hash)
+        if entry is not None:
+            self.hits += 1
+        return entry
+
+
 class SearcherMb:
     root_state: StateMb
 
@@ -54,6 +71,7 @@ class SearcherMb:
         self._time_per_move = 0
         self._start_time = 0
         self.stats = Stats()
+        self.hash_table = HashTable()
 
     def search(self, root_state: StateMb, iterations: int = 0, time_per_move: float = 1) -> (np.array, float, int, StateMb):
         self.root_state = root_state
@@ -123,6 +141,12 @@ class SearcherMb:
                 self.stats.inc_out_of_orders()
             else:
                 if state.N_in_flight == 0:
+
+                    # hash = state.position().hash()
+                    # entry = self.hash_table.search(hash)
+                    # if entry is None:
+                    #     self.hash_table.store(hash)
+
                     self._nodes += 1
                     mini_batch.append(state)
                 else:                           # collision

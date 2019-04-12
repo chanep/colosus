@@ -185,14 +185,14 @@ class ColosusModelTestCase(unittest.TestCase):
         pos.put_piece(Side.WHITE, 13, 8)
 
         colosusConfig = ColosusConfig()
-        colosusConfig.residual_blocks = 4
-        colosusConfig.conv_size = 120
+        # colosusConfig.residual_blocks = 4
+        # colosusConfig.conv_size = 120
         colosus = ColosusModel(colosusConfig)
         colosus.build()
 
         positions = []
         position = pos
-        minibatch = 64
+        minibatch = 32
         for m in range(minibatch):
             positions.append(position.to_model_position())
             # position = position.move(m)

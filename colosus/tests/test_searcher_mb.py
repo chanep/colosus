@@ -171,6 +171,8 @@ class SearcherTestCase(unittest.TestCase):
         print("nodes " + str(state.N))
         print("time: " + str(time.time() - start))
 
+        print("time: " + str(time.time() - start))
+
         state.print()
         new_state.print()
 
@@ -184,7 +186,7 @@ class SearcherTestCase(unittest.TestCase):
         colosus = ColosusModel(colosus_config)
         colosus.build()
 
-        colosus.load_weights("e_0608_2000_800.h5")
+        colosus.load_weights("e_14_2000_800.h5")
         # colosus.load_weights("cpo99345_47_5000_800.h5")
 
         pos = Position()
@@ -217,6 +219,8 @@ class SearcherTestCase(unittest.TestCase):
 
         searcher.stats.print()
         print("time: " + str(time.time() - start))
+        print("searches: " + str(searcher.hash_table.searches))
+        print("hits: " + str(searcher.hash_table.hits))
 
         state.print()
         new_state.print()

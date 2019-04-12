@@ -107,29 +107,32 @@ class SelfPlayTestCase(unittest.TestCase):
 
         self_play = SelfPlayMpMb(config)
 
-        train_filename = "e_14_2000_800.dat"
-        train_filename_a = "e_14a_2000_800.dat"
-        train_filename_b = "e_14b_2000_800.dat"
-        train_filename_c = "e_14c_2000_800.dat"
-        train_filename_d = "e_14d_2000_800.dat"
-        weights_filename = "e_13_2000_800.h5"
+        train_filename = "e_17_2000_800.dat"
+        train_filename_a = "e_17a_2000_800.dat"
+        train_filename_b = "e_17b_2000_800.dat"
+        train_filename_c = "e_17c_2000_800.dat"
+        train_filename_d = "e_17d_2000_800.dat"
+        weights_filename = "e_16_2000_800.h5"
 
         config.z_factor = 0
 
         config.search_config.move_count_temp0 = 24
-        config.search_config.temp0 = 1.4
+        config.search_config.temp0 = 1.5
+        config.state_config.play_policy_offset = -3
         self_play.play(500, 800, pos, train_filename_a, 11, weights_filename)
         time.sleep(5)
         TrainRecordSet.merge_and_rotate(train_filename_a, 11)
 
         config.search_config.move_count_temp0 = 26
-        config.search_config.temp0 = 1.25
+        config.search_config.temp0 = 1.30
+        config.state_config.play_policy_offset = -3
         self_play.play(500, 800, pos, train_filename_b, 11, weights_filename)
         time.sleep(5)
         TrainRecordSet.merge_and_rotate(train_filename_b, 11)
 
         config.search_config.move_count_temp0 = 30
-        config.search_config.temp0 = 1.1
+        config.search_config.temp0 = 1.15
+        config.state_config.play_policy_offset = -3
         self_play.play(500, 800, pos, train_filename_c, 11, weights_filename)
         time.sleep(5)
         TrainRecordSet.merge_and_rotate(train_filename_c, 11)
@@ -137,7 +140,8 @@ class SelfPlayTestCase(unittest.TestCase):
         config.z_factor = 0.25
 
         config.search_config.move_count_temp0 = 40
-        config.search_config.temp0 = 0.85
+        config.search_config.temp0 = 0.9
+        config.state_config.play_policy_offset = -3
         self_play.play(500, 800, pos, train_filename_d, 11, weights_filename)
         time.sleep(5)
         TrainRecordSet.merge_and_rotate(train_filename_d, 11)

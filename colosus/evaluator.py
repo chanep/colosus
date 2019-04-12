@@ -1,6 +1,8 @@
 import numpy as np
 import tensorflow as tf
 import time
+from datetime import datetime
+
 
 from colosus.colosus_model import ColosusModel
 from colosus.colosus_model2 import ColosusModel2
@@ -31,8 +33,11 @@ class Evaluator:
         self.final_position_rotations = {}
 
     def evaluate(self, games: int, iterations: int, position_ini: Position, weights_filename, weights_filename2,
-                 iterations2=None, times_per_move : float = 1):
+                 iterations2=None, times_per_move: float = 1):
         self._initialize()
+
+        seed = hash(str(datetime.now())) % (2 ** 32 - 1)
+        np.random.seed(seed)
 
         iterations_player2 = iterations
         if iterations2 is not None:
@@ -147,6 +152,10 @@ class Evaluator:
 
             end = position.is_end
             if end:
+
+                # print("searches: " + str(self.player.searcher.hash_table.searches))
+                # print("hits: " + str(self.player.searcher.hash_table.hits))
+
                 if move_num < 20:
                     self.short_games += 1
 

@@ -34,10 +34,10 @@ class TrainerTestCase(unittest.TestCase):
         trainer.train(train_filename, weights_filename, 1, weights_filename)
 
     def test_train_clr(self):
-        print("training e_1314_2000_800...")
-        train_filename = "e_1314_2000_800.dat"
-        weights_filename = "e_1314_2000_800.h5"
-        prev_weights_filename = "e_14_2000_800.h5"
+        print("training e_1617_2000_800...")
+        train_filename = "e_1617_2000_800.dat"
+        weights_filename = "e_1617_2000_800.h5"
+        prev_weights_filename = "e_16_2000_800.h5"
         trainer_config = TrainerConfig()
         trainer = Trainer(trainer_config)
         # trainer.train_clr(train_filename, weights_filename, 1, prev_weights_filename, 0.0003, 0.0015, 500)
@@ -46,26 +46,52 @@ class TrainerTestCase(unittest.TestCase):
         # trainer.train_clr(train_filename, weights_filename, 1, prev_weights_filename, 0.00005, 0.0003, 500)
         trainer.train_clr(train_filename, weights_filename, 2, prev_weights_filename, 0.00001, 0.00005, 500)
 
+    def test_train_clr2(self):
+        print("training e_17_2000_800...")
+        train_filename = "e_17_2000_800.dat"
+        weights_filename = "e_17_2000_800_.h5"
+        prev_weights_filename = "e_17_2000_800.h5"
+        trainer_config = TrainerConfig()
+        trainer = Trainer(trainer_config)
+        # trainer.train_clr(train_filename, weights_filename, 1, prev_weights_filename, 0.0003, 0.0015, 500)
+        trainer.train_clr(train_filename, weights_filename, 1, prev_weights_filename, 0.000007, 0.00003, 500)
+
+
+    def test_train_clr_nn(self):
+        print("training e_15_2000_800_ppo...")
+        train_filename = "e_15_2000_800_ppo.dat"
+        weights_filename = "x32.h5"
+        prev_weights_filename = None
+        trainer_config = TrainerConfig()
+        trainer = Trainer(trainer_config)
+
+        trainer.train_clr(train_filename, weights_filename, 1, prev_weights_filename, 0.0002, 0.001, 500)
+
+        trainer_config.colosus_config.policy_conv_size = 64
+        weights_filename = "x64.h5"
+        trainer.train_clr(train_filename, weights_filename, 1, prev_weights_filename, 0.0002, 0.001, 500)
+
     def test_train_clr_bignn(self):
-        print("training e_1112_2000_800...")
-        train_filename = "e_1112_2000_800.dat"
+        print("training e_15_2000_800_ppo...")
+        train_filename = "e_15_2000_800_ppo.dat"
 
         trainer_config = TrainerConfig()
         trainer = Trainer(trainer_config)
 
-        weights_filename = "e_1112_2000_800.h5"
-        # prev_weights_filename = None
-        # trainer_config.colosus_config.lr = 0.001
-        # trainer.train(train_filename, weights_filename, 3, prev_weights_filename)
+        weights_filename = "e_15_2000_800_ppo_64.h5"
+        prev_weights_filename = None
+        trainer_config.colosus_config.lr = 0.001
+        trainer_config.colosus_config.policy_conv_size = 64
+        trainer.train(train_filename, weights_filename, 3, prev_weights_filename)
         prev_weights_filename = weights_filename
-        # print("0.0002 - 0.001")
-        # trainer.train_clr(train_filename, weights_filename, 1, prev_weights_filename, 0.0002, 0.001, 500)
-        # trainer.train_clr(train_filename, weights_filename, 2, prev_weights_filename, 0.0002, 0.001, 1000)
-        # print("0.00004 - 0.0002")
-        # trainer.train_clr(train_filename, weights_filename, 1, prev_weights_filename, 0.00004, 0.0002, 500)
-        # trainer.train_clr(train_filename, weights_filename, 2, prev_weights_filename, 0.00004, 0.0002, 1000)
+        print("0.0002 - 0.001")
+        trainer.train_clr(train_filename, weights_filename, 1, prev_weights_filename, 0.0002, 0.001, 500)
+        trainer.train_clr(train_filename, weights_filename, 2, prev_weights_filename, 0.0002, 0.001, 1000)
+        print("0.00004 - 0.0002")
+        trainer.train_clr(train_filename, weights_filename, 1, prev_weights_filename, 0.00004, 0.0002, 500)
+        trainer.train_clr(train_filename, weights_filename, 2, prev_weights_filename, 0.00004, 0.0002, 1000)
         print("0.00001 - 0.00004")
-        # trainer.train_clr(train_filename, weights_filename, 1, prev_weights_filename, 0.00001, 0.00004, 500)
+        trainer.train_clr(train_filename, weights_filename, 1, prev_weights_filename, 0.00001, 0.00004, 500)
         trainer.train_clr(train_filename, weights_filename, 2, prev_weights_filename, 0.00001, 0.00004, 1000)
 
 

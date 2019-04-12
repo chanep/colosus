@@ -168,6 +168,17 @@ e14 vs cpo: 1s 103.5-96.5
 
 e1314 vs cpo: 99.0-101.0
 
+e15 vs cpo: 1s 102.5-97.5
+
+e15ppo vs e15: 197.5-202.5
+e15ppo vs cpo: 202.0-198.0
+
+64
+e16 vs cpo: 1s 108.0-92.0
+
+e17 vs cpo: 1s 103.5-96.5
+e1617 vs cpo: 1s 85.5-88.5
+
 
 
 fpu vs no fpu: 144.5-55.5
@@ -276,4 +287,17 @@ e11 trainer.train_clr(train_filename, weights_filename, 4, prev_weights_filename
 
   - 2621s - loss: 2.3928 - policy_loss: 1.8360 - value_loss: 0.0210 - policy_acc: 0.7312 - val_loss: 2.4694 - val_policy_loss: 1.8927 - val_value_loss: 0.0271 - val_policy_acc: 0.6948
 
-   - 1311s - loss: 2.0978 - policy_loss: 1.6001 - value_loss: 0.0235 - policy_acc: 0.7584 - val_loss: 2.1654 - val_policy_loss: 1.6501 - val_value_loss: 0.0288 - val_policy_acc: 0.7225
+  - 1311s - loss: 2.0978 - policy_loss: 1.6001 - value_loss: 0.0235 - policy_acc: 0.7584 - val_loss: 2.1654 - val_policy_loss: 1.6501 - val_value_loss: 0.0288 - val_policy_acc: 0.7225
+
+  - 1647s - loss: 2.2085 - policy_loss: 1.6956 - value_loss: 0.0187 - policy_acc: 0.7652 - val_loss: 2.2748 - val_policy_loss: 1.7458 - val_value_loss: 0.0226 - val_policy_acc: 0.7386
+
+  ppo
+  - 1815s - loss: 2.2157 - policy_loss: 1.7039 - value_loss: 0.0165 - policy_acc: 0.7677 - val_loss: 2.2702 - val_policy_loss: 1.7447 - val_value_loss: 0.0206 - val_policy_acc: 0.7348
+
+    1786s - loss: 2.2024 - policy_loss: 1.6845 - value_loss: 0.0120 - policy_acc: 0.7876 - val_loss: 2.3236 - val_policy_loss: 1.7757 - val_value_loss: 0.0198 - val_policy_acc: 0.7264
+    64
+    1402s - loss: 2.1439 - policy_loss: 1.6318 - value_loss: 0.0226 - policy_acc: 0.7651 - val_loss: 2.2419 - val_policy_loss: 1.7066 - val_value_loss: 0.0273 - val_policy_acc: 0.7188
+    17
+    1093s - loss: 1.9347 - policy_loss: 1.4583 - value_loss: 0.0305 - policy_acc: 0.7735 - val_loss: 2.0603 - val_policy_loss: 1.5539 - val_value_loss: 0.0368 - val_policy_acc: 0.7124
+    1617
+    2483s - loss: 2.0548 - policy_loss: 1.5592 - value_loss: 0.0254 - policy_acc: 0.7652 - val_loss: 2.1368 - val_policy_loss: 1.6219 - val_value_loss: 0.0295 - val_policy_acc: 0.7259

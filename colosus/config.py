@@ -1,11 +1,12 @@
 from enum import Enum
 
+
 class ColosusConfig:
     def __init__(self):
         self.thread_safe = False
         self.lr = 0.0005
         self.conv_size = 120
-        self.policy_conv_size = 32
+        self.policy_conv_size = 64
         self.residual_blocks = 6
         self.regularizer = 2e-5
         self.data_format_channel_last = True
@@ -20,6 +21,7 @@ class StateConfig:
         self.fpuRoot = 0.5
         self.backup_factor = 0.999
         self.policy_offset = -1
+        self.play_policy_offset = -2
 
 
 class SearchConfig:
@@ -71,7 +73,7 @@ class EvaluatorConfig:
         self.player_config.search_config.temp0 = 0.75
         self.player2_config.search_config.temp0 = 0.75
         self.player_type = PlayerType.player_mb
-        self.player2_type = PlayerType.player2_mb
+        self.player2_type = PlayerType.player_mb
 
 
 class PlayerConfig:
@@ -79,16 +81,17 @@ class PlayerConfig:
         self.state_config = StateConfig()
         self.search_config = SearchConfig()
         self.state_config.noise_factor = 0.0
-        self.search_config.move_count_temp0 = 25
-        self.search_config.temp0 = 0.5
+        self.search_config.move_count_temp0 = 26
+        self.search_config.temp0 = 0.6
         self.search_config.tempf = 0.2
 
 
 class MatchConfig:
     def __init__(self):
-        self.weights_filename = "./colosus/tests/e_14_2000_800.h5"
+        self.weights_filename = "./colosus/tests/e_16_2000_800.h5"
         self.colosus_config = ColosusConfig()
         self.player_config = PlayerConfig()
+
 
 
 

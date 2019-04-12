@@ -40,23 +40,24 @@ class StateMb:
                 policy[i] = child.N / self.N
         return policy
 
-    def get_policy(self):
+    def get_policy(self, offset=0):
         policy_len = len(self.children())
         policy = np.zeros(policy_len)
         for i in range(policy_len):
             child = self.children()[i]
             if child is not None:
-                policy[i] = max(0, (child.N + self.config.policy_offset)) / self.N + (child.P / math.sqrt(self.N))
+                policy[i] = max(0, (child.N + offset)) / self.N + (child.P / math.sqrt(self.N))
         return policy / np.sum(policy)
 
     def play(self, temperature) -> (int, float, int, 'StateMb'):
-        policy = self.get_policy()
+        policy = self.get_policy(self.config.policy_offset)
+        play_policy = self.get_policy(self.config.policy_offset + self.config.play_policy_offset)
         if temperature < 0.1:
-            move = np.argmax(policy)
-            temp_policy = np.zeros_like(policy)
+            move = np.argmax(play_policy)
+            temp_policy = np.zeros_like(play_policy)
             temp_policy[move] = 1.0
         else:
-            temp_policy = self.apply_temperature(policy, temperature)
+            temp_policy = self.apply_temperature(play_policy, temperature)
             move = np.random.choice(len(temp_policy), 1, p=temp_policy)[0]
         new_root_state = self.children()[move]
         new_root_state.parent = None
