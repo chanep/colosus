@@ -91,6 +91,7 @@ class MatchConfig:
         self.weights_filename = "./colosus/tests/e_16_2000_800.h5"
         self.colosus_config = ColosusConfig()
         self.player_config = PlayerConfig()
+        self.player_config.state_config.play_policy_offset = -4
 
 
 
