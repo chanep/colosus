@@ -78,12 +78,10 @@ class SearcherTestCase(unittest.TestCase):
 
     def test_search_mb(self):
         colosus_config = ColosusConfig()
-        colosus_config.residual_blocks = 6
-        colosus_config.conv_size = 160
         colosus = ColosusModel(colosus_config)
         colosus.build()
 
-        colosus.load_weights("e_07_2000_800.h5")
+        colosus.load_weights("e_16_2000_800.h5")
 
         pos = Position()
         pos.put_piece(Side.BLACK, 7, 7)

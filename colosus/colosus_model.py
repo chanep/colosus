@@ -10,7 +10,7 @@ from tensorflow.python.keras import Input
 from tensorflow.python.keras.optimizers import Adam, SGD
 from tensorflow.python.keras.models import Model
 from tensorflow.python.keras.layers import Conv2D, Activation, Flatten, Dense, Add, Multiply, Lambda, Concatenate
-from tensorflow.python.layers.normalization import BatchNormalization
+from tensorflow.python.keras.layers.normalization import BatchNormalization
 from tensorflow.python.keras.regularizers import l2
 
 from colosus.config import ColosusConfig
